@@ -38,6 +38,10 @@ namespace hSDK
 				static RuntimeInfo rti;
 				return rti;
 			}
+			static RD *Rd()
+			{
+				return Current.rd;
+			}
 			static Extension &Ext()
 			{
 				return **Current().rd;
@@ -121,15 +125,7 @@ namespace hSDK
 				}
 				operator std::int32_t() const
 				{
-					auto p = reinterpret_cast<string::pointer_type>(callRunTimeFunction
-					(
-						RuntimeInfo::Ext(),
-						RFUNCTION_GETSTRINGSPACE_EX,
-						0,
-						(s.size()+1)*sizeof(string::value_type))
-					);
-					std::copy(s.c_str(), s.c_str()+s.size()+1, p);
-					return reinterpret_cast<std::in32_t>(p);
+					return reinterpret_cast<std::in32_t>(CopyString(s));
 				}
 			};
 			using type = T;
@@ -244,6 +240,8 @@ namespace hSDK
 
 	private:
 		ACEs_t funcs;
+
+		static string::const_pointer_type CopyString(string const &s);
 
 		Extension() = delete;
 		Extension(Extension const &) = delete;
