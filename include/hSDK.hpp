@@ -111,26 +111,12 @@ namespace hSDK
 			//MMF2 doesn't support pass-by-reference
 		};
 		template<typename T>
-		struct Enforce32bit
-		<
-			typename std::enable_if
-			<
-				std::is_same<T, char *>::value,
-				T
-			>::type, T
-		> final
+		struct Enforce32bit<char *, T> final
 		{
 			//Don't allow pointers to non-const characters
 		};
 		template<typename T>
-		struct Enforce32bit
-		<
-			typename std::enable_if
-			<
-				std::is_same<T, string>::value,
-				T
-			>::type, T
-		> final
+		struct Enforce32bit<string, T> final
 		{
 			struct implicit_to32 final
 			{
@@ -400,7 +386,7 @@ namespace hSDK
 				{
 					std::int32_t p;
 					GetParam()
-					: p(GetNextParam<CallT, ExpT>())
+					: p(Params<CallT, ExpT>::GetNext())
 					{
 					}
 					operator std::int32_t()
@@ -413,7 +399,7 @@ namespace hSDK
 				{
 					std::int32_t p;
 					GetParam()
-					: p(GetFirstParam<CallT, ExpT>())
+					: p(Params<CallT, ExpT>::GetFirst())
 					{
 					}
 					operator std::int32_t()
@@ -426,23 +412,23 @@ namespace hSDK
 				template<std::size_t J, typename Last>
 				auto tuple_gen() -> std::tuple<typename Enforce32bit<Last>::fr32>
 				{
-					return std::make_tuple<Enforce32bit<Last>::fr32>
+					return std::make_tuple<typename Enforce32bit<Last>::fr32>
 						(GetParam<J, Enforce32bit<Last>::ExpT>());
 				}
 				template<std::size_t J, typename First, typename... Rest>
 				auto tuple_gen()
 				-> decltype(std::tuple_cat
 				(
-					std::make_tuple<Enforce32bit<First>::fr32>
+					std::make_tuple<typename Enforce32bit<First>::fr32>
 						(GetParam<J, Enforce32bit<First>::ExpT>()),
-					tuple_gen<J+1, Enforce32bit<Rest>::fr32...>()
+					tuple_gen<J+1, typename Enforce32bit<Rest>::fr32...>()
 				))
 				{
 					return std::tuple_cat
 					(
-						std::make_tuple<Enforce32bit<First>::fr32>
+						std::make_tuple<typename Enforce32bit<First>::fr32>
 							(GetParam<J, Enforce32bit<First>::ExpT>()),
-						tuple_gen<J+1, Enforce32bit<Rest>::fr32...>()
+						tuple_gen<J+1, typename Enforce32bit<Rest>::fr32...>()
 					);
 				}
 
@@ -560,9 +546,11 @@ namespace hSDK
 
 		static std::int32_t exp_lparam;
 		template<ACE CallT, ExpressionType ExpT>
-		static std::int32_t GetFirstParam();
-		template<ACE CallT, ExpressionType ExpT>
-		static std::int32_t GetNextParam();
+		struct Params final
+		{
+			static std::int32_t GetFirst();
+			static std::int32_t GetNext();
+		};
 
 		Extension() = delete;
 		Extension(Extension const &) = delete;
@@ -571,6 +559,45 @@ namespace hSDK
 		Extension &operator=(Extension &&) = delete;
 	};
 	inline Extension::~Extension() = default;
+
+	template<> std::int32_t Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::None   >::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::None   >::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::None   >::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::Integer>::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::Integer>::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::Integer>::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::Float  >::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::Float  >::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::Float  >::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::String >::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::String >::GetFirst();
+	template<> std::int32_t Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::String >::GetFirst();
+
+	template<> std::int32_t Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::None   >::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::None   >::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::None   >::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::Integer>::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::Integer>::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::Integer>::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::Float  >::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::Float  >::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::Float  >::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::String >::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::String >::GetNext();
+	template<> std::int32_t Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::String >::GetNext();
+
+	extern template struct Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::None   >;
+	extern template struct Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::None   >;
+	extern template struct Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::None   >;
+	extern template struct Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::Integer>;
+	extern template struct Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::Integer>;
+	extern template struct Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::Integer>;
+	extern template struct Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::Float  >;
+	extern template struct Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::Float  >;
+	extern template struct Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::Float  >;
+	extern template struct Extension::Params<Extension::ACE::Action    , Extension::ExpressionType::String >;
+	extern template struct Extension::Params<Extension::ACE::Condition , Extension::ExpressionType::String >;
+	extern template struct Extension::Params<Extension::ACE::Expression, Extension::ExpressionType::String >;
 }
 
 #endif

@@ -73,31 +73,31 @@ namespace hSDK
 	using ACE = Extension::ACE;
 	using ExprT = Extension::ExpressionType;
 
-	template<> std::int32_t Extension::GetFirstParam<ACE::Action    , ExprT::None   >(){ return GetNextParam<ACE::Action   , ExprT::None>(); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Condition , ExprT::None   >(){ return GetNextParam<ACE::Condition, ExprT::None>(); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Expression, ExprT::None   >(){ return CNC_GetFirstExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_INT); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Action    , ExprT::Integer>(){ return GetNextParam<ACE::Action   , ExprT::Integer>(); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Condition , ExprT::Integer>(){ return GetNextParam<ACE::Condition, ExprT::Integer>(); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Expression, ExprT::Integer>(){ return CNC_GetFirstExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_INT); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Action    , ExprT::Float  >(){ return GetNextParam<ACE::Action   , ExprT::Float>(); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Condition , ExprT::Float  >(){ return GetNextParam<ACE::Condition, ExprT::Float>(); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Expression, ExprT::Float  >(){ return CNC_GetFirstExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_FLOAT); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Action    , ExprT::String >(){ return GetNextParam<ACE::Action   , ExprT::String>(); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Condition , ExprT::String >(){ return GetNextParam<ACE::Condition, ExprT::String>(); }
-	template<> std::int32_t Extension::GetFirstParam<ACE::Expression, ExprT::String >(){ return CNC_GetFirstExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_STRING); }
+	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::None   >::GetFirst(){ return GetNext(); }
+	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::None   >::GetFirst(){ return GetNext(); }
+	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::None   >::GetFirst(){ return CNC_GetFirstExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_INT); }
+	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::Integer>::GetFirst(){ return GetNext(); }
+	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::Integer>::GetFirst(){ return GetNext(); }
+	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::Integer>::GetFirst(){ return CNC_GetFirstExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_INT); }
+	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::Float  >::GetFirst(){ return GetNext(); }
+	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::Float  >::GetFirst(){ return GetNext(); }
+	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::Float  >::GetFirst(){ return CNC_GetFirstExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_FLOAT); }
+	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::String >::GetFirst(){ return GetNext(); }
+	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::String >::GetFirst(){ return GetNext(); }
+	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::String >::GetFirst(){ return CNC_GetFirstExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_STRING); }
 
-	template<> std::int32_t Extension::GetNextParam<ACE::Action    , ExprT::None   >(){ return CNC_GetParameter(RuntimeInfo::Rd()); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Condition , ExprT::None   >(){ return CNC_GetParameter(RuntimeInfo::Rd()); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Expression, ExprT::None   >(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_INT); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Action    , ExprT::Integer>(){ return CNC_GetIntParameter(RuntimeInfo::Rd()); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Condition , ExprT::Integer>(){ return CNC_GetIntParameter(RuntimeInfo::Rd()); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Expression, ExprT::Integer>(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_INT); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Action    , ExprT::Float  >(){ return CNC_GetFloatParameter(RuntimeInfo::Rd()); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Condition , ExprT::Float  >(){ return CNC_GetFloatParameter(RuntimeInfo::Rd()); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Expression, ExprT::Float  >(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_FLOAT); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Action    , ExprT::String >(){ return CNC_GetStringParameter(RuntimeInfo::Rd()); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Condition , ExprT::String >(){ return CNC_GetStringParameter(RuntimeInfo::Rd()); }
-	template<> std::int32_t Extension::GetNextParam<ACE::Expression, ExprT::String >(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_STRING); }
+	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::None   >::GetNext(){ return CNC_GetParameter(RuntimeInfo::Rd()); }
+	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::None   >::GetNext(){ return CNC_GetParameter(RuntimeInfo::Rd()); }
+	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::None   >::GetNext(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_INT); }
+	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::Integer>::GetNext(){ return CNC_GetIntParameter(RuntimeInfo::Rd()); }
+	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::Integer>::GetNext(){ return CNC_GetIntParameter(RuntimeInfo::Rd()); }
+	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::Integer>::GetNext(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_INT); }
+	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::Float  >::GetNext(){ return CNC_GetFloatParameter(RuntimeInfo::Rd()); }
+	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::Float  >::GetNext(){ return CNC_GetFloatParameter(RuntimeInfo::Rd()); }
+	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::Float  >::GetNext(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_FLOAT); }
+	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::String >::GetNext(){ return CNC_GetStringParameter(RuntimeInfo::Rd()); }
+	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::String >::GetNext(){ return CNC_GetStringParameter(RuntimeInfo::Rd()); }
+	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::String >::GetNext(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_STRING); }
 }
 
 //
