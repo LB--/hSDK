@@ -292,10 +292,10 @@ namespace hSDK
 		struct null_returning_int_t    final { null_returning_int_t   (std::nullptr_t){} };
 		struct null_returning_float_t  final { null_returning_float_t (std::nullptr_t){} };
 		struct null_returning_string_t final { null_returning_string_t(std::nullptr_t){} };
-		static null_returning_void_t   const null_returning_void   = nullptr;
-		static null_returning_int_t    const null_returning_int    = nullptr;
-		static null_returning_float_t  const null_returning_float  = nullptr;
-		static null_returning_string_t const null_returning_string = nullptr;
+		static null_returning_void_t   const   null_returning_void   = nullptr;
+		static null_returning_int_t    const   null_returning_int    = nullptr;
+		static null_returning_float_t  const   null_returning_float  = nullptr;
+		static null_returning_string_t const   null_returning_string = nullptr;
 
 		template<typename ExtT, typename R, typename... Args>
 		using ExtMFP =
