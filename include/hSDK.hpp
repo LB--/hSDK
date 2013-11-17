@@ -324,12 +324,12 @@ namespace hSDK
 				template<std::size_t, ExpressionType ExpT>
 				std::uint32_t GetParam()
 				{
-					return GetNextParam<ExpT>();
+					return GetNextParam<CallT, ExpT>();
 				}
 				template<ExpressionType ExpT>
 				std::uint32_t GetParam<0, ExpT>
 				{
-					return GetFirstParam<ExpT>();
+					return GetFirstParam<CallT, ExpT>();
 				}
 
 				template<std::size_t J, typename First, typename... Rest>
@@ -460,9 +460,9 @@ namespace hSDK
 		static string::const_pointer_type CopyString(string const &s);
 
 		std::int32_t exp_lparam = 0;
-		template<ExpressionType ExpT>
+		template<ACE CallT, ExpressionType ExpT>
 		static std::int32_t GetFirstParam();
-		template<ExpressionType ExpT>
+		template<ACE CallT, ExpressionType ExpT>
 		static std::int32_t GetNextParam();
 
 		Extension() = delete;
