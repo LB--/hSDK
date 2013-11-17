@@ -422,9 +422,13 @@ namespace hSDK
 					}
 				};
 
-				template<std::size_t J, typename First, typename... Rest>
-				auto tuple_gen();
-
+				
+				template<std::size_t J, typename Last>
+				auto tuple_gen() -> std::tuple<typename Enforce32bit<Last>::fr32>
+				{
+					return std::make_tuple<Enforce32bit<Last>::fr32>
+						(GetParam<J, Enforce32bit<Last>::ExpT>());
+				}
 				template<std::size_t J, typename First, typename... Rest>
 				auto tuple_gen()
 				-> decltype(std::tuple_cat
@@ -440,12 +444,6 @@ namespace hSDK
 							(GetParam<J, Enforce32bit<First>::ExpT>()),
 						tuple_gen<J+1, Enforce32bit<Rest>::fr32...>()
 					);
-				}
-				template<std::size_t J, typename Last>
-				auto tuple_gen() -> std::tuple<typename Enforce32bit<Last>::fr32>
-				{
-					return std::make_tuple<Enforce32bit<Last>::fr32>
-						(GetParam<J, Enforce32bit<Last>::ExpT>());
 				}
 
 				template<int... S>
