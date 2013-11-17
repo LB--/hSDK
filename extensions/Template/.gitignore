@@ -1,0 +1,9 @@
+build/
+*[Mm]ake*/
+*[Mm]ake*
+!CMakeLists.txt
+*.obj
+*.dll
+*.mfx
+*.a
+*.bat
