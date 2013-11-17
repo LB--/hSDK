@@ -302,6 +302,16 @@ namespace hSDK
 		static null_returning_int_t            constexpr null_returning_int     {};
 		static null_returning_float_t          constexpr null_returning_float   {};
 		static null_returning_string_t         constexpr null_returning_string  {};
+		template<int>
+		struct invalid_ACE final
+		{
+			invalid_ACE() = delete;
+			invalid_ACE(invalid_ACE const &) = delete;
+			invalid_ACE(invalid_ACE &&) = delete;
+			invalid_ACE &operator=(invalid_ACE const &) = delete;
+			invalid_ACE &operator=(invalid_ACE &&) = delete;
+			~invalid_ACE() = default;
+		};
 
 		template<typename ExtT, typename R, typename... Args>
 		using ExtMFP =
@@ -331,23 +341,23 @@ namespace hSDK
 			: Forwarder_t(caller<ExtT, R, Args...>(mfp))
 			{
 			}
-			template<typename = typename std::enable_if<CallT == ACE::Action>::type>
-			ExtMF(null_returning_void_t)
+			template<typename = void>
+			ExtMF(typename std::conditional<CallT == ACE::Action, null_returning_void_t, invalid_ACE<0>>::type)
 			: Forwarder_t(&null_forwarder<ExpressionType::None>)
 			{
 			}
-			template<typename = typename std::enable_if<CallT != ACE::Action>::type>
-			ExtMF(null_returning_int_t)
+			template<typename = void>
+			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_int_t, invalid_ACE<1>>::type)
 			: Forwarder_t(&null_forwarder<ExpressionType::Integer>)
 			{
 			}
-			template<typename = typename std::enable_if<CallT != ACE::Action>::type>
-			ExtMF(null_returning_float_t)
+			template<typename = void>
+			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_float_t, invalid_ACE<2>>::type)
 			: Forwarder_t(&null_forwarder<ExpressionType::Float>)
 			{
 			}
-			template<typename = typename std::enable_if<CallT != ACE::Action>::type>
-			ExtMF(null_returning_string_t)
+			template<typename = void>
+			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_string_t, invalid_ACE<3>>::type)
 			: Forwarder_t(&null_forwarder<ExpressionType::String>)
 			{
 			}
@@ -526,9 +536,9 @@ namespace hSDK
 			};
 		};
 
-		using Actions_t     = std::map<std::size_t, ExtMF<ACE::Action>>;
-		using Conditions_t  = std::map<std::size_t, ExtMF<ACE::Condition>>;
-		using Expressions_t = std::map<std::size_t, ExtMF<ACE::Expression>>;
+		using Actions_t     = std::map<std::uint16_t, ExtMF<ACE::Action>>;
+		using Conditions_t  = std::map<std::uint16_t, ExtMF<ACE::Condition>>;
+		using Expressions_t = std::map<std::uint16_t, ExtMF<ACE::Expression>>;
 	protected:
 		Extension(Actions_t const &a, Conditions_t const &c, Expressions_t const &e)
 		: actions(a)
