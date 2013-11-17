@@ -1,6 +1,7 @@
 #ifndef hSDK_HeaderPlusPlus
 #define hSDK_HeaderPlusPlus
 #include <cstdint>
+#include <functional>
 #include <type_traits>
 #include <algorithm>
 #include <map>
@@ -22,6 +23,12 @@ namespace hSDK
 
 		using string = std::basic_string<char_t>;
 
+		enum struct ACE
+		{
+			Action,
+			Condition,
+			Expression
+		};
 		enum struct ExpressionType
 		{
 			None,
@@ -46,14 +53,9 @@ namespace hSDK
 			{
 				return **Current().rd;
 			}
-			static ExpressionType ExpType()
-			{
-				return Current().et;
-			}
 
 		private:
 			RD *rd = nullptr;
-			ExpressionType et = ExpressionType::None;
 		};
 
 	private:
@@ -102,6 +104,7 @@ namespace hSDK
 			using type = T;
 			using to32 = reinterpret_to32;
 			using fr32 = reinterpret_fr32;
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 		};
 		template<typename T>
 		struct Enforce32bit<T &> final
@@ -131,6 +134,7 @@ namespace hSDK
 			using type = T;
 			using to32 = implicit_to32;
 			using fr32 = string;
+			static ExpressionType constexpr ExpT = ExpressionType::String;
 		};
 		template<typename T>
 		struct Enforce32bit
@@ -145,6 +149,7 @@ namespace hSDK
 			using type = T;
 			using to32 = implicit_cast<T, std::int32_t>;
 			using fr32 = implicit_cast<std::int32_t, T>;
+			static ExpressionType constexpr ExpT = ExpressionType::Integer;
 		};
 		template<typename T>
 		struct Enforce32bit
@@ -184,6 +189,42 @@ namespace hSDK
 			using type = T;
 			using to32 = implicit_to32;
 			using fr32 = implicit_fr32;
+			static ExpressionType constexpr ExpT = ExpressionType::Float;
+		};
+		template<typename R>
+		struct safe_return final
+		{
+			std::function<R ()> f;
+			safe_return(std::function<R ()> func)
+			: f(func);
+			{
+			}
+			operator std::int32_t()
+			{
+				return Enforce32bit<R>::to32(f());
+			}
+		};
+		template<>
+		struct safe_return<void> final
+		{
+			std::function<void ()> f;
+			safe_return(std::function<void ()> func)
+			: f(func)
+			{
+			}
+			operator std::int32_t()
+			{
+				return f(), 0;
+			}
+		};
+		struct tuple_unpack final
+		{
+			template<int...> struct seq {};
+			template<int N, int... S> struct gens : gens<N-1, N-1, S...> {};
+			template<int... S> struct gens<0, S...>
+			{
+				using type = seq<S...>;
+			};
 		};
 
 		template<typename Base, typename Derived>
@@ -194,54 +235,235 @@ namespace hSDK
 		>::type;
 
 	public:
+		struct null_returning_void_t   final { null_returning_void_t  (std::nullptr_t){} };
+		struct null_returning_int_t    final { null_returning_int_t   (std::nullptr_t){} };
+		struct null_returning_float_t  final { null_returning_float_t (std::nullptr_t){} };
+		struct null_returning_string_t final { null_returning_string_t(std::nullptr_t){} };
+		static null_returning_void_t   const null_returning_void   = nullptr;
+		static null_returning_int_t    const null_returning_int    = nullptr;
+		static null_returning_float_t  const null_returning_float  = nullptr;
+		static null_returning_string_t const null_returning_string = nullptr;
+
 		template<typename ExtT, typename R, typename... Args>
 		using ExtMFP =
 			typename Enforce32bit<R>::type //return
 			(base_check<Extension<>, ExtT>::*) //member function pointer
 			(typename Enforce32bit<Args>::type...); //arguments
 
-		using Forwarder_t = std::function<std::int32_t ()>;
+		using Forwarder_t = std::function
+		<
+			std::int32_t (Extension &ext, std::int32_t param1, std::int32_t param2)
+		>;
+		template<ACE CallT>
 		struct ExtMF : public Forwarder_t
 		{
 			template<typename ExtT, typename R, typename... Args>
-			ExtMF(ExtMFP<ExtT, R, Args...> mfp)
-			: Forwarder_t(Forwarder<ExtT, R, Args...>(mfp))
+			ExtMF(ExtMFP
+			<
+				ExtT,
+				typename std::enable_if
+				<
+					(CallT == ACE::Action &&  std::is_same<R, void>::value)
+				 || (CallT != ACE::Action && !std::is_same<R, void>::value),
+					R
+				>::type,
+				Args...
+			> mfp)
+			: Forwarder_t(caller<ExtT, R, Args...>(mfp))
 			{
 			}
-			ExtMF(std::nullptr_t = nullptr)
-			: Forwarder_t(&null_forwarder)
+			template<typename = typename std::enable_if<CallT == ACE::Action>::type>
+			ExtMF(null_returning_void_t)
+			: Forwarder_t(&null_forwarder<ExpressionType::None>)
 			{
 			}
-			template<typename ExtT, typename R, typename... Args>
-			static Forwarder_t Forwarder(ExtMFP<ExtT, R, Args...> mfp)
+			template<typename = typename std::enable_if<CallT != ACE::Action>::type>
+			ExtMF(null_returning_int_t)
+			: Forwarder_t(&null_forwarder<ExpressionType::Int>)
 			{
-				return [&,mfp]() -> std::int32_t
+			}
+			template<typename = typename std::enable_if<CallT != ACE::Action>::type>
+			ExtMF(null_returning_float_t)
+			: Forwarder_t(&null_forwarder<ExpressionType::Float>)
+			{
+			}
+			template<typename = typename std::enable_if<CallT != ACE::Action>::type>
+			ExtMF(null_returning_string_t)
+			: Forwarder_t(&null_forwarder<ExpressionType::String>)
+			{
+			}
+			ExtMF(ExtMF const &) = default;
+			ExtMF(ExtMF &&) = default;
+			ExtMF &operator=(ExtMF const &) = default;
+			ExtMF &operator=(ExtMF &&) = default;
+
+		private:
+			template<ExpressionType ExpT>
+			static std::int32_t null_forwarder(Extension &, std::int32_t, std::int32_t)
+			{
+				if(CallT == ACE::Expression)
 				{
-					//
-				}
-			}
-			static std::int32_t null_forwarder()
-			{
-				switch(RuntimeInfo::ExpType())
-				{
-				case ExpressionType::Float: return Enforce32bit<float>::to32(0.0f);
-				case ExpressionType::String: return Enforce32bit<char const *>::to32("");
+					switch(ExpT)
+					{
+					case ExpressionType::Float: return Enforce32bit<float>::to32(0.0f);
+					case ExpressionType::String: return Enforce32bit<char const *>::to32("");
+					}
 				}
 				return 0;
 			}
+
+			template<typename ExtT, typename R, typename... Args, std::size_t I = sizeof...(Args)>
+			struct caller final
+			{
+				ExtMFP<ExtT, R, Args...> mfp;
+				caller(ExtMFP<ExtT, R, Args...> mf)
+				: mfp(mf)
+				{
+				}
+
+				template<std::size_t, ExpressionType ExpT>
+				std::uint32_t GetParam()
+				{
+					return GetNextParam<ExpT>();
+				}
+				template<ExpressionType ExpT>
+				std::uint32_t GetParam<0, ExpT>
+				{
+					return GetFirstParam<ExpT>();
+				}
+
+				template<std::size_t J, typename First, typename... Rest>
+				auto tuple_gen()
+				-> decltype(std::tuple_cat
+				(
+					std::make_tuple<Enforce32bit<First>::fr32>
+						(GetParam<J, Enforce32bit<First>::ExpT>()),
+					tuple_gen<J+1, Enforce32bit<Rest>::fr32...>()
+				))
+				{
+					return std::tuple_cat
+					(
+						std::make_tuple<Enforce32bit<First>::fr32>
+							(GetParam<J, Enforce32bit<First>::ExpT>()),
+						tuple_gen<J+1, Enforce32bit<Rest>::fr32...>()
+					);
+				}
+				template<std::size_t J, typename Last>
+				auto tuple_gen() -> std::tuple<Enforce32bit<Last>::fr32>
+				{
+					return std::make_tuple<Enforce32bit<Last>::fr32>
+						(GetParam<J, Enforce32bit<Last>::ExpT>());
+				}
+
+				template<int... S>
+				auto call(Extension &ext, tuple_unpack::seq<S...>)
+				-> typename std::enable_if<!std::is_same<R, void>, Enforce32bit<R>::to32>::type
+				{
+					auto params = tuple_gen<0, Args...>();
+					return (ext.*mfp)(std::get<S>(params)...);
+				}
+				template<int... S>
+				auto call(Extension &ext, tuple_unpack::seq<S...>)
+				-> typename std::enable_if<std::is_same<R, void>, std::int32_t>::type
+				{
+					auto params = tuple_gen<0, Args...>();
+					return (ext.*mfp)(std::get<S>(params)...), 0;
+				}
+
+				std::int32_t operator()(Extension &ext, std::int32_t, std::int32_t)
+				{
+					return call(ext, typename gens<I>::type());
+				}
+			};
+			template<typename ExtT, typename R, typename... Args>
+			struct caller<ExtT, R, Args..., 0> final
+			{
+				ExtMFP<ExtT, R, Args...> mfp;
+				caller(ExtT &e, ExtMFP<ExtT, R, Args...> mf)
+				: ext(e)
+				, mfp(mf)
+				{
+				}
+
+				auto operator()(Extension &ext, std::int32_t, std::int32_t)
+				-> typename std::enable_if<!std::is_same<R, void>, std::int32_t>::type
+				{
+					return Enforce32bit<R>::to32((ext.*mfp)());
+				}
+			};
+			template<typename ExtT, typename R, typename... Args>
+			struct caller<ExtT, R, Args..., 1> final
+			{
+				ExtMFP<ExtT, R, Args...> mfp;
+				caller(ExtT &e, ExtMFP<ExtT, R, Args...> mf)
+				: ext(e)
+				, mfp(mf)
+				, param1(p1)
+				{
+				}
+
+				template<typename First, typename...>
+				using A1_t = First;
+
+				auto operator()(Extension &ext, std::int32_t param1, std::int32_t)
+				-> typename std::enable_if<!std::is_same<R, void>, std::int32_t>::type
+				{
+					return Enforce32bit<R>::to32((ext.*mfp)
+					(
+						Enforce32bit<A1_t<Args...>>::fr32(param1)
+					));
+				}
+			};
+			template<typename ExtT, typename R, typename... Args>
+			struct caller<ExtT, R, Args..., 2> final
+			{
+				ExtMFP<ExtT, R, Args...> mfp;
+				caller(ExtT &e, ExtMFP<ExtT, R, Args...> mf)
+				: ext(e)
+				, mfp(mf)
+				{
+				}
+
+				template<typename First, typename...>
+				using A1_t = First;
+				template<typename, typename Second, typename...>
+				using A2_t = Second;
+
+				auto operator()(Extension &ext, std::int32_t param1, std::int32_t param2)
+				-> typename std::enable_if<!std::is_same<R, void>, std::int32_t>::type
+				{
+					return Enforce32bit<R>::to32((ext.*mfp)
+					(
+						Enforce32bit<A1_t<Args...>>::fr32(param1),
+						Enforce32bit<A2_t<Args...>>::fr32(param2)
+					));
+				}
+			};
 		};
 
-		using ACEs_t = std::map<std::size_t, ExtMF>;
+		using Actions_t     = std::map<std::size_t, ExtMF<ACE::Action>>;
+		using Conditions_t  = std::map<std::size_t, ExtMF<ACE::Condition>>;
+		using Expressions_t = std::map<std::size_t, ExtMF<ACE::Expression>>;
 	protected:
-		Extension(ACEs_t const &ACEs)
-		: funcs(ACEs)
+		Extension(Actions_t const &a, Conditions_t const &c, Expressions_t const &e)
+		: actions(a)
+		, conditions(c)
+		, expressions(e)
 		{
 		}
 
 	private:
-		ACEs_t funcs;
+		Actions_t actions;
+		Conditions_t conditions;
+		Expressions_t expressions;
 
 		static string::const_pointer_type CopyString(string const &s);
+
+		std::int32_t exp_lparam = 0;
+		template<ExpressionType ExpT>
+		static std::int32_t GetFirstParam();
+		template<ExpressionType ExpT>
+		static std::int32_t GetNextParam();
 
 		Extension() = delete;
 		Extension(Extension const &) = delete;

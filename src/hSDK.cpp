@@ -1,6 +1,8 @@
 #include "hSDK.hpp"
 #include <tuple>
 
+#include "Ccxhdr.h"
+
 namespace hSDK
 {
 	auto Extension::CopyString(string const &s) -> string::const_pointer_type
@@ -14,6 +16,118 @@ namespace hSDK
 		);
 		std::copy(s.c_str(), s.c_str()+s.size()+1, p);
 		return p;
+	}
+	template<>
+	auto Extension::GetFirstParam<ExpressionType::None>()
+	-> std::int32_t
+	{
+		if(CallType() == ACE::Action || CallType() == ACE::Condtion)
+		{
+			return GetNextParam<ExpressionType::None>();
+		}
+		else if(CallType() == ACE::Expression)
+		{
+			return CNC_GetFirstExpressionParameter(Rd(), Current().exp_lparam, TYPE_INT);
+		}
+		return 0;
+	}
+	template<>
+	auto Extension::GetFirstParam<ExpressionType::Integer>()
+	-> std::int32_t
+	{
+		if(CallType() == ACE::Action || CallType() == ACE::Condtion)
+		{
+			return GetNextParam<ExpressionType::Integer>();
+		}
+		else if(CallType() == ACE::Expression)
+		{
+			return CNC_GetFirstExpressionParameter(Rd(), Current().exp_lparam, TYPE_INT);
+		}
+		return 0;
+	}
+	template<>
+	auto Extension::GetFirstParam<ExpressionType::Float>()
+	-> std::int32_t
+	{
+		if(CallType() == ACE::Action || CallType() == ACE::Condtion)
+		{
+			return GetNextParam<ExpressionType::Float>();
+		}
+		else if(CallType() == ACE::Expression)
+		{
+			return CNC_GetFirstExpressionParameter(Rd(), Current().exp_lparam, TYPE_FLOAT);
+		}
+		return 0;
+	}
+	template<>
+	auto Extension::GetFirstParam<ExpressionType::String>()
+	-> std::int32_t
+	{
+		if(CallType() == ACE::Action || CallType() == ACE::Condtion)
+		{
+			return GetNextParam<ExpressionType::String>();
+		}
+		else if(CallType() == ACE::Expression)
+		{
+			return CNC_GetFirstExpressionParameter(Rd(), Current().exp_lparam, TYPE_STRING);
+		}
+		return 0;
+	}
+	template<>
+	auto Extension::GetNextParam<ExpressionType::None>()
+	-> std::int32_t
+	{
+		if(CallType() == ACE::Action || CallType() == ACE::Condtion)
+		{
+			return CNC_GetParameter(Rd());
+		}
+		else if(CallType() == ACE::Expression)
+		{
+			return CNC_GetNextExpressionParameter(Rd(), Current().exp_lparam, TYPE_INT);
+		}
+		return 0;
+	}
+	template<>
+	auto Extension::GetNextParam<ExpressionType::Integer>()
+	-> std::int32_t
+	{
+		if(CallType() == ACE::Action || CallType() == ACE::Condtion)
+		{
+			return CNC_GetIntParameter(Rd());
+		}
+		else if(CallType() == ACE::Expression)
+		{
+			return CNC_GetNextExpressionParameter(Rd(), Current().exp_lparam, TYPE_INT);
+		}
+		return 0;
+	}
+	template<>
+	auto Extension::GetNextParam<ExpressionType::Float>()
+	-> std::int32_t
+	{
+		if(CallType() == ACE::Action || CallType() == ACE::Condtion)
+		{
+			return CNC_GetFloatParameter(Rd());
+		}
+		else if(CallType() == ACE::Expression)
+		{
+			return CNC_GetNextExpressionParameter(Rd(), Current().exp_lparam, TYPE_FLOAT);
+		}
+		return 0;
+	}
+	template<>
+	auto Extension::GetNextParam<ExpressionType::String>()
+	-> std::int32_t
+	{
+		if(CallType() == ACE::Action || CallType() == ACE::Condtion)
+		{
+			return CNC_GetStringParameter(Rd());
+		}
+		else if(CallType() == ACE::Expression)
+		{
+			return CNC_GetNextExpressionParameter(Rd(), Current().exp_lparam, TYPE_STRING);
+		}
+		return 0;
 	}
 }
 namespace
