@@ -37,9 +37,11 @@ namespace hSDK
 			String
 		};
 
+		struct ED;
+		struct RD;
+
 		struct RuntimeInfo
 		{
-			using RD = Extension *;
 			static RuntimeInfo &Current()
 			{
 				static RuntimeInfo rti;
@@ -47,12 +49,9 @@ namespace hSDK
 			}
 			static RD *Rd()
 			{
-				return Current.rd;
+				return Current().rd;
 			}
-			static Extension &Ext()
-			{
-				return **Current().rd;
-			}
+			static Extension &Ext();
 
 		private:
 			RD *rd = nullptr;
@@ -73,7 +72,7 @@ namespace hSDK
 			}
 		};
 
-		template<typename T>
+		template<typename T, typename = void>
 		struct Enforce32bit final
 		{
 			static_assert(sizeof(T) == 4, "Type is not compatible with MMF2");
@@ -81,7 +80,7 @@ namespace hSDK
 			{
 				T t;
 				reinterpret_to32(T const &from)
-				: t(from);
+				: t(from)
 				{
 				}
 				operator std::int32_t() const
@@ -93,7 +92,7 @@ namespace hSDK
 			{
 				std::int32_t i;
 				reinterpret_fr32(std::int32_t i32)
-				: i(i32);
+				: i(i32)
 				{
 				}
 				operator T() const
@@ -109,15 +108,29 @@ namespace hSDK
 		template<typename T>
 		struct Enforce32bit<T &> final
 		{
-			static_assert(false, "MMF2 does not support pass-by-reference");
+			//MMF2 doesn't support pass-by-reference
 		};
-		template<>
-		struct Enforce32bit<char *> final
+		template<typename T>
+		struct Enforce32bit
+		<
+			typename std::enable_if
+			<
+				std::is_same<T, char *>::value,
+				T
+			>::type, T
+		> final
 		{
 			//Don't allow pointers to non-const characters
 		};
-		template<>
-		struct Enforce32bit<string> final
+		template<typename T>
+		struct Enforce32bit
+		<
+			typename std::enable_if
+			<
+				std::is_same<T, string>::value,
+				T
+			>::type, T
+		> final
 		{
 			struct implicit_to32 final
 			{
@@ -128,7 +141,7 @@ namespace hSDK
 				}
 				operator std::int32_t() const
 				{
-					return reinterpret_cast<std::in32_t>(CopyString(s));
+					return reinterpret_cast<std::int32_t>(CopyString(s));
 				}
 			};
 			using type = T;
@@ -143,7 +156,7 @@ namespace hSDK
 			<
 				std::is_integral<T>::value && !std::is_same<T, std::int32_t>::value,
 				T
-			>::type
+			>::type, T
 		> final
 		{
 			using type = T;
@@ -158,7 +171,7 @@ namespace hSDK
 			<
 				std::is_floating_point<T>::value,
 				T
-			>::type
+			>::type, T
 		> final
 		{
 			static_assert(sizeof(float) == 4, "MMF2 only supports 32-bit floats");
@@ -177,7 +190,7 @@ namespace hSDK
 			struct implicit_fr32 final
 			{
 				float f;
-				implicit_to32(std::int32_t i)
+				implicit_fr32(std::int32_t i)
 				: f(*reinterpret_cast<float *>(&i))
 				{
 				}
@@ -191,12 +204,12 @@ namespace hSDK
 			using fr32 = implicit_fr32;
 			static ExpressionType constexpr ExpT = ExpressionType::Float;
 		};
-		template<typename R>
+		template<typename R, typename = void *>
 		struct safe_return final
 		{
 			std::function<R ()> f;
 			safe_return(std::function<R ()> func)
-			: f(func);
+			: f(func)
 			{
 			}
 			operator std::int32_t()
@@ -204,8 +217,15 @@ namespace hSDK
 				return Enforce32bit<R>::to32(f());
 			}
 		};
-		template<>
-		struct safe_return<void> final
+		template<typename R>
+		struct safe_return
+		<
+			typename std::enable_if
+			<
+				std::is_same<R, void>::value,
+				R
+			>::type, R
+		> final
 		{
 			std::function<void ()> f;
 			safe_return(std::function<void ()> func)
@@ -288,19 +308,19 @@ namespace hSDK
 		>::type;
 
 	public:
-		struct null_returning_void_t   final { null_returning_void_t  (std::nullptr_t){} };
-		struct null_returning_int_t    final { null_returning_int_t   (std::nullptr_t){} };
-		struct null_returning_float_t  final { null_returning_float_t (std::nullptr_t){} };
-		struct null_returning_string_t final { null_returning_string_t(std::nullptr_t){} };
-		static null_returning_void_t   const   null_returning_void   = nullptr;
-		static null_returning_int_t    const   null_returning_int    = nullptr;
-		static null_returning_float_t  const   null_returning_float  = nullptr;
-		static null_returning_string_t const   null_returning_string = nullptr;
+		struct null_returning_void_t   final { constexpr null_returning_void_t  () = default; };
+		struct null_returning_int_t    final { constexpr null_returning_int_t   () = default; };
+		struct null_returning_float_t  final { constexpr null_returning_float_t () = default; };
+		struct null_returning_string_t final { constexpr null_returning_string_t() = default;};
+		static null_returning_void_t           constexpr null_returning_void    {};
+		static null_returning_int_t            constexpr null_returning_int     {};
+		static null_returning_float_t          constexpr null_returning_float   {};
+		static null_returning_string_t         constexpr null_returning_string  {};
 
 		template<typename ExtT, typename R, typename... Args>
 		using ExtMFP =
 			typename Enforce32bit<R>::type //return
-			(base_check<Extension<>, ExtT>::*) //member function pointer
+			(base_check<Extension, ExtT>::*) //member function pointer
 			(typename Enforce32bit<Args>::type...); //arguments
 
 		using Forwarder_t = std::function
@@ -332,7 +352,7 @@ namespace hSDK
 			}
 			template<typename = typename std::enable_if<CallT != ACE::Action>::type>
 			ExtMF(null_returning_int_t)
-			: Forwarder_t(&null_forwarder<ExpressionType::Int>)
+			: Forwarder_t(&null_forwarder<ExpressionType::Integer>)
 			{
 			}
 			template<typename = typename std::enable_if<CallT != ACE::Action>::type>
@@ -365,9 +385,10 @@ namespace hSDK
 				return 0;
 			}
 
-			template<typename ExtT, typename R, typename... Args, std::size_t I = sizeof...(Args)>
+			template<typename ExtT, typename R, typename... Args>
 			struct caller final
 			{
+				static std::size_t constexpr I = sizeof...(Args);
 				ExtMFP<ExtT, R, Args...> mfp;
 				caller(ExtMFP<ExtT, R, Args...> mf)
 				: mfp(mf)
@@ -375,15 +396,34 @@ namespace hSDK
 				}
 
 				template<std::size_t, ExpressionType ExpT>
-				std::uint32_t GetParam()
+				struct GetParam final
 				{
-					return GetNextParam<CallT, ExpT>();
-				}
+					std::int32_t p;
+					GetParam()
+					: p(GetNextParam<CallT, ExpT>())
+					{
+					}
+					operator std::int32_t()
+					{
+						return p;
+					}
+				};
 				template<ExpressionType ExpT>
-				std::uint32_t GetParam<0, ExpT>
+				struct GetParam<0, ExpT> final
 				{
-					return GetFirstParam<CallT, ExpT>();
-				}
+					std::int32_t p;
+					GetParam()
+					: p(GetFirstParam<CallT, ExpT>())
+					{
+					}
+					operator std::int32_t()
+					{
+						return p;
+					}
+				};
+
+				template<std::size_t J, typename First, typename... Rest>
+				auto tuple_gen();
 
 				template<std::size_t J, typename First, typename... Rest>
 				auto tuple_gen()
@@ -402,7 +442,7 @@ namespace hSDK
 					);
 				}
 				template<std::size_t J, typename Last>
-				auto tuple_gen() -> std::tuple<Enforce32bit<Last>::fr32>
+				auto tuple_gen() -> std::tuple<typename Enforce32bit<Last>::fr32>
 				{
 					return std::make_tuple<Enforce32bit<Last>::fr32>
 						(GetParam<J, Enforce32bit<Last>::ExpT>());
@@ -410,14 +450,22 @@ namespace hSDK
 
 				template<int... S>
 				auto call(Extension &ext, tuple_unpack::seq<S...>)
-				-> typename std::enable_if<!std::is_same<R, void>, Enforce32bit<R>::to32>::type
+				-> typename std::enable_if
+				<
+					!std::is_same<R, void>::value,
+					typename Enforce32bit<R>::to32
+				>::type
 				{
 					auto params = tuple_gen<0, Args...>();
 					return (ext.*mfp)(std::get<S>(params)...);
 				}
 				template<int... S>
 				auto call(Extension &ext, tuple_unpack::seq<S...>)
-				-> typename std::enable_if<std::is_same<R, void>, std::int32_t>::type
+				-> typename std::enable_if
+				<
+					std::is_same<R, void>::value,
+					std::int32_t
+				>::type
 				{
 					auto params = tuple_gen<0, Args...>();
 					return (ext.*mfp)(std::get<S>(params)...), 0;
@@ -425,70 +473,70 @@ namespace hSDK
 
 				std::int32_t operator()(Extension &ext, std::int32_t, std::int32_t)
 				{
-					return call(ext, typename gens<I>::type());
+					return call(ext, typename tuple_unpack::gens<I>::type());
 				}
 			};
-			template<typename ExtT, typename R, typename... Args>
-			struct caller<ExtT, R, Args..., 0> final
+			template<typename ExtT, typename R>
+			struct caller<ExtT, R> final
 			{
-				ExtMFP<ExtT, R, Args...> mfp;
-				caller(ExtT &e, ExtMFP<ExtT, R, Args...> mf)
-				: ext(e)
-				, mfp(mf)
+				ExtMFP<ExtT, R> mfp;
+				caller(ExtMFP<ExtT, R> mf)
+				: mfp(mf)
 				{
 				}
 
 				auto operator()(Extension &ext, std::int32_t, std::int32_t)
-				-> typename std::enable_if<!std::is_same<R, void>, std::int32_t>::type
+				-> typename std::enable_if
+				<
+					!std::is_same<R, void>::value,
+					std::int32_t
+				>::type
 				{
 					return Enforce32bit<R>::to32((ext.*mfp)());
 				}
 			};
-			template<typename ExtT, typename R, typename... Args>
-			struct caller<ExtT, R, Args..., 1> final
+			template<typename ExtT, typename R, typename Arg1>
+			struct caller<ExtT, R, Arg1> final
 			{
-				ExtMFP<ExtT, R, Args...> mfp;
-				caller(ExtT &e, ExtMFP<ExtT, R, Args...> mf)
-				: ext(e)
-				, mfp(mf)
-				, param1(p1)
+				ExtMFP<ExtT, R, Arg1> mfp;
+				caller(ExtMFP<ExtT, R, Arg1> mf)
+				: mfp(mf)
 				{
 				}
 
-				template<typename First, typename...>
-				using A1_t = First;
-
 				auto operator()(Extension &ext, std::int32_t param1, std::int32_t)
-				-> typename std::enable_if<!std::is_same<R, void>, std::int32_t>::type
+				-> typename std::enable_if
+				<
+					!std::is_same<R, void>::value,
+					std::int32_t
+				>::type
 				{
 					return Enforce32bit<R>::to32((ext.*mfp)
 					(
-						Enforce32bit<A1_t<Args...>>::fr32(param1)
+						Enforce32bit<Arg1>::fr32(param1)
 					));
 				}
 			};
-			template<typename ExtT, typename R, typename... Args>
-			struct caller<ExtT, R, Args..., 2> final
+			template<typename ExtT, typename R, typename Arg1, typename Arg2>
+			struct caller<ExtT, R, Arg1, Arg2> final
 			{
-				ExtMFP<ExtT, R, Args...> mfp;
-				caller(ExtT &e, ExtMFP<ExtT, R, Args...> mf)
-				: ext(e)
-				, mfp(mf)
+				ExtMFP<ExtT, R, Arg1, Arg2> mfp;
+				caller(ExtMFP<ExtT, R, Arg1, Arg2> mf)
+				: mfp(mf)
 				{
 				}
 
-				template<typename First, typename...>
-				using A1_t = First;
-				template<typename, typename Second, typename...>
-				using A2_t = Second;
-
 				auto operator()(Extension &ext, std::int32_t param1, std::int32_t param2)
-				-> typename std::enable_if<!std::is_same<R, void>, std::int32_t>::type
+				-> typename std::enable_if
+				<
+					!std::is_same<R, void>::value,
+					std::int32_t
+				>::type
 				{
 					return Enforce32bit<R>::to32((ext.*mfp)
 					(
-						Enforce32bit<A1_t<Args...>>::fr32(param1),
-						Enforce32bit<A2_t<Args...>>::fr32(param2)
+						Enforce32bit<Arg1>::fr32(param1),
+						Enforce32bit<Arg2>::fr32(param2)
 					));
 				}
 			};
@@ -510,7 +558,7 @@ namespace hSDK
 		Conditions_t conditions;
 		Expressions_t expressions;
 
-		static string::const_pointer_type CopyString(string const &s);
+		static string::const_pointer CopyString(string const &s);
 
 		static std::int32_t exp_lparam;
 		template<ACE CallT, ExpressionType ExpT>
