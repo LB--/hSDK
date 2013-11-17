@@ -227,6 +227,59 @@ namespace hSDK
 			};
 		};
 
+		template<typename T>
+		using identity = T;
+
+		template<typename T, typename... V>
+		struct RAII_Set_impl
+		{
+			T &t;
+			std::tuple<identity<V T::*>...> mop;
+			std::tuple<V...> ds;
+			RAII_Set_impl(T &t_, std::tuple<V T::*, V, V>... sets)
+			: t(t_)
+			, mop(std::get<0>(sets)...)
+			, ds(std::get<2>(sets)...)
+			{
+				set(std::get<1>(sets)...);
+			}
+			~RAII_Set_impl()
+			{
+				unset(typename tuple_unpack::gens<sizeof...(V)>::type());
+			}
+			template<typename... U>
+			void set(U... u)
+			{
+				do_set<0, U...>(u...);
+			}
+			template<std::size_t i, typename First, typename... Rest>
+			void do_set(First first, Rest... rest)
+			{
+				t.*std::get<i>(mop) = first;
+				do_set<i+1, Rest...>(rest...);
+			}
+			template<std::size_t i, typename Last>
+			void do_set(Last last)
+			{
+				t.*std::get<i>(mop) = last;
+			}
+			template<std::size_t i>
+			void do_set()
+			{
+			}
+			template<std::size_t... S>
+			void unset(tuple_unpack::seq<S...>)
+			{
+				set(std::get<S>(ds)...);
+			}
+		};
+		template<typename T, typename... V>
+		auto RAII_Set(T &t, std::tuple<V T::*, V, V>... sets)
+		-> RAII_Set_impl<T, V...>
+		{
+			return RAII_Set_impl<T, V...>(t, sets...);
+		}
+
 		template<typename Base, typename Derived>
 		using base_check = typename std::enable_if
 		<
@@ -459,7 +512,7 @@ namespace hSDK
 
 		static string::const_pointer_type CopyString(string const &s);
 
-		std::int32_t exp_lparam = 0;
+		static std::int32_t exp_lparam;
 		template<ACE CallT, ExpressionType ExpT>
 		static std::int32_t GetFirstParam();
 		template<ACE CallT, ExpressionType ExpT>
