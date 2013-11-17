@@ -341,22 +341,18 @@ namespace hSDK
 			: Forwarder_t(caller<ExtT, R, Args...>(mfp))
 			{
 			}
-			template<typename = void>
 			ExtMF(typename std::conditional<CallT == ACE::Action, null_returning_void_t, invalid_ACE<0>>::type)
 			: Forwarder_t(&null_forwarder<ExpressionType::None>)
 			{
 			}
-			template<typename = void>
 			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_int_t, invalid_ACE<1>>::type)
 			: Forwarder_t(&null_forwarder<ExpressionType::Integer>)
 			{
 			}
-			template<typename = void>
 			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_float_t, invalid_ACE<2>>::type)
 			: Forwarder_t(&null_forwarder<ExpressionType::Float>)
 			{
 			}
-			template<typename = void>
 			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_string_t, invalid_ACE<3>>::type)
 			: Forwarder_t(&null_forwarder<ExpressionType::String>)
 			{
