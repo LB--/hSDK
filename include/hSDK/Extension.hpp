@@ -68,7 +68,21 @@ namespace hSDK
 		template<typename T, typename = void>
 		struct Enforce32bit final
 		{
-			static_assert(sizeof(T) == 4, "Type is not compatible with MMF2");
+		};
+		template<typename T>
+		struct Enforce32bit
+		<
+			typename std::enable_if
+			<
+				sizeof(T) == 4
+			 && !std::is_floating_point<T>::value
+			 && !std::is_integral<T>::value
+			 && !std::is_same<T, char_t *>::value
+			 && !std::is_reference<T>::value,
+				T
+			>::type, T
+		> final
+		{
 			struct reinterpret_to32 final
 			{
 				T t;
@@ -99,16 +113,6 @@ namespace hSDK
 			static ExpressionType constexpr ExpT = ExpressionType::None;
 		};
 		template<typename T>
-		struct Enforce32bit<T &> final
-		{
-			//MMF2 doesn't support pass-by-reference
-		};
-		template<typename T>
-		struct Enforce32bit<char *, T> final
-		{
-			//Don't allow pointers to non-const characters
-		};
-		template<typename T>
 		struct Enforce32bit<string, T> final
 		{
 			struct implicit_to32 final
@@ -133,7 +137,7 @@ namespace hSDK
 		<
 			typename std::enable_if
 			<
-				std::is_integral<T>::value && !std::is_same<T, std::int32_t>::value,
+				std::is_integral<T>::value,
 				T
 			>::type, T
 		> final
@@ -183,7 +187,13 @@ namespace hSDK
 			using fr32 = implicit_fr32;
 			static ExpressionType constexpr ExpT = ExpressionType::Float;
 		};
-		template<typename R, typename = void *>
+		template<typename T>
+		struct Enforce32bit<void, T> final
+		{
+			using type = void;
+			static ExpressionType constexpr ExpT = ExpressionType::None;
+		};
+		template<typename R, typename = void>
 		struct safe_return final
 		{
 			std::function<R ()> f;
@@ -197,14 +207,7 @@ namespace hSDK
 			}
 		};
 		template<typename R>
-		struct safe_return
-		<
-			typename std::enable_if
-			<
-				std::is_same<R, void>::value,
-				R
-			>::type, R
-		> final
+		struct safe_return<void, R> final
 		{
 			std::function<void ()> f;
 			safe_return(std::function<void ()> func)
@@ -216,68 +219,6 @@ namespace hSDK
 				return f(), 0;
 			}
 		};
-		struct tuple_unpack final
-		{
-			template<int...> struct seq {};
-			template<int N, int... S> struct gens : gens<N-1, N-1, S...> {};
-			template<int... S> struct gens<0, S...>
-			{
-				using type = seq<S...>;
-			};
-		};
-
-		template<typename T>
-		using identity = T;
-
-		template<typename T, typename... V>
-		struct RAII_Set_impl
-		{
-			T &t;
-			std::tuple<identity<V T::*>...> mop;
-			std::tuple<V...> ds;
-			RAII_Set_impl(T &t_, std::tuple<V T::*, V, V>... sets)
-			: t(t_)
-			, mop(std::get<0>(sets)...)
-			, ds(std::get<2>(sets)...)
-			{
-				set(std::get<1>(sets)...);
-			}
-			~RAII_Set_impl()
-			{
-				unset(typename tuple_unpack::gens<sizeof...(V)>::type());
-			}
-			template<typename... U>
-			void set(U... u)
-			{
-				do_set<0, U...>(u...);
-			}
-			template<std::size_t i, typename First, typename... Rest>
-			void do_set(First first, Rest... rest)
-			{
-				t.*std::get<i>(mop) = first;
-				do_set<i+1, Rest...>(rest...);
-			}
-			template<std::size_t i, typename Last>
-			void do_set(Last last)
-			{
-				t.*std::get<i>(mop) = last;
-			}
-			template<std::size_t i>
-			void do_set()
-			{
-			}
-			template<std::size_t... S>
-			void unset(tuple_unpack::seq<S...>)
-			{
-				set(std::get<S>(ds)...);
-			}
-		};
-		template<typename T, typename... V>
-		auto RAII_Set(T &t, std::tuple<V T::*, V, V>... sets)
-		-> RAII_Set_impl<T, V...>
-		{
-			return RAII_Set_impl<T, V...>(t, sets...);
-		}
 
 		template<typename Base, typename Derived>
 		using base_check = typename std::enable_if
@@ -320,18 +261,8 @@ namespace hSDK
 		struct ExtMF : public Forwarder_t
 		{
 			template<typename ExtT, typename R, typename... Args>
-			ExtMF(ExtMFP
-			<
-				ExtT,
-				typename std::enable_if
-				<
-					(CallT == ACE::Action &&  std::is_same<R, void>::value)
-				 || (CallT != ACE::Action && !std::is_same<R, void>::value),
-					R
-				>::type,
-				Args...
-			> mfp)
-			: Forwarder_t(caller<ExtT, R, Args...>(mfp))
+			ExtMF(R (ExtT::*mfp)(Args...))
+			: Forwarder_t(caller<ExtT, R, Args...>(verify(mfp)))
 			{
 			}
 			ExtMF(typename std::conditional<CallT == ACE::Action, null_returning_void_t, invalid_ACE<0>>::type)
@@ -356,6 +287,22 @@ namespace hSDK
 			ExtMF &operator=(ExtMF &&) = default;
 
 		private:
+			template<typename ExtT, typename R, typename... Args>
+			static auto verify(R (ExtT::*mfp)(Args...))
+			-> ExtMFP
+			<
+				ExtT,
+				typename std::enable_if
+				<
+					(CallT == ACE::Action &&  std::is_same<R, void>::value)
+				 || (CallT != ACE::Action && !std::is_same<R, void>::value),
+					R
+				>::type,
+				Args...
+			>
+			{
+				return mfp;
+			}
 			template<ExpressionType ExpT>
 			static std::int32_t null_forwarder(Extension &, std::int32_t, std::int32_t)
 			{
@@ -363,8 +310,8 @@ namespace hSDK
 				{
 					switch(ExpT)
 					{
-					case ExpressionType::Float: return Enforce32bit<float>::to32(0.0f);
-					case ExpressionType::String: return Enforce32bit<char const *>::to32("");
+					case ExpressionType::Float: return typename Enforce32bit<float>::to32(0.0f);
+					case ExpressionType::String: return typename Enforce32bit<char_t const *>::to32(T_"");
 					}
 				}
 				return 0;
@@ -468,14 +415,9 @@ namespace hSDK
 				{
 				}
 
-				auto operator()(Extension &ext, std::int32_t, std::int32_t)
-				-> typename std::enable_if
-				<
-					!std::is_same<R, void>::value,
-					std::int32_t
-				>::type
+				std::int32_t operator()(Extension &ext, std::int32_t, std::int32_t)
 				{
-					return Enforce32bit<R>::to32((ext.*mfp)());
+					return safe_return<R>([&]()->R{return (ext.*mfp)();});
 				}
 			};
 			template<typename ExtT, typename R, typename Arg1>
@@ -487,17 +429,15 @@ namespace hSDK
 				{
 				}
 
-				auto operator()(Extension &ext, std::int32_t param1, std::int32_t)
-				-> typename std::enable_if
-				<
-					!std::is_same<R, void>::value,
-					std::int32_t
-				>::type
+				std::int32_t operator()(Extension &ext, std::int32_t param1, std::int32_t)
 				{
-					return Enforce32bit<R>::to32((ext.*mfp)
-					(
-						Enforce32bit<Arg1>::fr32(param1)
-					));
+					return safe_return<R>([&]() -> R
+					{
+						return (ext.*mfp)
+						(
+							Enforce32bit<Arg1>::fr32(param1)
+						);
+					});
 				}
 			};
 			template<typename ExtT, typename R, typename Arg1, typename Arg2>
@@ -509,18 +449,16 @@ namespace hSDK
 				{
 				}
 
-				auto operator()(Extension &ext, std::int32_t param1, std::int32_t param2)
-				-> typename std::enable_if
-				<
-					!std::is_same<R, void>::value,
-					std::int32_t
-				>::type
+				std::int32_t operator()(Extension &ext, std::int32_t param1, std::int32_t param2)
 				{
-					return Enforce32bit<R>::to32((ext.*mfp)
-					(
-						Enforce32bit<Arg1>::fr32(param1),
-						Enforce32bit<Arg2>::fr32(param2)
-					));
+					return safe_return<R>([&]() -> R
+					{
+						return (ext.*mfp)
+						(
+							Enforce32bit<Arg1>::fr32(param1),
+							Enforce32bit<Arg2>::fr32(param2)
+						);
+					});
 				}
 			};
 		};

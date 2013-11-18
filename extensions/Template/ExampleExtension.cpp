@@ -7,6 +7,8 @@
 
 struct ExampleExtension : hSDK::Extension
 {
+	using E = ExampleExtension;
+
 	struct VarHolder
 	{
 		template<typename T>
@@ -18,9 +20,14 @@ struct ExampleExtension : hSDK::Extension
 	template<typename T>
 	struct TVarHolder : VarHolder
 	{
-		T v = T();
+		T v;
+		TVarHolder()
+		: v(T()) 
+		{
+		}
 	};
 	std::map<std::type_index, std::unique_ptr<VarHolder>> vars;
+	template<typename T>
 	T &get()
 	{
 		if(vars.find(typeid(T)) == vars.end())
@@ -55,32 +62,32 @@ struct ExampleExtension : hSDK::Extension
 	ExampleExtension()
 	: hSDK::Extension(
 	{ //register actions
-		{0, &SetVar<short>},
-		{1, &SetVar<int>},
-		{2, &SetVar<long long>},
-		{3, &SetVar<float>},
-		{4, &SetVar<double>},
-		{5, &SetVar<long double>},
+		{0, &E::SetVar<short>},
+		{1, &E::SetVar<int>},
+		{2, &E::SetVar<long long>},
+		{3, &E::SetVar<float>},
+		{4, &E::SetVar<double>},
+		{5, &E::SetVar<long double>},
 		//hSDK::Extension provides the 'string' type, don't use std::string
-		{6, &SetVar<string>} //changes depending on unicode/non-unicode
+		{6, &E::SetVar<string>} //changes depending on unicode/non-unicode
 	},
 	{ //register conditions
-		{0, &VarsEqual<short>},
-		{1, &VarsEqual<int>},
-		{2, &VarsEqual<long long>},
-		{3, &VarsEqual<float>},
-		{4, &VarsEqual<double>},
-		{5, &VarsEqual<long double>},
-		{6, &VarsEqual<string>}
+		{0, &E::VarsEqual<short>},
+		{1, &E::VarsEqual<int>},
+		{2, &E::VarsEqual<long long>},
+		{3, &E::VarsEqual<float>},
+		{4, &E::VarsEqual<double>},
+		{5, &E::VarsEqual<long double>},
+		{6, &E::VarsEqual<string>}
 	},
 	{ //register expressions
-		{0, &GetVar<short>},
-		{1, &GetVar<int>},
-		{2, &GetVar<long long>},
-		{3, &GetVar<float>},
-		{4, &GetVar<double>},
-		{5, &GetVar<long double>},
-		{6, &GetVar<string>}
+		{0, &E::GetVar<short>},
+		{1, &E::GetVar<int>},
+		{2, &E::GetVar<long long>},
+		{3, &E::GetVar<float>},
+		{4, &E::GetVar<double>},
+		{5, &E::GetVar<long double>},
+		{6, &E::GetVar<string>}
 	})
 //	, other(meh)
 //	, vars(blah)
