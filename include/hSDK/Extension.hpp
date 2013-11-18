@@ -263,7 +263,7 @@ namespace hSDK
 		{
 			template<typename ExtT, typename R, typename... Args>
 			ExtMF(R (ExtT::*mfp)(Args...))
-			: Forwarder_t(caller<ExtT, R, Args...>(verify(mfp)))
+			: Forwarder_t(caller<ExtT, R, Args...>(verify<ExtT, R, Args...>(mfp)))
 			{
 			}
 			ExtMF(typename std::conditional<CallT == ACE::Action, null_returning_void_t, invalid_ACE<0>>::type)
