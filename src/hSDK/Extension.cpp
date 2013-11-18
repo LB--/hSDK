@@ -1,4 +1,6 @@
-#include "hSDK.hpp"
+#include "hSDK/Extension.hpp"
+#include "hSDK/Properties.hpp"
+
 #include <tuple>
 
 #include "MinGW.hpp"
