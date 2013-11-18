@@ -72,15 +72,16 @@ namespace hSDK
 		template<typename T>
 		struct Enforce32bit
 		<
-			typename std::enable_if
+			T, typename std::enable_if
 			<
 				sizeof(T) == 4
 			 && !std::is_floating_point<T>::value
 			 && !std::is_integral<T>::value
 			 && !std::is_same<T, char_t *>::value
+			 && std::is_pod<T>::value
 			 && !std::is_reference<T>::value,
-				T
-			>::type, T
+				void
+			>::type
 		> final
 		{
 			struct reinterpret_to32 final
@@ -135,11 +136,11 @@ namespace hSDK
 		template<typename T>
 		struct Enforce32bit
 		<
-			typename std::enable_if
+			T, typename std::enable_if
 			<
 				std::is_integral<T>::value,
-				T
-			>::type, T
+				void
+			>::type
 		> final
 		{
 			using type = T;
@@ -150,11 +151,11 @@ namespace hSDK
 		template<typename T>
 		struct Enforce32bit
 		<
-			typename std::enable_if
+			T, typename std::enable_if
 			<
 				std::is_floating_point<T>::value,
-				T
-			>::type, T
+				void
+			>::type
 		> final
 		{
 			static_assert(sizeof(float) == 4, "MMF2 only supports 32-bit floats");
