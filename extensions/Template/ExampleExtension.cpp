@@ -35,7 +35,7 @@ struct ExampleExtension : hSDK::Extension
 		{
 			vars.emplace(typeid(T), std::unique_ptr<VarHolder>(new TVarHolder<T>));
 		}
-		return vars.at(typeid(T)).get<T>();
+		return vars.at(typeid(T)).get()->get<T>();
 	}
 
 	//example actions
