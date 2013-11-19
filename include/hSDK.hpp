@@ -16,6 +16,10 @@ namespace hSDK
 #endif
 		using string = std::basic_string<char_t>;
 
+		class mv;
+		struct ED;
+		struct RD;
+
 		struct tuple_unpack final
 		{
 			template<int...> struct seq {};

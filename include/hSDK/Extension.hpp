@@ -31,8 +31,6 @@ namespace hSDK
 			String
 		};
 
-		struct RD;
-
 		struct RuntimeInfo
 		{
 			static RuntimeInfo &Current()
@@ -68,6 +66,7 @@ namespace hSDK
 		template<typename T, typename = void>
 		struct Enforce32bit final
 		{
+			using type = T;
 		};
 		template<typename T>
 		struct Enforce32bit
@@ -228,6 +227,9 @@ namespace hSDK
 			Derived
 		>::type;
 
+		template<typename ExtT, typename R, typename... Args>
+		using ExtMFP_helper = R (ExtT::*)(Args...);
+
 	public:
 		struct null_returning_void_t   final { constexpr null_returning_void_t  () = default; };
 		struct null_returning_int_t    final { constexpr null_returning_int_t   () = default; };
@@ -249,37 +251,73 @@ namespace hSDK
 		};
 
 		template<typename ExtT, typename R, typename... Args>
-		using ExtMFP =
-			typename Enforce32bit<R>::type //return
-			(base_check<Extension, ExtT>::*) //member function pointer
-			(typename Enforce32bit<Args>::type...); //arguments
-
-		using Forwarder_t = std::function
+		using ExtMFP = ExtMFP_helper
 		<
-			std::int32_t (Extension &ext, std::int32_t param1, std::int32_t param2)
+			typename Enforce32bit<R>::type,
+			base_check<Extension, ExtT>,
+			typename Enforce32bit<Args>::type...
 		>;
+
+		template<ACE CallT, ACE = CallT>
+		struct Forwarder_t_helper final
+		{
+			using type = std::function
+			<
+				std::int32_t (Extension &ext, std::int32_t param1, std::int32_t param2)
+			>;
+		};
 		template<ACE CallT>
-		struct ExtMF : public Forwarder_t
+		struct Forwarder_t_helper<ACE::Expression, CallT> final
+		{
+			using type = std::function
+			<
+				std::int32_t (Extension &ext, std::int32_t param1)
+			>;
+		};
+		template<ACE CallT>
+		using Forwarder_t = typename Forwarder_t_helper<CallT>::type;
+		template<ACE CallT>
+		struct ExtMF : public Forwarder_t<CallT>
 		{
 			template<typename ExtT, typename R, typename... Args>
 			ExtMF(R (ExtT::*mfp)(Args...))
-			: Forwarder_t(caller<ExtT, R, Args...>(verify<ExtT, R, Args...>(mfp)))
+			: Forwarder_t<CallT>(caller<ExtT, R, Args...>(verify<ExtT, R, Args...>(mfp)))
 			{
 			}
 			ExtMF(typename std::conditional<CallT == ACE::Action, null_returning_void_t, invalid_ACE<0>>::type)
-			: Forwarder_t(&null_forwarder<ExpressionType::None>)
+			: Forwarder_t<CallT>
+			(
+				CallT == ACE::Expression?
+				&null_forwarder<ExpressionType::None> :
+				&null_forwarder<ExpressionType::None, std::int32_t>
+			)
 			{
 			}
 			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_int_t, invalid_ACE<1>>::type)
-			: Forwarder_t(&null_forwarder<ExpressionType::Integer>)
+			: Forwarder_t<CallT>
+			(
+				CallT == ACE::Expression?
+				&null_forwarder<ExpressionType::Integer> :
+				&null_forwarder<ExpressionType::Integer, std::int32_t>
+			)
 			{
 			}
 			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_float_t, invalid_ACE<2>>::type)
-			: Forwarder_t(&null_forwarder<ExpressionType::Float>)
+			: Forwarder_t<CallT>
+			(
+				CallT == ACE::Expression?
+				&null_forwarder<ExpressionType::Float> :
+				&null_forwarder<ExpressionType::Float, std::int32_t>
+			)
 			{
 			}
 			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_string_t, invalid_ACE<3>>::type)
-			: Forwarder_t(&null_forwarder<ExpressionType::String>)
+			: Forwarder_t<CallT>
+			(
+				CallT == ACE::Expression?
+				&null_forwarder<ExpressionType::String> :
+				&null_forwarder<ExpressionType::String, std::int32_t>
+			)
 			{
 			}
 			ExtMF(ExtMF const &) = default;
@@ -290,23 +328,20 @@ namespace hSDK
 		private:
 			template<typename ExtT, typename R, typename... Args>
 			static auto verify(R (ExtT::*mfp)(Args...))
-			-> ExtMFP
+			-> typename std::enable_if
 			<
-				ExtT,
-				typename std::enable_if
-				<
-					(CallT == ACE::Action &&  std::is_same<R, void>::value)
-				 || (CallT != ACE::Action && !std::is_same<R, void>::value),
-					R
-				>::type,
-				Args...
-			>
+				(CallT == ACE::Action &&  std::is_same<R, void>::value)
+			 || (CallT != ACE::Action && !std::is_same<R, void>::value),
+				ExtMFP<ExtT, R, Args...>
+			>::type
 			{
 				return mfp;
 			}
-			template<ExpressionType ExpT>
-			static std::int32_t null_forwarder(Extension &, std::int32_t, std::int32_t)
+			template<ExpressionType ExpT, typename... Param2>
+			static std::int32_t null_forwarder(Extension &, std::int32_t, Param2...)
 			{
+				//TODO: Eat extra parameters so MMF2 won't crash
+
 				if(CallT == ACE::Expression)
 				{
 					switch(ExpT)
@@ -402,6 +437,10 @@ namespace hSDK
 					return (ext.*mfp)(std::get<S>(params)...), 0;
 				}
 
+				std::int32_t operator()(Extension &ext, std::int32_t)
+				{
+					return (*this)(ext, 0, 0);
+				}
 				std::int32_t operator()(Extension &ext, std::int32_t, std::int32_t)
 				{
 					return call(ext, typename tuple_unpack::gens<I>::type());
@@ -430,13 +469,17 @@ namespace hSDK
 				{
 				}
 
+				std::int32_t operator()(Extension &ext, std::int32_t param1)
+				{
+					return (*this)(ext, param1, 0);
+				}
 				std::int32_t operator()(Extension &ext, std::int32_t param1, std::int32_t)
 				{
 					return safe_return<R>([&]() -> R
 					{
 						return (ext.*mfp)
 						(
-							Enforce32bit<Arg1>::fr32(param1)
+							typename Enforce32bit<Arg1>::fr32(param1)
 						);
 					});
 				}
@@ -456,8 +499,21 @@ namespace hSDK
 					{
 						return (ext.*mfp)
 						(
-							Enforce32bit<Arg1>::fr32(param1),
-							Enforce32bit<Arg2>::fr32(param2)
+							typename Enforce32bit<Arg1>::fr32(param1),
+							typename Enforce32bit<Arg2>::fr32(param2)
+						);
+					});
+				}
+				std::int32_t operator()(Extension &ext, std::int32_t)
+				{
+					std::int32_t param1 = Params<CallT, Enforce32bit<Arg1>::ExpT>::GetFirst();
+					std::int32_t param2 = Params<CallT, Enforce32bit<Arg2>::ExpT>::GetNext();
+					return safe_return<R>([&]() -> R
+					{
+						return (ext.*mfp)
+						(
+							typename Enforce32bit<Arg1>::fr32(param1),
+							typename Enforce32bit<Arg2>::fr32(param2)
 						);
 					});
 				}
