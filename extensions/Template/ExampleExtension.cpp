@@ -63,7 +63,7 @@ struct ExampleExtension : hSDK::Extension
 	ExampleExtension()
 	: hSDK::Extension(
 	{ //register actions
-		{0, &E::SetVar<short>}/*,
+		{0, &E::SetVar<short>},
 		{1, &E::SetVar<int>},
 		{2, &E::SetVar<long long>},
 		{3, &E::SetVar<float>},
@@ -71,25 +71,25 @@ struct ExampleExtension : hSDK::Extension
 		{5, &E::SetVar<long double>},
 		//hSDK::Extension provides the 'string' type, don't use std::string
 		{6, &E::SetVar<string>} //changes depending on unicode/non-unicode
-*/	},
+	},
 	{ //register conditions
-/*		{0, &E::VarsEqual<short>},
+		{0, &E::VarsEqual<short>},
 		{1, &E::VarsEqual<int>},
 		{2, &E::VarsEqual<long long>},
 		{3, &E::VarsEqual<float>},
 		{4, &E::VarsEqual<double>},
 		{5, &E::VarsEqual<long double>},
 		{6, &E::VarsEqual<string>}
-*/	},
+	},
 	{ //register expressions
-/*		{0, &E::GetVar<short>},
+		{0, &E::GetVar<short>},
 		{1, &E::GetVar<int>},
 		{2, &E::GetVar<long long>},
 		{3, &E::GetVar<float>},
 		{4, &E::GetVar<double>},
 		{5, &E::GetVar<long double>},
 		{6, &E::GetVar<string>}
-*/	})
+	})
 //	, other(meh)
 //	, vars(blah)
 	{

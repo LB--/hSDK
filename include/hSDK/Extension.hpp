@@ -67,6 +67,7 @@ namespace hSDK
 		struct Enforce32bit final
 		{
 			using type = T;
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 		};
 		template<typename T>
 		struct Enforce32bit
@@ -127,9 +128,21 @@ namespace hSDK
 					return reinterpret_cast<std::int32_t>(CopyString(s));
 				}
 			};
-			using type = T;
+			struct implicit_fr32 final
+			{
+				string const &s;
+				implicit_fr32(std::int32_t i32)
+				: s(reinterpret_cast<char *>(i32))
+				{
+				}
+				operator string() const
+				{
+					return s;
+				}
+			};
+			using type = string;
 			using to32 = implicit_to32;
-			using fr32 = string;
+			using fr32 = implicit_fr32;
 			static ExpressionType constexpr ExpT = ExpressionType::String;
 		};
 		template<typename T>
@@ -187,12 +200,6 @@ namespace hSDK
 			using fr32 = implicit_fr32;
 			static ExpressionType constexpr ExpT = ExpressionType::Float;
 		};
-		template<typename T>
-		struct Enforce32bit<void, T> final
-		{
-			using type = void;
-			static ExpressionType constexpr ExpT = ExpressionType::None;
-		};
 		template<typename R, typename = void>
 		struct safe_return final
 		{
@@ -203,7 +210,7 @@ namespace hSDK
 			}
 			operator std::int32_t()
 			{
-				return Enforce32bit<R>::to32(f());
+				return typename Enforce32bit<R>::to32(f());
 			}
 		};
 		template<typename R>
@@ -253,8 +260,8 @@ namespace hSDK
 		template<typename ExtT, typename R, typename... Args>
 		using ExtMFP = ExtMFP_helper
 		<
-			typename Enforce32bit<R>::type,
 			base_check<Extension, ExtT>,
+			typename Enforce32bit<R>::type,
 			typename Enforce32bit<Args>::type...
 		>;
 
@@ -281,7 +288,21 @@ namespace hSDK
 		{
 			template<typename ExtT, typename R, typename... Args>
 			ExtMF(R (ExtT::*mfp)(Args...))
-			: Forwarder_t<CallT>(caller<ExtT, R, Args...>(verify<ExtT, R, Args...>(mfp)))
+			: Forwarder_t<CallT>
+			(
+				typename std::conditional
+				<
+					CallT == ACE::Expression,
+					translator<ExtT, caller<ExtT, R, Args...>, std::int32_t>,
+					translator<ExtT, caller<ExtT, R, Args...>, std::int32_t, std::int32_t>
+				>::type
+				(
+					caller<ExtT, R, Args...>
+					(
+						verify<ExtT, R, Args...>(mfp)
+					)
+				)
+			)
 			{
 			}
 			ExtMF(typename std::conditional<CallT == ACE::Action, null_returning_void_t, invalid_ACE<0>>::type)
@@ -337,6 +358,19 @@ namespace hSDK
 			{
 				return mfp;
 			}
+			template<typename ExtT, typename func, typename... Args>
+			struct translator final
+			{
+				func f;
+				translator(func fun)
+				: f(fun)
+				{
+				}
+				std::int32_t operator()(Extension &ext, Args... args)
+				{
+					return f(*static_cast<ExtT *>(&ext), args...);
+				}
+			};
 			template<ExpressionType ExpT, typename... Param2>
 			static std::int32_t null_forwarder(Extension &, std::int32_t, Param2...)
 			{
@@ -415,7 +449,7 @@ namespace hSDK
 				}
 
 				template<int... S>
-				auto call(Extension &ext, tuple_unpack::seq<S...>)
+				auto call(ExtT &ext, tuple_unpack::seq<S...>)
 				-> typename std::enable_if
 				<
 					!std::is_same<R, void>::value,
@@ -426,7 +460,7 @@ namespace hSDK
 					return (ext.*mfp)(std::get<S>(params)...);
 				}
 				template<int... S>
-				auto call(Extension &ext, tuple_unpack::seq<S...>)
+				auto call(ExtT &ext, tuple_unpack::seq<S...>)
 				-> typename std::enable_if
 				<
 					std::is_same<R, void>::value,
@@ -437,11 +471,11 @@ namespace hSDK
 					return (ext.*mfp)(std::get<S>(params)...), 0;
 				}
 
-				std::int32_t operator()(Extension &ext, std::int32_t)
+				std::int32_t operator()(ExtT &ext, std::int32_t)
 				{
 					return (*this)(ext, 0, 0);
 				}
-				std::int32_t operator()(Extension &ext, std::int32_t, std::int32_t)
+				std::int32_t operator()(ExtT &ext, std::int32_t, std::int32_t)
 				{
 					return call(ext, typename tuple_unpack::gens<I>::type());
 				}
@@ -455,7 +489,11 @@ namespace hSDK
 				{
 				}
 
-				std::int32_t operator()(Extension &ext, std::int32_t, std::int32_t)
+				std::int32_t operator()(ExtT &ext, std::int32_t)
+				{
+					return (*this)(ext, 0, 0);
+				}
+				std::int32_t operator()(ExtT &ext, std::int32_t, std::int32_t)
 				{
 					return safe_return<R>([&]()->R{return (ext.*mfp)();});
 				}
@@ -469,11 +507,11 @@ namespace hSDK
 				{
 				}
 
-				std::int32_t operator()(Extension &ext, std::int32_t param1)
+				std::int32_t operator()(ExtT &ext, std::int32_t param1)
 				{
 					return (*this)(ext, param1, 0);
 				}
-				std::int32_t operator()(Extension &ext, std::int32_t param1, std::int32_t)
+				std::int32_t operator()(ExtT &ext, std::int32_t param1, std::int32_t)
 				{
 					return safe_return<R>([&]() -> R
 					{
@@ -493,7 +531,7 @@ namespace hSDK
 				{
 				}
 
-				std::int32_t operator()(Extension &ext, std::int32_t param1, std::int32_t param2)
+				std::int32_t operator()(ExtT &ext, std::int32_t param1, std::int32_t param2)
 				{
 					return safe_return<R>([&]() -> R
 					{
@@ -504,7 +542,7 @@ namespace hSDK
 						);
 					});
 				}
-				std::int32_t operator()(Extension &ext, std::int32_t)
+				std::int32_t operator()(ExtT &ext, std::int32_t)
 				{
 					std::int32_t param1 = Params<CallT, Enforce32bit<Arg1>::ExpT>::GetFirst();
 					std::int32_t param2 = Params<CallT, Enforce32bit<Arg2>::ExpT>::GetNext();

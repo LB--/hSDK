@@ -8,7 +8,7 @@
 
 namespace hSDK
 {
-	struct Extension::RD
+	struct RD
 	{
 		headerObject rHo;
 		char r

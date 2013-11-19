@@ -30,7 +30,7 @@ namespace hSDK
 			{
 				return Current().ed;
 			}
-			static Properties Props();
+			static Properties &Props();
 
 		private:
 			ED *ed = nullptr;
