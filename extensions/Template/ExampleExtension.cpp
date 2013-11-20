@@ -60,7 +60,7 @@ struct ExampleExtension : hSDK::Extension
 	}
 
 	//constructor
-	ExampleExtension()
+	ExampleExtension(/*NYD*/)
 	: hSDK::Extension(
 	{ //register actions
 		{0, &E::SetVar<short>},
@@ -70,7 +70,8 @@ struct ExampleExtension : hSDK::Extension
 		{4, &E::SetVar<double>},
 		{5, &E::SetVar<long double>},
 		//hSDK::Extension provides the 'string' type, don't use std::string
-		{6, &E::SetVar<string>} //changes depending on unicode/non-unicode
+		{6, &E::SetVar<string>}, //changes depending on unicode/non-unicode
+		{7, null_returning_void} //do nothing for this action
 	},
 	{ //register conditions
 		{0, &E::VarsEqual<short>},
@@ -79,7 +80,8 @@ struct ExampleExtension : hSDK::Extension
 		{3, &E::VarsEqual<float>},
 		{4, &E::VarsEqual<double>},
 		{5, &E::VarsEqual<long double>},
-		{6, &E::VarsEqual<string>}
+		{6, &E::VarsEqual<string>},
+		{7, null_returning_bool} //condition always returns false
 	},
 	{ //register expressions
 		{0, &E::GetVar<short>},
@@ -88,7 +90,8 @@ struct ExampleExtension : hSDK::Extension
 		{3, &E::GetVar<float>},
 		{4, &E::GetVar<double>},
 		{5, &E::GetVar<long double>},
-		{6, &E::GetVar<string>}
+		{6, &E::GetVar<string>},
+		{7, null_returning_string} //expression always returns empty string
 	})
 //	, other(meh)
 //	, vars(blah)

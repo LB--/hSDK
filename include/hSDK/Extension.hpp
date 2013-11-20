@@ -244,6 +244,7 @@ namespace hSDK
 		struct null_returning_string_t final { constexpr null_returning_string_t() = default;};
 		static null_returning_void_t           constexpr null_returning_void    {};
 		static null_returning_int_t            constexpr null_returning_int     {};
+		static null_returning_int_t            constexpr null_returning_bool    {};
 		static null_returning_float_t          constexpr null_returning_float   {};
 		static null_returning_string_t         constexpr null_returning_string  {};
 		template<int>
@@ -306,39 +307,31 @@ namespace hSDK
 			{
 			}
 			ExtMF(typename std::conditional<CallT == ACE::Action, null_returning_void_t, invalid_ACE<0>>::type)
-			: Forwarder_t<CallT>
-			(
-				CallT == ACE::Expression?
-				&null_forwarder<ExpressionType::None> :
-				&null_forwarder<ExpressionType::None, std::int32_t>
-			)
+			: Forwarder_t<CallT>(&null_forwarder<ExpressionType::None, std::int32_t>)
 			{
 			}
-			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_int_t, invalid_ACE<1>>::type)
-			: Forwarder_t<CallT>
-			(
-				CallT == ACE::Expression?
-				&null_forwarder<ExpressionType::Integer> :
-				&null_forwarder<ExpressionType::Integer, std::int32_t>
-			)
+			ExtMF(typename std::conditional<CallT == ACE::Condition, null_returning_int_t, invalid_ACE<1>>::type)
+			: Forwarder_t<CallT>(&null_forwarder<ExpressionType::Integer, std::int32_t>)
 			{
 			}
-			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_float_t, invalid_ACE<2>>::type)
-			: Forwarder_t<CallT>
-			(
-				CallT == ACE::Expression?
-				&null_forwarder<ExpressionType::Float> :
-				&null_forwarder<ExpressionType::Float, std::int32_t>
-			)
+			ExtMF(typename std::conditional<CallT == ACE::Condition, null_returning_float_t, invalid_ACE<2>>::type)
+			: Forwarder_t<CallT>(&null_forwarder<ExpressionType::Float, std::int32_t>)
 			{
 			}
-			ExtMF(typename std::conditional<CallT != ACE::Action, null_returning_string_t, invalid_ACE<3>>::type)
-			: Forwarder_t<CallT>
-			(
-				CallT == ACE::Expression?
-				&null_forwarder<ExpressionType::String> :
-				&null_forwarder<ExpressionType::String, std::int32_t>
-			)
+			ExtMF(typename std::conditional<CallT == ACE::Condition, null_returning_string_t, invalid_ACE<3>>::type)
+			: Forwarder_t<CallT>(&null_forwarder<ExpressionType::String, std::int32_t>)
+			{
+			}
+			ExtMF(typename std::conditional<CallT == ACE::Expression, null_returning_int_t, invalid_ACE<4>>::type)
+			: Forwarder_t<CallT>(&null_forwarder<ExpressionType::Integer>)
+			{
+			}
+			ExtMF(typename std::conditional<CallT == ACE::Expression, null_returning_float_t, invalid_ACE<5>>::type)
+			: Forwarder_t<CallT>(&null_forwarder<ExpressionType::Float>)
+			{
+			}
+			ExtMF(typename std::conditional<CallT == ACE::Expression, null_returning_string_t, invalid_ACE<6>>::type)
+			: Forwarder_t<CallT>(&null_forwarder<ExpressionType::String>)
 			{
 			}
 			ExtMF(ExtMF const &) = default;

@@ -18,6 +18,10 @@ namespace hSDK
 			: std::basic_istream<char_t>(sb)
 			{
 			}
+			In(In const &) = delete;
+			In(In &&) = default;
+			In &operator=(In const &) = delete;
+			In &operator=(In &&) = default;
 			virtual ~In() = 0;
 		};
 		inline In::~In() = default;
@@ -27,41 +31,78 @@ namespace hSDK
 			: std::basic_ostream<char_t>(sb)
 			{
 			}
+			Out(Out const &) = delete;
+			Out(Out &&) = default;
+			Out &operator=(Out const &) = delete;
+			Out &operator=(Out &&) = default;
 			virtual ~Out() = 0;
 		};
 		inline Out::~Out() = default;
+
 		namespace EditData
 		{
-			struct In : ::hSDK::BinaryStream::In
+			using InBase = ::hSDK::BinaryStream::In;
+			struct In : InBase
 			{
 				In(ED *);
+				In(In const &) = delete;
+				In(In &&) = default;
+				In &operator=(In const &) = delete;
+				In &operator=(In &&) = default;
+				virtual ~In();
+
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
+				Buf *temp;
 			};
-			struct Out : ::hSDK::BinaryStream::Out
+			using OutBase = ::hSDK::BinaryStream::Out;
+			struct Out : OutBase
 			{
 				Out(mv *, ED *&);
+				Out(Out const &) = delete;
+				Out(Out &&) = default;
+				Out &operator=(Out const &) = delete;
+				Out &operator=(Out &&) = default;
+				virtual ~Out();
+
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
+				Buf *temp;
 			};
 		}
 		namespace RunData
 		{
-			struct In : ::hSDK::BinaryStream::In
+			using InBase = ::hSDK::BinaryStream::In;
+			struct In : InBase
 			{
 				In(void *);
+				In(In const &) = delete;
+				In(In &&) = default;
+				In &operator=(In const &) = delete;
+				In &operator=(In &&) = default;
+				virtual ~In();
+
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
+				Buf *temp;
 			};
-			struct Out : ::hSDK::BinaryStream::Out
+			using OutBase = ::hSDK::BinaryStream::Out;
+			struct Out : OutBase
 			{
 				Out(void *);
+				Out(Out const &) = delete;
+				Out(Out &&) = default;
+				Out &operator=(Out const &) = delete;
+				Out &operator=(Out &&) = default;
+				virtual ~Out();
+
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
+				Buf *temp;
 			};
 		}
 	}

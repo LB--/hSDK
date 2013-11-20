@@ -1,57 +1,9 @@
 #include "hSDK/Extension.hpp"
-#include "hSDK/Properties.hpp"
 
-#include <tuple>
-
-#include "MinGW.hpp"
-#include "MMF2API/Ccxhdr.h"
+#include "RunData.hpp"
 
 namespace hSDK
 {
-	struct RD
-	{
-		headerObject rHo;
-		char r
-		[
-			sizeof(rCom)+
-			sizeof(rMvt)+
-			sizeof(rSpr)+
-			sizeof(rVal)
-		];
-		rCom *rc = nullptr;
-		rMvt *rm = nullptr;
-		rSpr *rs = nullptr;
-		rVal *rv = nullptr;
-
-		Extension &ext;
-
-		RD(ED *ed, createObjectInfo *COB)
-		: ext(*reinterpret_cast<Extension *>(0)) //PLACEHOLDER
-		{
-			unsigned off = 0;
-			if(/*Extension::OEFLAGS*/0 & OEFLAG_MOVEMENTS
-			|| /*Extension::OEFLAGS*/0 & OEFLAG_SPRITES)
-			{
-				rc = (rCom *)(r + off);
-				off += sizeof(rCom);
-			}
-			if(/*Extension::OEFLAGS*/0 & OEFLAG_MOVEMENTS)
-			{
-				rm = (rMvt *)(r + off);
-				off += sizeof(rMvt);
-			}
-			if(/*Extension::OEFLAGS*/0 & OEFLAG_SPRITES)
-			{
-				rs = (rSpr *)(r + off);
-				off += sizeof(rSpr);
-			}
-			if(/*Extension::OEFLAGS*/0 & OEFLAG_VALUES)
-			{
-				rv = (rVal *)(r + off);
-			}
-		}
-	};
-
 	Extension &Extension::RuntimeInfo::Ext()
 	{
 		return Rd()->ext;
@@ -101,5 +53,3 @@ namespace hSDK
 	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::String >::GetNext(){ return CNC_GetStringParameter(RuntimeInfo::Rd()); }
 	template<> std::int32_t Extension::Params<ACE::Expression, ExprT::String >::GetNext(){ return CNC_GetNextExpressionParameter(RuntimeInfo::Rd(), exp_lparam, TYPE_STRING); }
 }
-
-//

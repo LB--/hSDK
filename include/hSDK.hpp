@@ -3,6 +3,8 @@
 #include <string>
 #include <tuple>
 
+class mv;
+
 namespace hSDK
 {
 	static_assert(sizeof(void *) == 4 && sizeof(std::size_t) == 4, "MMF2 only supports 32-bit extensions");
@@ -16,7 +18,6 @@ namespace hSDK
 #endif
 		using string = std::basic_string<char_t>;
 
-		class mv;
 		struct ED;
 		struct RD;
 
