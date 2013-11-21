@@ -216,7 +216,16 @@ namespace hSDK
 	#undef TypeMap
 	#undef TypeMapO
 	template<ACE CallT, typename T>
-	struct TypeFrom<CallT, Param::Custom<T>> final
+	struct TypeFrom
+	<
+		CallT,
+		Param::Custom<T>,
+		typename std::enable_if
+		<
+			CallT != ACE::Expression,
+			void
+		>::type
+	> final
 	{
 		static ParamsType<CallT> constexpr PT = ParamsType<CallT>::Custom;
 		static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT);
