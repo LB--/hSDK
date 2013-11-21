@@ -2,6 +2,7 @@
 #define hSDK_HeaderPlusPlus
 #include <string>
 #include <tuple>
+#include <type_traits>
 
 class mv;
 
@@ -11,10 +12,10 @@ namespace hSDK
 
 #ifdef UNICODE
 	using char_t = wchar_t;
-	#define T_ L
+	#define T_ u
 #else
 	using char_t = char;
-	#define T_
+	#define T_ u8
 #endif
 	using string = std::basic_string<char_t>;
 
@@ -32,10 +33,7 @@ namespace hSDK
 	};
 
 	template<typename T>
-	struct identity final
-	{
-		using type = T;
-	};
+	using identity = std::common_type<T>;
 
 	template<typename T, typename... V>
 	struct RAII_Set_impl final
