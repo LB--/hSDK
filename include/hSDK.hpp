@@ -1,8 +1,14 @@
 #ifndef hSDK_HeaderPlusPlus
 #define hSDK_HeaderPlusPlus
+
+#include <cstdint>
 #include <string>
 #include <tuple>
 #include <type_traits>
+
+#if __cplusplus > 201103L
+using namespace std::string_literals;
+#endif
 
 class mv;
 
@@ -85,6 +91,20 @@ namespace hSDK
 	{
 		return RAII_Set_impl<T, V...>(t, sets...);
 	}
+
+	enum struct ACE
+	{
+		Action,
+		Condition,
+		Expression
+	};
+	enum struct ExpressionType
+	{
+		None,
+		Integer,
+		Float,
+		String
+	};
 }
 
 #endif

@@ -3,7 +3,6 @@
 
 #include "hSDK.hpp"
 
-#include <cstdint>
 #include <iostream>
 #include <streambuf>
 #include <memory>
