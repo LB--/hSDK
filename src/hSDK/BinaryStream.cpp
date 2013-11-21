@@ -42,6 +42,10 @@ namespace hSDK
 			};
 
 			In::In(ED *sed)
+			: In(nullptr, sed)
+			{
+			}
+			In::In(Buf *temp, ED *sed)
 			: InBase(temp = new Buf(*sed))
 			, b(temp)
 			{
@@ -92,6 +96,10 @@ namespace hSDK
 			};
 
 			Out::Out(mv *mV, ED *&sed)
+			: Out(nullptr, mV, sed)
+			{
+			}
+			Out::Out(Buf *temp, mv *mV, ED *&sed)
 			: OutBase(temp = new Buf(mV, sed))
 			, b(temp)
 			{

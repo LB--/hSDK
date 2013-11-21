@@ -54,7 +54,7 @@ namespace hSDK
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
-				Buf *temp;
+				In(Buf *, ED *);
 			};
 			using OutBase = ::hSDK::BinaryStream::Out;
 			struct Out : OutBase
@@ -69,7 +69,7 @@ namespace hSDK
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
-				Buf *temp;
+				Out(Buf *, mv *, ED *&);
 			};
 		}
 		namespace RunData
@@ -87,7 +87,7 @@ namespace hSDK
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
-				Buf *temp;
+				In(Buf *, void *);
 			};
 			using OutBase = ::hSDK::BinaryStream::Out;
 			struct Out : OutBase
@@ -102,7 +102,7 @@ namespace hSDK
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
-				Buf *temp;
+				Out(Buf *, void *);
 			};
 		}
 	}
