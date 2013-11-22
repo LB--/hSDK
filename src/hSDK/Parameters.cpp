@@ -149,4 +149,29 @@ namespace hSDK
 	template<> int const MMF2Params<AgnosticParamsType::C_TimeComparison>::ID   = PARAM_CMPTIME;
 	template<> int const MMF2Params<AgnosticParamsType::E_Number>::ID           = EXPPARAM_LONG;
 	template<> int const MMF2Params<AgnosticParamsType::E_String>::ID           = EXPPARAM_STRING;
+
+	template<> int const MMF2Params<AgnosticParamsType::AC_Object>::ID     = PARAM_OBJECT;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Border>::ID     = PARAM_BORDER;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Create>::ID     = PARAM_CREATE;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Shoot>::ID      = PARAM_SHOOT;
+	template<> int const MMF2Params<AgnosticParamsType::AC_SysCreate>::ID  = PARAM_SYSCREATE;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Animation>::ID  = PARAM_ANIMATION;
+	template<> int const MMF2Params<AgnosticParamsType::AC_None>::ID       = PARAM_NOP;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Every>::ID      = PARAM_EVERY;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Frame>::ID      = PARAM_FRAME;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Sample>::ID     = PARAM_SAMPLE;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Music>::ID      = PARAM_MUSIC;
+	template<> int const MMF2Params<AgnosticParamsType::AC_SampleLoop>::ID = PARAM_SAMLOOP;
+	template<> int const MMF2Params<AgnosticParamsType::AC_MusicLoop>::ID  = PARAM_MUSLOOP;
+	template<> int const MMF2Params<AgnosticParamsType::C_Sample>::ID      = PARAM_CNDSAMPLE;
+	template<> int const MMF2Params<AgnosticParamsType::C_Music>::ID       = PARAM_CNDMUSIC;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Program>::ID    = PARAM_PROGRAM;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Paste>::ID      = PARAM_PASTE;
+	template<> int const MMF2Params<AgnosticParamsType::AC_InkEffect>::ID  = PARAM_INKEFFECT;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Menu>::ID       = PARAM_MENU;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Extension>::ID  = PARAM_EXTENSION;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Direction8>::ID = PARAM_8DIRECTIONS;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Movement>::ID   = PARAM_MVT;
+	template<> int const MMF2Params<AgnosticParamsType::AC_ProgramF>::ID   = PARAM_PROGRAM2;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Effect>::ID     = PARAM_EFFECT;
 }

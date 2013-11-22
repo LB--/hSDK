@@ -496,6 +496,56 @@ namespace hSDK
 	extern template struct MMF2Params<AgnosticParamsType::E_Number>;
 	extern template struct MMF2Params<AgnosticParamsType::E_String>;
 
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Object>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Border>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Create>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Shoot>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_SysCreate>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Animation>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_None>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Every>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Frame>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Sample>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Music>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_SampleLoop>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_MusicLoop>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::C_Sample>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::C_Music>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Program>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Paste>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_InkEffect>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Menu>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Extension>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Direction8>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Movement>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_ProgramF>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Effect>::ID;
+
+	extern template struct MMF2Params<AgnosticParamsType::AC_Object>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Border>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Create>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Shoot>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_SysCreate>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Animation>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_None>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Every>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Frame>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Sample>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Music>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_SampleLoop>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_MusicLoop>;
+	extern template struct MMF2Params<AgnosticParamsType::C_Sample>;
+	extern template struct MMF2Params<AgnosticParamsType::C_Music>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Program>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Paste>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_InkEffect>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Menu>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Extension>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Direction8>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Movement>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_ProgramF>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Effect>;
+
 	template<ACE CallT, typename ParamT, typename = void>
 	struct TypeFrom;
 	template<ACE CallT, typename ParamT>
@@ -512,7 +562,7 @@ namespace hSDK
 	{
 		static ParamsType<CallT> constexpr PT = ParamsType<CallT>::Number;
 		static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT);
-		static std::int16_t constexpr ID = MMF2Params<APT>::ID;
+		static std::int16_t const ID = MMF2Params<APT>::ID;
 	};
 	#define TypeMap(CallT, ParamT, Specific) \
 		template<> \
@@ -520,7 +570,7 @@ namespace hSDK
 		{ \
 			static ParamsType<ACE::CallT> constexpr PT = ParamsType<ACE::CallT>::Specific; \
 			static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT); \
-			static std::int16_t constexpr ID = MMF2Params<APT>::ID; \
+			static std::int16_t const ID = MMF2Params<APT>::ID; \
 		}
 	#define TypeMapAC(AC) \
 		TypeMap(AC, Param::Click, Click); \
@@ -582,7 +632,7 @@ namespace hSDK
 		static ParamsType<CallT> constexpr PT = ParamsType<CallT>::Custom;
 		static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT);
 		static std::int16_t constexpr CustomParamID = CustomID;
-		static std::int16_t constexpr ID = MMF2Params<APT>::ID + CustomParamID;
+		static std::int16_t const ID = MMF2Params<APT>::ID + CustomParamID;
 	};
 }
 
