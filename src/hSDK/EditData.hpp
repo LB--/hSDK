@@ -3,8 +3,7 @@
 
 #include "hSDK/Properties.hpp"
 
-#include "MinGW.hpp"
-#include "MMF2API/Ccxhdr.h"
+#include "MMF2API.hpp"
 
 namespace hSDK
 {

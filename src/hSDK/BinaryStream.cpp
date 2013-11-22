@@ -107,6 +107,9 @@ namespace hSDK
 			}
 			Out::~Out() = default;
 		}
+		namespace ParamData
+		{
+		}
 		namespace RunData
 		{
 		}

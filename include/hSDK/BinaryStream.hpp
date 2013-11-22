@@ -71,6 +71,39 @@ namespace hSDK
 				Out(Buf *, mv *, ED *&);
 			};
 		}
+		namespace ParamData
+		{
+			using InBase = ::hSDK::BinaryStream::In;
+			struct In : InBase
+			{
+				In(void *);
+				In(In const &) = delete;
+				In(In &&) = default;
+				In &operator=(In const &) = delete;
+				In &operator=(In &&) = default;
+				virtual ~In();
+
+			private:
+				struct Buf;
+				std::unique_ptr<Buf> b;
+				In(Buf *, void *);
+			};
+			using OutBase = ::hSDK::BinaryStream::Out;
+			struct Out : OutBase
+			{
+				Out(void *);
+				Out(Out const &) = delete;
+				Out(Out &&) = default;
+				Out &operator=(Out const &) = delete;
+				Out &operator=(Out &&) = default;
+				virtual ~Out();
+
+			private:
+				struct Buf;
+				std::unique_ptr<Buf> b;
+				Out(Buf *, void *);
+			};
+		}
 		namespace RunData
 		{
 			using InBase = ::hSDK::BinaryStream::In;

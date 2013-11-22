@@ -2,6 +2,7 @@
 #define hSDK_Extension_HeaderPlusPlus
 
 #include "hSDK.hpp"
+#include "hSDK/Parameters.hpp"
 
 #include <functional>
 #include <algorithm>
@@ -52,6 +53,20 @@ namespace hSDK
 		{
 			using type = T;
 			static ExpressionType constexpr ExpT = ExpressionType::None;
+		};
+		template<typename T>
+		struct Enforce32bit
+		<
+			T, typename std::enable_if
+			<
+				std::is_same(decltype(T::ExpT), ExpressionType),
+				void
+			>::type
+		> final
+		{
+			using type = T;
+			using fr32 = T;
+			static ExpressionType constexpr ExpT = T::ExpT;
 		};
 		template<typename T>
 		struct Enforce32bit
@@ -545,6 +560,8 @@ namespace hSDK
 		, expressions(e)
 		{
 		}
+
+		using namespace Param;
 
 	private:
 		Actions_t actions;
