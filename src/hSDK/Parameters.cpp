@@ -18,7 +18,45 @@ namespace hSDK
 			doubleclick = i32 & PARAMCLICK_DOUBLE ? true : false;
 		}
 		Color::Color(std::int32_t i32)
-		//
+		: rgb(i32)
+		, r(reinterpret_cast<std::int8_t *>(&i32)[0])
+		, g(reinterpret_cast<std::int8_t *>(&i32)[1])
+		, b(reinterpret_cast<std::int8_t *>(&i32)[2])
+		{
+		}
+		Filename::Filename(std::int32_t i32)
+		: fname(reinterpret_cast<char_t *>(i32))
+		{
+		}
+		Joystick::Joystick(std::int32_t i32)
+		: up   (i32 & JOYSTICK_UP ? true : false)
+		, down (i32 & JOYSTICK_DOWN ? true : false)
+		, left (i32 & JOYSTICK_LEFT ? true : false)
+		, right(i32 & JOYSTICK_RIGHT ? true : false)
+		, fire1(i32 & JOYSTICK_FIRE1 ? true : false)
+		, fire2(i32 & JOYSTICK_FIRE2 ? true : false)
+		, fire3(i32 & JOYSTICK_FIRE3 ? true : false)
+		, fire4(i32 & JOYSTICK_FIRE4 ? true : false)
+		{
+		}
+		Position::Position(std::int32_t i32)
+		: x(reinterpret_cast<std::int16_t *>(&i32)[0])
+		, y(reinterpret_cast<std::int16_t *>(&i32)[1])
+		{
+		}
+		struct ZoneRect final
+		{
+			std::int16_t left, top, right, bottom;
+		};
+		Zone::Zone(std::int32_t i32)
+		: x1(reinterpret_cast<ZoneRect *>(i32)->left)
+		, y1(reinterpret_cast<ZoneRect *>(i32)->top)
+		, x2(reinterpret_cast<ZoneRect *>(i32)->right)
+		, y2(reinterpret_cast<ZoneRect *>(i32)->bottom)
+		{
+		}
+		Custom::Custom(std::int32_t i32)
+		: data(reinterpret_cast<void *>(i32))
 		{
 		}
 
@@ -91,4 +129,24 @@ namespace hSDK
 		{
 		}
 	}
+
+	template<> int const MMF2Params<AgnosticParamsType::AC_Click>::ID           = PARAM_CLICK;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Color>::ID           = PARAM_COLOUR;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Number>::ID          = PARAM_EXPRESSION;
+	template<> int const MMF2Params<AgnosticParamsType::AC_String>::ID          = PARAM_EXPSTRING;
+	template<> int const MMF2Params<AgnosticParamsType::AC_File>::ID            = PARAM_FILENAME2;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Joystick>::ID        = PARAM_JOYDIR;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Key>::ID             = PARAM_KEY;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Direction>::ID       = PARAM_NEWDIRECTION;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Player>::ID          = PARAM_PLAYER;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Position>::ID        = PARAM_POSITION;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Speed>::ID           = PARAM_SPEED;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Time>::ID            = PARAM_TIME;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Zone>::ID            = PARAM_ZONE;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Custom>::ID          = PARAM_EXTBASE+0;
+	template<> int const MMF2Params<AgnosticParamsType::C_NumberComparison>::ID = PARAM_COMPARAISON;
+	template<> int const MMF2Params<AgnosticParamsType::C_StringCOmparison>::ID = PARAM_CMPSTRING;
+	template<> int const MMF2Params<AgnosticParamsType::C_TimeComparison>::ID   = PARAM_CMPTIME;
+	template<> int const MMF2Params<AgnosticParamsType::E_Number>::ID           = EXPPARAM_LONG;
+	template<> int const MMF2Params<AgnosticParamsType::E_String>::ID           = EXPPARAM_STRING;
 }

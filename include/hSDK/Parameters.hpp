@@ -165,6 +165,7 @@ namespace hSDK
 	{
 		struct Click final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Click(std::int32_t);
 
 			enum struct Button
@@ -178,13 +179,15 @@ namespace hSDK
 		};
 		struct Color final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Color(std::int32_t);
 
 			std::uint32_t rgb;
 			std::uint8_t r, g, b;
 		};
-		struct Filename final ////////////////////////////////////////////////////////////////
+		struct Filename final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::String;
 			Filename(std::int32_t);
 
 			string fname;
@@ -195,6 +198,7 @@ namespace hSDK
 		};
 		struct Joystick final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Joystick(std::int32_t);
 
 			bool up, down, left, right;
@@ -202,6 +206,7 @@ namespace hSDK
 		};
 		struct Key final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Key(std::int32_t i32)
 			: vk(i32)
 			{
@@ -211,6 +216,7 @@ namespace hSDK
 		};
 		struct Direction final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Direction(std::int32_t i32)
 			: dir32(i32)
 			{
@@ -220,6 +226,7 @@ namespace hSDK
 		};
 		struct Player final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Player(std::int32_t i32)
 			: player(i32)
 			{
@@ -229,12 +236,14 @@ namespace hSDK
 		};
 		struct Position final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Position(std::int32_t);
 
 			std::int16_t x, y;
 		};
 		struct Speed final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Speed(std::int32_t i32)
 			: speed(i32)
 			{
@@ -244,6 +253,7 @@ namespace hSDK
 		};
 		struct Time final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Time(std::int32_t i32)
 			: millis(i32)
 			{
@@ -253,6 +263,7 @@ namespace hSDK
 		};
 		struct Zone final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Zone(std::int32_t);
 
 			std::int16_t x1, y1;
@@ -261,6 +272,7 @@ namespace hSDK
 		template<typename T>
 		struct Comparison final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Comparison(std::int32_t)
 			{
 			}
@@ -268,6 +280,7 @@ namespace hSDK
 		template<std::int16_t ID>
 		struct Custom
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Custom(std::int32_t);
 
 			BinaryStream::ParamData::In data;
@@ -275,14 +288,17 @@ namespace hSDK
 
 		struct Object final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Object(std::int32_t);
 		};
 		struct Border final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Border(std::int32_t);
 		};
 		struct Create final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Create(std::int32_t);
 
 			struct Position final
@@ -303,6 +319,7 @@ namespace hSDK
 		};
 		struct Shoot final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Shoot(std::int32_t);
 
 			Create create;
@@ -310,26 +327,32 @@ namespace hSDK
 		};
 		struct SysCreate final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			SysCreate(std::int32_t);
 		};
 		struct Animation final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Animation(std::int32_t);
 		};
 		struct None final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			None(std::int32_t);
 		};
 		struct Every final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Every(std::int32_t);
 		};
 		struct Frame final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Frame(std::int32_t);
 		};
 		struct Sample final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Sample(std::int32_t);
 
 			string name;
@@ -338,6 +361,7 @@ namespace hSDK
 		};
 		struct Music final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Music(std::int32_t);
 
 			string name;
@@ -346,14 +370,17 @@ namespace hSDK
 		};
 		struct SampleLoop final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			SampleLoop(std::int32_t);
 		};
 		struct MusicLoop final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			MusicLoop(std::int32_t);
 		};
 		struct SampleNF final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			SampleNF(std::int32_t);
 
 			string name;
@@ -361,6 +388,7 @@ namespace hSDK
 		};
 		struct MusicNF final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			MusicNF(std::int32_t);
 
 			string name;
@@ -368,6 +396,7 @@ namespace hSDK
 		};
 		struct Program final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Program(std::int32_t);
 
 			string path;
@@ -376,26 +405,32 @@ namespace hSDK
 		};
 		struct Paste final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Paste(std::int32_t);
 		};
 		struct InkEffect final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			InkEffect(std::int32_t);
 		};
 		struct Menu final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Menu(std::int32_t);
 		};
 		struct Extension final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Extension(std::int32_t);
 		};
 		struct Direction8 final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Direction8(std::int32_t);
 		};
 		struct Movement final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Movement(std::int32_t);
 
 			std::int16_t num;
@@ -403,15 +438,63 @@ namespace hSDK
 		};
 		struct ProgramF final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			ProgramF(std::int32_t);
 
 			bool wait, hide;
 		};
 		struct Effect final
 		{
+			static ExpressionType constexpr ExpT = ExpressionType::None;
 			Effect(std::int32_t);
 		};
 	}
+
+	template<AgnosticParamsType ParamT>
+	struct MMF2Params final
+	{
+		static int const ID;
+	};
+
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Click>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Color>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Number>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_String>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_File>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Joystick>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Key>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Direction>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Player>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Position>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Speed>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Time>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Zone>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::AC_Custom>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::C_NumberComparison>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::C_StringCOmparison>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::C_TimeComparison>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::E_Number>::ID;
+	template<> extern int const MMF2Params<AgnosticParamsType::E_String>::ID;
+
+	extern template struct MMF2Params<AgnosticParamsType::AC_Click>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Color>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Number>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_String>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_File>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Joystick>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Key>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Direction>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Player>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Position>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Speed>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Time>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Zone>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Custom>;
+	extern template struct MMF2Params<AgnosticParamsType::C_NumberComparison>;
+	extern template struct MMF2Params<AgnosticParamsType::C_StringCOmparison>;
+	extern template struct MMF2Params<AgnosticParamsType::C_TimeComparison>;
+	extern template struct MMF2Params<AgnosticParamsType::E_Number>;
+	extern template struct MMF2Params<AgnosticParamsType::E_String>;
 
 	template<ACE CallT, typename ParamT, typename = void>
 	struct TypeFrom;
@@ -429,6 +512,7 @@ namespace hSDK
 	{
 		static ParamsType<CallT> constexpr PT = ParamsType<CallT>::Number;
 		static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT);
+		static std::int16_t constexpr ID = MMF2Params<APT>::ID;
 	};
 	#define TypeMap(CallT, ParamT, Specific) \
 		template<> \
@@ -436,6 +520,7 @@ namespace hSDK
 		{ \
 			static ParamsType<ACE::CallT> constexpr PT = ParamsType<ACE::CallT>::Specific; \
 			static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT); \
+			static std::int16_t constexpr ID = MMF2Params<APT>::ID; \
 		}
 	#define TypeMapAC(AC) \
 		TypeMap(AC, Param::Click, Click); \
@@ -481,30 +566,24 @@ namespace hSDK
 	TypeMap(Expression, string, String);
 	#undef TypeMapAC
 	#undef TypeMap
-	template<ACE CallT, std::int16_t ID>
+	template<ACE CallT, std::int16_t CustomID>
 	struct TypeFrom
 	<
 		CallT,
-		Param::Custom<ID>,
+		Param::Custom<CustomID>,
 		typename std::enable_if
 		<
-			CallT != ACE::Expression,
+			CallT != ACE::Expression
+		 && CustomID >= 0,
 			void
 		>::type
 	> final
 	{
 		static ParamsType<CallT> constexpr PT = ParamsType<CallT>::Custom;
 		static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT);
-		static std:int16_t constexpr ParamID = ID;
+		static std::int16_t constexpr CustomParamID = CustomID;
+		static std::int16_t constexpr ID = MMF2Params<APT>::ID + CustomParamID;
 	};
-
-	template<AgnosticParamsType ParamT>
-	struct MMF2Params final
-	{
-		static int const ID;
-	};
-
-	template<> extern int const MMF2Params</**/>::ID;
 }
 
 #endif
