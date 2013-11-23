@@ -55,10 +55,6 @@ namespace hSDK
 		, y2(reinterpret_cast<ZoneRect *>(i32)->bottom)
 		{
 		}
-		Custom::Custom(std::int32_t i32)
-		: data(reinterpret_cast<void *>(i32))
-		{
-		}
 
 		Create::Create(std::int32_t i32)
 		: pos
@@ -134,8 +130,8 @@ namespace hSDK
 	template<> int const MMF2Params<AgnosticParamsType::AC_Color>::ID           = PARAM_COLOUR;
 	template<> int const MMF2Params<AgnosticParamsType::AC_Number>::ID          = PARAM_EXPRESSION;
 	template<> int const MMF2Params<AgnosticParamsType::AC_String>::ID          = PARAM_EXPSTRING;
-	template<> int const MMF2Params<AgnosticParamsType::AC_File>::ID            = PARAM_FILENAME2;
-	template<> int const MMF2Params<AgnosticParamsType::AC_Joystick>::ID        = PARAM_JOYDIR;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Filename>::ID        = PARAM_FILENAME2;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Joystick>::ID        = PARAM_JOYDIRECTION;
 	template<> int const MMF2Params<AgnosticParamsType::AC_Key>::ID             = PARAM_KEY;
 	template<> int const MMF2Params<AgnosticParamsType::AC_Direction>::ID       = PARAM_NEWDIRECTION;
 	template<> int const MMF2Params<AgnosticParamsType::AC_Player>::ID          = PARAM_PLAYER;
@@ -145,7 +141,7 @@ namespace hSDK
 	template<> int const MMF2Params<AgnosticParamsType::AC_Zone>::ID            = PARAM_ZONE;
 	template<> int const MMF2Params<AgnosticParamsType::AC_Custom>::ID          = PARAM_EXTBASE+0;
 	template<> int const MMF2Params<AgnosticParamsType::C_NumberComparison>::ID = PARAM_COMPARAISON;
-	template<> int const MMF2Params<AgnosticParamsType::C_StringCOmparison>::ID = PARAM_CMPSTRING;
+	template<> int const MMF2Params<AgnosticParamsType::C_StringComparison>::ID = PARAM_CMPSTRING;
 	template<> int const MMF2Params<AgnosticParamsType::C_TimeComparison>::ID   = PARAM_CMPTIME;
 	template<> int const MMF2Params<AgnosticParamsType::E_Number>::ID           = EXPPARAM_LONG;
 	template<> int const MMF2Params<AgnosticParamsType::E_String>::ID           = EXPPARAM_STRING;

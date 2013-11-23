@@ -59,7 +59,7 @@ namespace hSDK
 		<
 			T, typename std::enable_if
 			<
-				std::is_same(decltype(T::ExpT), ExpressionType),
+				std::is_same<decltype(T::ExpT), ExpressionType>::value,
 				void
 			>::type
 		> final
@@ -554,14 +554,25 @@ namespace hSDK
 		using Conditions_t  = std::map<std::uint16_t, ExtMF<ACE::Condition>>;
 		using Expressions_t = std::map<std::uint16_t, ExtMF<ACE::Expression>>;
 	protected:
-		Extension(Actions_t const &a, Conditions_t const &c, Expressions_t const &e)
-		: actions(a)
-		, conditions(c)
-		, expressions(e)
+		Extension()
 		{
 		}
 
-		using namespace Param;
+		void registerActions(Actions_t a)
+		{
+			a.insert(std::begin(actions), std::end(actions));
+			actions.swap(a);
+		}
+		void registerConditions(Conditions_t c)
+		{
+			c.insert(std::begin(conditions), std::end(conditions));
+			conditions.swap(c);
+		}
+		void registerExpressions(Expressions_t e)
+		{
+			e.insert(std::begin(expressions), std::end(expressions));
+			expressions.swap(e);
+		}
 
 	private:
 		Actions_t actions;
@@ -578,7 +589,6 @@ namespace hSDK
 			static std::int32_t GetNext();
 		};
 
-		Extension() = delete;
 		Extension(Extension const &) = delete;
 		Extension(Extension &&) = delete;
 		Extension &operator=(Extension const &) = delete;

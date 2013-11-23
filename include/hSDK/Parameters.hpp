@@ -12,7 +12,7 @@ namespace hSDK
 		AC_Color,
 		AC_Number,
 		AC_String,
-		AC_File,
+		AC_Filename,
 		AC_Joystick,
 		AC_Key,
 		AC_Direction,
@@ -65,7 +65,7 @@ namespace hSDK
 			Color     = AgnosticParamsType::AC_Color,
 			Number    = AgnosticParamsType::AC_Number,
 			String    = AgnosticParamsType::AC_String,
-			File      = AgnosticParamsType::AC_File,
+			Filename  = AgnosticParamsType::AC_Filename,
 			Joystick  = AgnosticParamsType::AC_Joystick,
 			Key       = AgnosticParamsType::AC_Key,
 			Direction = AgnosticParamsType::AC_Direction,
@@ -109,7 +109,7 @@ namespace hSDK
 			Color            = AgnosticParamsType::AC_Color,
 			Number           = AgnosticParamsType::AC_Number,
 			String           = AgnosticParamsType::AC_String,
-			File             = AgnosticParamsType::AC_File,
+			Filename         = AgnosticParamsType::AC_Filename,
 			Joystick         = AgnosticParamsType::AC_Joystick,
 			Key              = AgnosticParamsType::AC_Key,
 			Direction        = AgnosticParamsType::AC_Direction,
@@ -281,7 +281,10 @@ namespace hSDK
 		struct Custom
 		{
 			static ExpressionType constexpr ExpT = ExpressionType::None;
-			Custom(std::int32_t);
+			Custom(std::int32_t i32)
+			: data(reinterpret_cast<void *>(i32))
+			{
+			}
 
 			BinaryStream::ParamData::In data;
 		};
@@ -456,31 +459,31 @@ namespace hSDK
 		static int const ID;
 	};
 
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Click>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Color>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Number>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_String>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_File>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Joystick>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Key>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Direction>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Player>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Position>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Speed>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Time>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Zone>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Custom>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::C_NumberComparison>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::C_StringCOmparison>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::C_TimeComparison>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::E_Number>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::E_String>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Click>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Color>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Number>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_String>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Filename>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Joystick>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Key>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Direction>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Player>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Position>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Speed>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Time>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Zone>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Custom>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::C_NumberComparison>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::C_StringComparison>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::C_TimeComparison>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::E_Number>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::E_String>::ID;
 
 	extern template struct MMF2Params<AgnosticParamsType::AC_Click>;
 	extern template struct MMF2Params<AgnosticParamsType::AC_Color>;
 	extern template struct MMF2Params<AgnosticParamsType::AC_Number>;
 	extern template struct MMF2Params<AgnosticParamsType::AC_String>;
-	extern template struct MMF2Params<AgnosticParamsType::AC_File>;
+	extern template struct MMF2Params<AgnosticParamsType::AC_Filename>;
 	extern template struct MMF2Params<AgnosticParamsType::AC_Joystick>;
 	extern template struct MMF2Params<AgnosticParamsType::AC_Key>;
 	extern template struct MMF2Params<AgnosticParamsType::AC_Direction>;
@@ -491,35 +494,35 @@ namespace hSDK
 	extern template struct MMF2Params<AgnosticParamsType::AC_Zone>;
 	extern template struct MMF2Params<AgnosticParamsType::AC_Custom>;
 	extern template struct MMF2Params<AgnosticParamsType::C_NumberComparison>;
-	extern template struct MMF2Params<AgnosticParamsType::C_StringCOmparison>;
+	extern template struct MMF2Params<AgnosticParamsType::C_StringComparison>;
 	extern template struct MMF2Params<AgnosticParamsType::C_TimeComparison>;
 	extern template struct MMF2Params<AgnosticParamsType::E_Number>;
 	extern template struct MMF2Params<AgnosticParamsType::E_String>;
 
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Object>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Border>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Create>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Shoot>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_SysCreate>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Animation>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_None>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Every>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Frame>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Sample>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Music>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_SampleLoop>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_MusicLoop>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::C_Sample>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::C_Music>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Program>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Paste>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_InkEffect>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Menu>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Extension>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Direction8>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Movement>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_ProgramF>::ID;
-	template<> extern int const MMF2Params<AgnosticParamsType::AC_Effect>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Object>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Border>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Create>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Shoot>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_SysCreate>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Animation>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_None>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Every>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Frame>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Sample>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Music>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_SampleLoop>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_MusicLoop>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::C_Sample>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::C_Music>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Program>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Paste>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_InkEffect>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Menu>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Extension>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Direction8>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Movement>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_ProgramF>::ID;
+	template<> int const MMF2Params<AgnosticParamsType::AC_Effect>::ID;
 
 	extern template struct MMF2Params<AgnosticParamsType::AC_Object>;
 	extern template struct MMF2Params<AgnosticParamsType::AC_Border>;
@@ -562,7 +565,6 @@ namespace hSDK
 	{
 		static ParamsType<CallT> constexpr PT = ParamsType<CallT>::Number;
 		static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT);
-		static std::int16_t const ID = MMF2Params<APT>::ID;
 	};
 	#define TypeMap(CallT, ParamT, Specific) \
 		template<> \
@@ -570,8 +572,7 @@ namespace hSDK
 		{ \
 			static ParamsType<ACE::CallT> constexpr PT = ParamsType<ACE::CallT>::Specific; \
 			static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT); \
-			static std::int16_t const ID = MMF2Params<APT>::ID; \
-		}
+		};
 	#define TypeMapAC(AC) \
 		TypeMap(AC, Param::Click, Click); \
 		TypeMap(AC, Param::Color, Color); \
@@ -606,9 +607,9 @@ namespace hSDK
 		TypeMap(AC, Param::Direction8, Direction8); \
 		TypeMap(AC, Param::Movement, Movement); \
 		TypeMap(AC, Param::ProgramF, ProgramF); \
-		TypeMap(AC, Param::Effect, Effect)
+		TypeMap(AC, Param::Effect, Effect);
 	TypeMapAC(Action);
-	typeMapAC(Condition);
+	TypeMapAC(Condition);
 	TypeMap(Condition, Param::Comparison<string>, StringComparison);
 	TypeMap(Condition, Param::Comparison<Param::Time>, TimeComparison);
 	TypeMap(Condition, Param::SampleNF, SampleNF);
@@ -631,8 +632,7 @@ namespace hSDK
 	{
 		static ParamsType<CallT> constexpr PT = ParamsType<CallT>::Custom;
 		static AgnosticParamsType constexpr APT = static_cast<AgnosticParamsType>(PT);
-		static std::int16_t constexpr CustomParamID = CustomID;
-		static std::int16_t const ID = MMF2Params<APT>::ID + CustomParamID;
+		static int constexpr CustomParamID = CustomID;
 	};
 }
 

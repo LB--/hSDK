@@ -24,8 +24,7 @@ namespace hSDK
 
 	std::int32_t Extension::exp_lparam = 0;
 
-	using ACE = Extension::ACE;
-	using ExprT = Extension::ExpressionType;
+	using ExprT = ExpressionType;
 
 	template<> std::int32_t Extension::Params<ACE::Action    , ExprT::None   >::GetFirst(){ return GetNext(); }
 	template<> std::int32_t Extension::Params<ACE::Condition , ExprT::None   >::GetFirst(){ return GetNext(); }

@@ -19,7 +19,7 @@ namespace hSDK
 		{
 			static inline int geti()
 			{
-				static int i = ios_base::xalloc();
+				static int i = std::ios_base::xalloc();
 				return i;
 			}
 
@@ -41,7 +41,7 @@ namespace hSDK
 				virtual oit_t Put(oit_t it, std::uint64_t v) override
 				{
 					std::uint8_t *pv = reinterpret_cast<std::uint8_t *>(&v);
-					if(E == Little)
+					if(E == Endianness::Little)
 					{
 						for(auto p = pv; p != pv + sizeof(T); ++p)
 						{
@@ -62,7 +62,7 @@ namespace hSDK
 				virtual iit_t Get(iit_t it, std::uint64_t &v) override
 				{
 					std::uint8_t *pv = reinterpret_cast<std::uint8_t *>(&v);
-					if(E == Little)
+					if(E == Endianness::Little)
 					{
 						for(auto p = pv; p != pv + sizeof(T); ++p)
 						{
@@ -83,7 +83,7 @@ namespace hSDK
 				virtual oit_t Put(oit_t it, long double v) override
 				{
 					std::uint8_t *pv = reinterpret_cast<std::uint8_t *>(&v);
-					if(E == Little)
+					if(E == Endianness::Little)
 					{
 						for(auto p = pv; p != pv + sizeof(T); ++p)
 						{
@@ -104,7 +104,7 @@ namespace hSDK
 				virtual iit_t Get(iit_t it, long double &v) override
 				{
 					std::uint8_t *pv = reinterpret_cast<std::uint8_t *>(&v);
-					if(E == Little)
+					if(E == Endianness::Little)
 					{
 						for(auto p = pv; p != pv + sizeof(T); ++p)
 						{
@@ -126,78 +126,78 @@ namespace hSDK
 
 			struct NumPut : std::num_put<char_t>
 			{
-				virtual iter_type do_put(iter_type it, ios_base &ios, char_type fill, bool v) const override
+				virtual iter_type do_put(iter_type it, std::ios_base &ios, char_type fill, bool v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->put(it, v ? 1 : 0);
+						iter_type r = as->Put(it, v ? 1ull : 0ull);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_put<char_t>::do_put(it, ios, fill, v);
 				}
-				virtual iter_type do_put(iter_type it, ios_base &ios, char_type fill, long v) const override
+				virtual iter_type do_put(iter_type it, std::ios_base &ios, char_type fill, long v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->put(it, v);
+						iter_type r = as->Put(it, static_cast<std::uint64_t>(v));
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_put<char_t>::do_put(it, ios, fill, v);
 				}
-				virtual iter_type do_put(iter_type it, ios_base &ios, char_type fill, unsigned long v) const override
+				virtual iter_type do_put(iter_type it, std::ios_base &ios, char_type fill, unsigned long v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->put(it, v);
+						iter_type r = as->Put(it, static_cast<std::uint64_t>(v));
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_put<char_t>::do_put(it, ios, fill, v);
 				}
-				virtual iter_type do_put(iter_type it, ios_base &ios, char_type fill, long long v) const override
+				virtual iter_type do_put(iter_type it, std::ios_base &ios, char_type fill, long long v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->put(it, static_cast<std::uint64_t>(v));
+						iter_type r = as->Put(it, static_cast<std::uint64_t>(v));
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_put<char_t>::do_put(it, ios, fill, v);
 				}
-				virtual iter_type do_put(iter_type it, ios_base &ios, char_type fill, unsigned long long v) const override
+				virtual iter_type do_put(iter_type it, std::ios_base &ios, char_type fill, unsigned long long v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->put(it, v);
+						iter_type r = as->Put(it, v);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_put<char_t>::do_put(it, ios, fill, v);
 				}
-				virtual iter_type do_put(iter_type it, ios_base &ios, char_type fill, double v) const override
+				virtual iter_type do_put(iter_type it, std::ios_base &ios, char_type fill, double v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->put(it, v);
+						iter_type r = as->Put(it, static_cast<long double>(v));
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_put<char_t>::do_put(it, ios, fill, v);
 				}
-				virtual iter_type do_put(iter_type it, ios_base &ios, char_type fill, long double v) const override
+				virtual iter_type do_put(iter_type it, std::ios_base &ios, char_type fill, long double v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->put(it, v);
+						iter_type r = as->Put(it, v);
 						delete as, as = nullptr;
 						return r;
 					}
@@ -207,127 +207,127 @@ namespace hSDK
 
 			struct NumGet : std::num_get<char_t>
 			{
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, bool &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, bool &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
 						std::uint64_t temp;
-						iter_type r = as->get(it, temp);
+						iter_type r = as->Get(it, temp);
 						v = (temp ? true : false);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, long &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, long &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
 						std::uint64_t temp;
-						iter_type r = as->get(it, temp);
-						v = static_cast<decltype(v)>(temp);
+						iter_type r = as->Get(it, temp);
+						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, long long &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, long long &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
 						std::uint64_t temp;
-						iter_type r = as->get(it, temp);
-						v = static_cast<decltype(v)>(temp);
+						iter_type r = as->Get(it, temp);
+						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, unsigned short &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, unsigned short &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
 						std::uint64_t temp;
-						iter_type r = as->get(it, temp);
-						v = static_cast<decltype(v)>(temp);
+						iter_type r = as->Get(it, temp);
+						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, unsigned int &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, unsigned int &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
 						std::uint64_t temp;
-						iter_type r = as->get(it, temp);
-						v = static_cast<decltype(v)>(temp);
+						iter_type r = as->Get(it, temp);
+						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, unsigned long &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, unsigned long &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
 						std::uint64_t temp;
-						iter_type r = as->get(it, temp);
-						v = static_cast<decltype(v)>(temp);
+						iter_type r = as->Get(it, temp);
+						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, unsigned long long &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, unsigned long long &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->get(it, v);
+						iter_type r = as->Get(it, v);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, float &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, float &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
 						long double temp;
-						iter_type r = as->get(it, temp);
-						v = static_cast<decltype(v)>(temp);
+						iter_type r = as->Get(it, temp);
+						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, double &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, double &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
 						long double temp;
-						iter_type r = as->get(it, temp);
-						v = static_cast<decltype(v)>(temp);
+						iter_type r = as->Get(it, temp);
+						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
 					return std::num_get<char_t>::do_get(it, end, ios, err, v);
 				}
-				virtual iter_type do_get(iter_type it, iter_type end, ios_base &ios, ios_base::iostate &err, long double &v) const override
+				virtual iter_type do_get(iter_type it, iter_type end, std::ios_base &ios, std::ios_base::iostate &err, long double &v) const override
 				{
 					AsBase *&as = *reinterpret_cast<AsBase **>(&ios.pword(geti()));
 					if(as != nullptr)
 					{
-						iter_type r = as->get(it, v);
+						iter_type r = as->Get(it, v);
 						delete as, as = nullptr;
 						return r;
 					}
@@ -336,26 +336,22 @@ namespace hSDK
 			};
 		}
 
-		template<typename T, Endianness E = Little, typename = void>
-		std::basic_ostream<char_t> &As(std::basic_ostream<char_t> &os);
-		template<typename T, Endianness E>
-		std::basic_ostream<char_t> &As
-		<
-			T, E, typename std::enable_if
+		template<typename T, Endianness E = Endianness::Little, typename = void>
+		auto As(std::basic_ostream<char_t> &os)
+		-> typename std::enable_if
 			<
 				std::is_integral<T>::value
 			 || std::is_floating_point<T>::value,
-				void
+				std::basic_ostream<char_t> &
 			>::type
-		>(std::basic_ostream<char_t> &os)
 		{
-			auto &imbued = os.iword(geti());
+			auto &imbued = os.iword(impl::geti());
 			if(imbued != 1)
 			{
 				os.imbue(std::locale(std::locale(), new impl::NumPut));
 				imbued = 1;
 			}
-			impl::AsBase *&as = *reinterpret_cast<impl::AsBase **>(&os.pword(geti()));
+			impl::AsBase *&as = *reinterpret_cast<impl::AsBase **>(&os.pword(impl::geti()));
 			if(as != nullptr)
 			{
 				delete as, as = nullptr;
@@ -364,26 +360,22 @@ namespace hSDK
 			return os;
 		}
 
-		template<typename T, Endianness E = Little, typename = void>
-		std::basic_istream<char_t> &As(std::basic_istream<char_t> &is);
-		template<typename T, Endianness E>
-		std::basic_istream<char_t> &As
-		<
-			T, E, typename std::enable_if
+		template<typename T, Endianness E = Endianness::Little, typename = void>
+		auto As(std::basic_istream<char_t> &is)
+		-> typename std::enable_if
 			<
 				std::is_integral<T>::value
 			 || std::is_floating_point<T>::value,
-				void
+				std::basic_istream<char_t> &
 			>::type
-		>(std::basic_istream<char_t> &is)
 		{
-			auto &imbued = is.iword(geti());
+			auto &imbued = is.iword(impl::geti());
 			if(imbued != 1)
 			{
 				is.imbue(std::locale(std::locale(), new impl::NumGet));
 				imbued = 1;
 			}
-			impl::AsBase *&as = *reinterpret_cast<impl::AsBase **>(&is.pword(geti()));
+			impl::AsBase *&as = *reinterpret_cast<impl::AsBase **>(&is.pword(impl::geti()));
 			if(as != nullptr)
 			{
 				delete as, as = nullptr;
