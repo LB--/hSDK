@@ -18,7 +18,7 @@ link_directories("${PROJECT_SOURCE_DIR}/" "${PROJECT_SOURCE_DIR}/../../lib/")
 message(STATUS "Extension Sources = ${EXT_SOURCES}")
 message(STATUS "Extension Headers = ${EXT_HEADERS}")
 
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -Wno-multichar")
+set(CMAKE_CXX_FLAGS "-std=c++11 -O2 ${CMAKE_CXX_FLAGS} -Wno-multichar")
 set(CMAKE_BUILD_TYPE "RELEASE")
 
 list(APPEND EXT_MFX_TYPE "Plain")

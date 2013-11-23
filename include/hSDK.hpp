@@ -2,9 +2,10 @@
 #define hSDK_HeaderPlusPlus
 
 #include <cstdint>
-#include <string>
-#include <tuple>
 #include <type_traits>
+#include <tuple>
+#include <string>
+#include <memory>
 
 #if __cplusplus > 201103L
 using namespace std::string_literals;
@@ -26,8 +27,60 @@ namespace hSDK
 #endif
 	using string = std::basic_string<char_t>;
 
+	struct impl;
+
 	struct ED;
+	struct Properties;
+	struct EdittimeInfo
+	{
+		static EdittimeInfo &Current()
+		{
+			static EdittimeInfo eti;
+			return eti;
+		}
+		static ED *Ed()
+		{
+			return Current().ed;
+		}
+		static std::unique_ptr<Properties> Props();
+
+	private:
+		ED *ed = nullptr;
+
+		EdittimeInfo() = default;
+		EdittimeInfo(EdittimeInfo const &) = delete;
+		EdittimeInfo(EdittimeInfo &&) = delete;
+		EdittimeInfo &operator=(EdittimeInfo const &) = delete;
+		EdittimeInfo &operator=(EdittimeInfo &&) = delete;
+
+		friend struct ::hSDK::impl;
+	};
 	struct RD;
+	struct Extension;
+	struct RuntimeInfo
+	{
+		static RuntimeInfo &Current()
+		{
+			static RuntimeInfo rti;
+			return rti;
+		}
+		static RD *Rd()
+		{
+			return Current().rd;
+		}
+		static Extension *Ext();
+
+	private:
+		RD *rd = nullptr;
+
+		RuntimeInfo() = default;
+		RuntimeInfo(RuntimeInfo const &) = delete;
+		RuntimeInfo(RuntimeInfo &&) = delete;
+		RuntimeInfo &operator=(RuntimeInfo const &) = delete;
+		RuntimeInfo &operator=(RuntimeInfo &&) = delete;
+
+		friend struct ::hSDK::impl;
+	};
 
 	struct tuple_unpack final
 	{

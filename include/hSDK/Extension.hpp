@@ -16,23 +16,6 @@ namespace hSDK
 
 		using string = hSDK::string;
 
-		struct RuntimeInfo
-		{
-			static RuntimeInfo &Current()
-			{
-				static RuntimeInfo rti;
-				return rti;
-			}
-			static RD *Rd()
-			{
-				return Current().rd;
-			}
-			static Extension &Ext();
-
-		private:
-			RD *rd = nullptr;
-		};
-
 	private:
 		template<typename Fr, typename To>
 		struct implicit_cast final

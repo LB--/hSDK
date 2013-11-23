@@ -4,11 +4,6 @@
 
 namespace hSDK
 {
-	Extension &Extension::RuntimeInfo::Ext()
-	{
-		return Rd()->ext;
-	}
-
 	auto Extension::CopyString(string const &s) -> string::const_pointer
 	{
 		auto p = reinterpret_cast<string::pointer>(callRunTimeFunction

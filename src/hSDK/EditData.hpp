@@ -13,6 +13,12 @@ namespace hSDK
 		char data[1];
 		//...data...
 	};
+
+	auto EdittimeInfo::Props()
+	-> std::unique_ptr<Properties>
+	{
+		//
+	}
 }
 
 #endif

@@ -22,10 +22,9 @@ namespace hSDK
 		rSpr *rs = nullptr;
 		rVal *rv = nullptr;
 
-		Extension &ext;
+		std::unique_ptr<Extension> ext;
 
 		RD(ED *ed, createObjectInfo *COB)
-		: ext(*reinterpret_cast<Extension *>(0)) //PLACEHOLDER
 		{
 			unsigned off = 0;
 			if(/*Extension::OEFLAGS*/0 & OEFLAG_MOVEMENTS
@@ -51,6 +50,12 @@ namespace hSDK
 		}
 		~RD() = default;
 	};
+
+	auto RuntimeInfo::Ext()
+	-> Extension *
+	{
+		return Rd()->ext.get();
+	}
 }
 
 #endif
