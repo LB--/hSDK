@@ -20,14 +20,11 @@ namespace hSDK
 			string desc;
 
 		private:
-			Property(std::uint32_t t, string const &n, string const &d, bool c = false, bool b = false, bool s = false, bool p = false)
+			Property(std::int32_t t, string const &n, string const &d, std::int32_t opt)
 			: name(n)
 			, desc(d)
 			, type(t)
-			, check(c)
-			, bold(b)
-			, ssel(s)
-			, preq(p)
+			, options(opt)
 			{
 			}
 			Property(Property const &) = delete;
@@ -36,11 +33,8 @@ namespace hSDK
 			Property &operator=(Property &&) = delete;
 			virtual ~Property() = 0;
 
-			std::uint32_t type;
-			bool check;
-			bool bold;
-			bool ssel;
-			bool preq;
+			std::int32_t type;
+			std::int32_t options;
 			struct Param;
 			virtual std::unique_ptr<Param> param();
 
@@ -135,8 +129,14 @@ namespace hSDK
 				Multiline,
 				Static
 			};
+			enum struct CaseChange
+			{
+				None,
+				Lowercase,
+				Uppercase
+			};
 
-			StringProp(string const &name, string const &description, string s = T_"", Type t = Type::Multiline, bool checkbox = false, bool bold = false, bool singlesel = false);
+			StringProp(string const &name, string const &description, string s = T_"", Type t = Type::Multiline, CaseChange cc = CaseChange::None, bool password = false, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			string s;
 
@@ -298,6 +298,43 @@ namespace hSDK
 			ReferenceToProp(Property &prop);
 
 			Property &prop;
+
+		private:
+			virtual std::unique_ptr<Param> param() override;
+
+			virtual std::unique_ptr<Value> value() override;
+			virtual void value(std::unique_ptr<Value>) override;
+		};
+
+		//Not documented in MMF2 SDK Help:
+		struct UrlProp final : Property
+		{
+			UrlProp(string const &name, string const &description, string const &url, bool checkbox = false, bool bold = false, bool singlesel = false);
+
+			string url;
+
+		private:
+			virtual std::unique_ptr<Param> param() override;
+
+			virtual std::unique_ptr<Value> value() override;
+		};
+		struct DirectoryProp final : Property
+		{
+			DirectoryProp(string const &name, string const &description, string const &dir, bool checkbox = false, bool bold = false, bool singlesel = false);
+
+			string dir;
+
+		private:
+			virtual std::unique_ptr<Param> param() override;
+
+			virtual std::unique_ptr<Value> value() override;
+			virtual void value(std::unique_ptr<Value>) override;
+		};
+		struct FloatSpinProp final : Property
+		{
+			FloatSpinProp(string const &name, string const &description, float min, float max, float delta = 0.01f, bool checkbox = false, bool bold = false, bool singlesel = false);
+
+			float min, max, delta;
 
 		private:
 			virtual std::unique_ptr<Param> param() override;
