@@ -27,7 +27,7 @@ namespace hSDK
 #endif
 	using string = std::basic_string<char_t>;
 
-	struct impl;
+	struct Impl;
 
 	struct ED;
 	struct Properties;
