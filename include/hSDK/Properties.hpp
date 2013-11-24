@@ -2,6 +2,7 @@
 #define hSDK_Properties_HeaderPlusPlus
 
 #include "hSDK.hpp"
+#include "hSDK/BinaryStream.hpp"
 
 #include <vector>
 
@@ -49,6 +50,7 @@ namespace hSDK
 
 			friend struct ::hSDK::Properties;
 		};
+		using Properties_t = std::vector<std::unique_ptr<Property>>;
 		struct ButtonProp final : Property
 		{
 			ButtonProp(string const &name, string const &description, string const &text = T_"Edit", bool checkbox = false, bool bold = false, bool singlesel = false);
@@ -170,9 +172,9 @@ namespace hSDK
 		};
 		struct FolderProp final : Property
 		{
-			FolderProp(string const &name, string const &description, std::vector<std::unique_ptr<Property>> props);
+			FolderProp(string const &name, string const &description, Properties_t props);
 
-			std::vector<std::unique_ptr<Property>> props;
+			Properties_t props;
 		};/*
 		struct FontProp final : Property
 		{
@@ -269,24 +271,82 @@ namespace hSDK
 
 			virtual std::unique_ptr<Value> value() override;
 			virtual void value(std::unique_ptr<Value>) override;
-		};
+		};/*
 		struct CustomProp : Property
 		{
-			//...
+			//
+
+		protected:
+			CustomProp(string const &name, string const &description, bool checkbox = false, bool bold = false, bool singlesel = false);
+
+			bool isActive();
+
+			virtual void draw() = 0;
+			virtual void serialize(BinaryStream::Out os) = 0;
+			virtual void deserialize(BinaryStream::In is) = 0;
 
 		private:
+			struct Impl;
+
 			virtual std::unique_ptr<Param> param() override final;
 
 			virtual std::unique_ptr<Value> value() override final;
 			virtual void value(std::unique_ptr<Value>) override final;
+		};*/
+		struct ReferenceToProp final : Property
+		{
+			ReferenceToProp(Property &prop);
+
+			Property &prop;
+
+		private:
+			virtual std::unique_ptr<Param> param() override;
+
+			virtual std::unique_ptr<Value> value() override;
+			virtual void value(std::unique_ptr<Value>) override;
 		};
+
+		enum struct Tab
+		{
+			General,
+			Specific,
+			Display,
+			Window,
+			SizeAndPosition,
+			TextOptions,
+			Movements,
+			RuntimeOptions,
+			AlterableValues,
+			Behaviors,
+			About,
+			BluRay,
+			iPhone,
+			Android,
+			XNA,
+			Mac,
+			SmileyFace
+		};
+		using Tabs_t = std::map<Tab, Properties_t>;
 
 	protected:
 		Properties()
 		{
 		}
 
+		void addProps(Tabs_t const &tab)
+		{
+			for(auto const &t : tab)
+			{
+				for(auto const &p : t.second)
+				{
+					props[t.first].push_back(p);
+				}
+			}
+		}
+
 	private:
+		Tabs_t props;
+
 		Properties(Properties const &) = delete;
 		Properties(Properties &&) = delete;
 		Properties &operator=(Properties const &) = delete;

@@ -38,9 +38,9 @@ namespace hSDK
 			static EdittimeInfo eti;
 			return eti;
 		}
-		static ED *Ed()
+		static ED &Ed()
 		{
-			return Current().ed;
+			return *Current().ed;
 		}
 		static std::unique_ptr<Properties> Props();
 
@@ -64,9 +64,9 @@ namespace hSDK
 			static RuntimeInfo rti;
 			return rti;
 		}
-		static RD *Rd()
+		static RD &Rd()
 		{
-			return Current().rd;
+			return *Current().rd;
 		}
 		static Extension *Ext();
 
