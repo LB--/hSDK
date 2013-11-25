@@ -4,6 +4,63 @@
 
 namespace hSDK
 {
+
+	struct Properties::Property::Param
+	{
+		virtual ~Param() = default;
+
+		virtual LPARAM lParam() const = 0;
+
+		operator LPARAM() const
+		{
+			return lParam();
+		}
+	};
+	auto Properties::Property::param()
+	-> std::unique_ptr<Param>
+	{
+		struct Derived : Param
+		{
+			virtual LPARAM lParam() const override
+			{
+				return 0;
+			}
+		};
+		return std::unique_ptr<Param>(new Derived);
+	}
+
+	struct Properties::Property::Value;
+	{
+		CPropValue *v;
+		Value(CPropValue *val)
+		: v(val)
+		{
+		}
+
+		template<typename T>
+		auto as()
+		-> typename std::enable_if
+		<
+			std::is_base_of<CPropValue, T>,
+			T *
+		>::type
+		{
+			return static_cast<T *>(v);
+		}
+		operator CPropValue *()
+		{
+			return v;
+		}
+	};
+	auto Properties::Property::value()
+	-> std::unique_ptr<Value>
+	{
+		return std::unique_ptr<Value>(new Value(nullptr));
+	}
+	void Properties::Property::value(std::unique_ptr<Value>)
+	{
+	}
+
 	std::int32_t PropTab(Properties::Tab t)
 	{
 		switch(t)
