@@ -227,26 +227,25 @@ namespace hSDK
 	{
 		struct Derived : Param
 		{
-			std::unique_ptr<DirCtrlCreateParam> p;
+			DirCtrlCreateParam p;
 			Derived(DirectionProp const &dp)
-			: p(new DirCtrlCreateParam)
 			{
-				p->bMultiSel = dp.multi ? 1 : 0;
-				p->numDirs = dp.num_dirs;
-				p->style = DCS_NOBORDER;
+				p.bMultiSel = dp.multi ? 1 : 0;
+				p.numDirs = dp.num_dirs;
+				p.style = DCS_NOBORDER;
 				switch(dp.style)
 				{
-				case Style::Flat:   p->style |= DCS_FLAT; break;
-				case Style::ThreeD: p->style |= DCS_3D;   break;
-				default:                                  break;
+				case Style::Flat:   p.style |= DCS_FLAT; break;
+				case Style::ThreeD: p.style |= DCS_3D;   break;
+				default:                                 break;
 				}
-				if(slider)  p->style |= DCS_SLIDER;
-				if(empty)   p->style |= DCS_EMPTY;
-				if(buttons) p->style |= DCS_SETALL_BTNS;
+				if(slider)  p.style |= DCS_SLIDER;
+				if(empty)   p.style |= DCS_EMPTY;
+				if(buttons) p.style |= DCS_SETALL_BTNS;
 			}
 			virtual LPARAM lParam() const override
 			{
-				return reinterpret_cast<LPARAM>(p.get());
+				return reinterpret_cast<LPARAM>(&p);
 			}
 		};
 		return std::unique_ptr<Param>(new Derived(*this));
@@ -356,21 +355,20 @@ namespace hSDK
 	{
 		struct Derived : Param
 		{
-			std::unique_ptr<FilenameCreateParam> p;
+			FilenameCreateParam p;
 			string const filt;
 			Derived(FilenameProp const &fp)
-			: p(new FilenameCreateParam)
-			, filt(fp.filter)
+			: filt(fp.filter)
 			{
-				p->extFilter = filt.c_str();
-				p->options = 0;
-				if(fp.file_must_exist) p->options |= OFN_FILEMUSTEXIST;
-				if(fp.path_must_exist) p->options |= OFN_PATHMUSTEXIST;
-				if(fp.hide_read_only)  p->options |= OFN_HIDEREADONLY;
+				p.extFilter = filt.c_str();
+				p.options = 0;
+				if(fp.file_must_exist) p.options |= OFN_FILEMUSTEXIST;
+				if(fp.path_must_exist) p.options |= OFN_PATHMUSTEXIST;
+				if(fp.hide_read_only)  p.options |= OFN_HIDEREADONLY;
 			}
 			virtual LPARAM lParam() const override
 			{
-				return reinterpret_cast<LPARAM>(p.get());
+				return reinterpret_cast<LPARAM>(&p);
 			}
 		};
 		return std::unique_ptr<Param>(new Derived(*this));
