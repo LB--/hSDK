@@ -157,7 +157,7 @@ namespace hSDK
 	}
 
 	Properties::ListProp::ListProp(string const &n, string const &d, Items_t const &i, bool bu, bool c, bool b, bool s)
-	: Property((bu? PROPTYPE_COMBOBOXBTN : PROPTYPE_COMBOBOX), n, d, popt(c, b, s))
+	: Property((bu? PROPTYPE_COMBOBOXBTN : PROPTYPE_COMBOBOX), n, d, popt(c, b, s, true))
 	, items(i)
 	{
 		selected = items.end();
@@ -212,7 +212,7 @@ namespace hSDK
 	}
 
 	Properties::DirectionProp::DirectionProp(string const &n, string const &d, std::int32_t nd, Directions_t const &ds, Style st, bool m, bool sl, bool e, bool bu, bool c, bool b, bool s)
-	: Property(PROPTYPE_DIRCTRL, n, d, popt(c, b, s))
+	: Property(PROPTYPE_DIRCTRL, n, d, popt(c, b, s, true))
 	, style(st)
 	, num_dirs(nd)
 	, multi(m)
@@ -342,7 +342,7 @@ namespace hSDK
 	}
 
 	Properties::FilenameProp::FilenameProp(string const &n, string const &d, string const &fn, string const &filt, bool fme, bool pme, bool hro, bool c, bool b, bool s)
-	: Property(PROPTYPE_FILENAME, n, d, popt(c, b, s))
+	: Property(PROPTYPE_FILENAME, n, d, popt(c, b, s, true))
 	, fname(fn)
 	, filter(filt)
 	, file_must_exist(fme)
@@ -477,7 +477,7 @@ namespace hSDK
 	}
 
 	Properties::ImageFilenameProp::ImageFilenameProp(string const &n, string const &d, string const &fn, bool aa, bool c, bool b, bool s)
-	: Property(PROPTYPE_PICTUREFILENAME, n, d, popt(c, b, s))
+	: Property(PROPTYPE_PICTUREFILENAME, n, d, popt(c, b, s, true))
 	, fname(fn)
 	, allow_anims(aa)
 	{
@@ -516,7 +516,7 @@ namespace hSDK
 	}
 
 	Properties::SizeProp::SizeProp(string const &n, string const &d, Size_t const &sz, Sizes_t const &p, bool c, bool b, bool s)
-	: Property(PROPTYPE_SIZE, n, d, popt(c, b, s))
+	: Property(PROPTYPE_SIZE, n, d, popt(c, b, s, true))
 	, size(sz)
 	, predefined(p)
 	{
@@ -558,7 +558,7 @@ namespace hSDK
 	}
 
 	Properties::SpinProp::SpinProp(string const &n, string const &d, std::int16_t mn, std::int16_t mx, std::int16_t val, bool c, bool b, bool s)
-	: Property(PROPTYPE_SPINEDIT, n, d, popt(c, b, s))
+	: Property(PROPTYPE_SPINEDIT, n, d, popt(c, b, s, true))
 	, min(mn)
 	, max(mx)
 	, v(val)
@@ -592,7 +592,7 @@ namespace hSDK
 	}
 
 	Properties::SliderProp::SliderProp(string const &n, string const &d, std::int32_t mn, std::int32_t mx, std::int32_t val, bool c, bool b, bool s)
-	: Property(PROPTYPE_SLIDEREDIT, n, d, popt(c, b, s))
+	: Property(PROPTYPE_SLIDEREDIT, n, d, popt(c, b, s, true))
 	, min(mn)
 	, max(mx)
 	, v(val)
@@ -676,7 +676,7 @@ namespace hSDK
 	}
 
 	Properties::UrlProp::UrlProp(string const &n, string const &d, string const &URL, bool c, bool b, bool s)
-	: Property(PROPTYPE_URLBUTTON, n, d, popt(c, b, s))
+	: Property(PROPTYPE_URLBUTTON, n, d, popt(c, b, s, true))
 	, url(URL)
 	{
 	}
@@ -699,7 +699,7 @@ namespace hSDK
 	}
 
 	Properties::FloatSpinProp::FloatSpinProp(string const &n, string const &d, float mn, float mx, float val, float dt, bool c, bool b, bool s)
-	: Property(PROPTYPE_SPINEDITFLOAT, n, d, popt(c, b, s))
+	: Property(PROPTYPE_SPINEDITFLOAT, n, d, popt(c, b, s, true))
 	, min(mn)
 	, max(mx)
 	, delta(dt)
