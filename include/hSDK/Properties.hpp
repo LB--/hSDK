@@ -340,8 +340,6 @@ namespace hSDK
 
 		private:
 			virtual std::unique_ptr<Param> param() override;
-
-			virtual std::unique_ptr<Value> value() override;
 		};
 		struct DirectoryProp final : Property
 		{
@@ -357,9 +355,10 @@ namespace hSDK
 		};
 		struct FloatSpinProp final : Property
 		{
-			FloatSpinProp(string const &name, string const &description, float min, float max, float delta = 0.01f, bool checkbox = false, bool bold = false, bool singlesel = false);
+			FloatSpinProp(string const &name, string const &description, float min, float max, float v, float delta = 0.01f, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			float min, max, delta;
+			float v;
 
 		private:
 			virtual std::unique_ptr<Param> param() override;

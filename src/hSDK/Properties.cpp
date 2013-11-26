@@ -679,6 +679,64 @@ namespace hSDK
 		return prop.prop();
 	}
 
+	Properties::UrlProp::UrlProp(string const &n, string const &d, string const &URL, bool c, bool b, bool s)
+	: Property(PROPTYPE_URLBUTTON, n, d, popt(c, b, s))
+	, url(URL)
+	{
+	}
+	auto Properties::UrlProp::param()
+	-> std::unique_ptr<Param>
+	{
+		struct Derived : Param
+		{
+			string const url;
+			Derived(string const &URL)
+			: url(URL)
+			{
+			}
+			virtual LPARAM lParam() const override
+			{
+				return reinterpret_cast<LPARAM>(url.c_str());
+			}
+		};
+		return std::unique_ptr<Param>(new Derived(url));
+	}
+
+	Properties::FloatSpinProp::FloatSpinProp(string const &n, string const &d, float mn, float mx, float val, float dt, bool c, bool b, bool s)
+	: Property(PROPTYPE_SPINEDITFLOAT, n, d, popt(c, b, s))
+	, min(mn)
+	, max(mx)
+	, delta(dt)
+	, v(val)
+	{
+	}
+	auto Properties::FloatSpinProp::param()
+	-> std::unique_ptr<Param>
+	{
+		struct Derived : Param
+		{
+			MinMaxFloatParam mmfp;
+			Derived(float min, float max, float delta)
+			: mmfp{min, max, delta}
+			{
+			}
+			virtual LPARAM lParam() const override
+			{
+				return reinterpret_cast<LPARAM>(&mmfp);
+			}
+		};
+		return std::unique_ptr<Param>(new Derived(min, max, delta));
+	}
+	auto Properties::FloatSpinProp::value()
+	-> std::unique_ptr<Value>
+	{
+		return Value::New(new CPropFloatValue(v));
+	}
+	void Properties::FloatSpinProp::value(std::unique_ptr<Value> val)
+	{
+		v = val->as<CPropFloatValue>()->m_fValue;
+	}
+
 	std::int32_t PropTab(Properties::Tab t)
 	{
 		switch(t)
