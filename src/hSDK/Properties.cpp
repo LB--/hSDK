@@ -569,15 +569,14 @@ namespace hSDK
 	{
 		struct Derived : Param
 		{
-			std::int32_t minmax[2];
+			MinMaxParam mmp;
 			Derived(std::int16_t min, std::int16_t max)
+			: mmp{min, max}
 			{
-				minmax[0] = min;
-				minmax[1] = max;
 			}
 			virtual LPARAM lParam() const override
 			{
-				return reinterpret_cast<LPARAM>(&(minmax[0]));
+				return reinterpret_cast<LPARAM>(&mmp);
 			}
 		};
 		return std::unique_ptr<Param>(new Derived(min, max));
@@ -604,15 +603,14 @@ namespace hSDK
 	{
 		struct Derived : Param
 		{
-			std::int32_t minmax[2];
+			MinMaxParam mmp;
 			Derived(std::int32_t min, std::int32_t max)
+			: mmp{min, max}
 			{
-				minmax[0] = min;
-				minmax[1] = max;
 			}
 			virtual LPARAM lParam() const override
 			{
-				return reinterpret_cast<LPARAM>(&(minmax[0]));
+				return reinterpret_cast<LPARAM>(&mmp);
 			}
 		};
 		return std::unique_ptr<Param>(new Derived(min, max));
