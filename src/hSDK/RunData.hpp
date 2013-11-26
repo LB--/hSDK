@@ -54,7 +54,7 @@ namespace hSDK
 	auto RuntimeInfo::Ext()
 	-> Extension *
 	{
-		return Rd()->ext.get();
+		return Rd().ext.get();
 	}
 }
 

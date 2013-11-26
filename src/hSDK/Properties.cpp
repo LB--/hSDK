@@ -31,7 +31,7 @@ namespace hSDK
 		return std::unique_ptr<Param>(new Derived);
 	}
 
-	struct Properties::Property::Value;
+	struct Properties::Property::Value
 	{
 		CPropValue *v;
 		Value(CPropValue *val)
@@ -48,7 +48,7 @@ namespace hSDK
 		auto as()
 		-> typename std::enable_if
 		<
-			std::is_base_of<CPropValue, T>,
+			std::is_base_of<CPropValue, T>::value,
 			T *
 		>::type
 		{
@@ -68,7 +68,7 @@ namespace hSDK
 	{
 	}
 
-	struct Properties::Propery::impl
+	struct Properties::Property::impl
 	{
 		std::vector<std::unique_ptr<PropData>> props;
 		virtual ~impl() = 0;
@@ -100,7 +100,7 @@ namespace hSDK
 
 	namespace
 	{
-		static std::int32_t popt(bool checkbox, bool bold, bool ssel, bool pr = false, bool password = false, bool lowercase = false, bool upeprcase = false, bool remove = false, bool rename = false, bool move = false, bool list = false)
+		static std::int32_t popt(bool checkbox, bool bold, bool ssel, bool pr = false, bool password = false, bool lowercase = false, bool uppercase = false, bool remove = false, bool rename = false, bool move = false, bool list = false)
 		{
 			return        PROPOPT_NIL
 			| (checkbox?  PROPOPT_CHECKBOX : 0)
@@ -127,13 +127,17 @@ namespace hSDK
 	{
 		struct Derived : Param
 		{
-			string text;
+			string const text;
+			Derived(string const &txt)
+			: text(txt)
+			{
+			}
 			virtual LPARAM lParam() const override
 			{
 				return reinterpret_cast<LPARAM>(text.c_str());
 			}
 		};
-		return std::unique_ptr<Param>(new Derived{text});
+		return std::unique_ptr<Param>(new Derived(text));
 	}
 
 	Properties::CheckboxProp::CheckboxProp(string const &n, string const &d, bool c, bool b, bool s)
@@ -153,7 +157,7 @@ namespace hSDK
 	}
 	void Properties::ColorProp::value(std::unique_ptr<Value> v)
 	{
-		color = v->as<CPropDWordValue>()->m_dValue;
+		color = v->as<CPropDWordValue>()->m_dwValue;
 	}
 
 	Properties::ListProp::ListProp(string const &n, string const &d, Items_t const &i, bool bu, bool c, bool b, bool s)
@@ -174,7 +178,7 @@ namespace hSDK
 			, list(new char_t const *[i.size()+2])
 			{
 				list[0] = list[items.size()+1] = nullptr;
-				for(Items_t::size_t i = 0; i < items.size(); ++i)
+				for(Items_t::size_type i = 0; i < items.size(); ++i)
 				{
 					list[i+1] = items[i].c_str();
 				}
@@ -200,7 +204,7 @@ namespace hSDK
 	}
 	void Properties::ListProp::value(std::unique_ptr<Value> v)
 	{
-		std::uint32_t sel = v->as<CPropDWordValue>()->m_dValue;
+		std::uint32_t sel = v->as<CPropDWordValue>()->m_dwValue;
 		if(sel == -1ul)
 		{
 			selected = items.end();
@@ -239,9 +243,9 @@ namespace hSDK
 				case Style::ThreeD: p.style |= DCS_3D;   break;
 				default:                                 break;
 				}
-				if(slider)  p.style |= DCS_SLIDER;
-				if(empty)   p.style |= DCS_EMPTY;
-				if(buttons) p.style |= DCS_SETALL_BTNS;
+				if(dp.slider)  p.style |= DCS_SLIDER;
+				if(dp.empty)   p.style |= DCS_EMPTY;
+				if(dp.buttons) p.style |= DCS_SETALL_BTNS;
 			}
 			virtual LPARAM lParam() const override
 			{
@@ -376,7 +380,7 @@ namespace hSDK
 	auto Properties::FilenameProp::value()
 	-> std::unique_ptr<Value>
 	{
-		return Value::New(new CPropStringValue(fname));
+		return Value::New(new CPropStringValue(fname.c_str()));
 	}
 	void Properties::FilenameProp::value(std::unique_ptr<Value> v)
 	{
@@ -415,13 +419,13 @@ namespace hSDK
 				}
 				for(auto const &prop : fp.props)
 				{
-					nds.emplace_back(prop.name, prop.desc);
+					nds.emplace_back(prop->name, prop->desc);
 					std::unique_ptr<PropData> p {new PropData};
 					p->dwID = 0;
 					p->sName = reinterpret_cast<UINT_PTR>(nds.back().first.c_str());
 					p->sInfo = reinterpret_cast<UINT_PTR>(nds.back().second.c_str());
-					p->lType = prop.type;
-					p->dwOptions = prop.options;
+					p->lType = prop->type;
+					p->dwOptions = prop->options;
 					p->lCreateParam = reinterpret_cast<LPARAM>(nullptr);
 					props.emplace_back(std::move(p));
 				}
@@ -482,7 +486,7 @@ namespace hSDK
 	, allow_anims(aa)
 	{
 	}
-	auto Properties::DirectionProp::param()
+	auto Properties::ImageFilenameProp::param()
 	-> std::unique_ptr<Param>
 	{
 		struct Derived : Param
@@ -494,17 +498,17 @@ namespace hSDK
 			}
 			virtual LPARAM lParam() const override
 			{
-				return reinterpret_cast<LPARAM>(allow_anims);
+				return static_cast<LPARAM>(allow_anims);
 			}
 		};
 		return std::unique_ptr<Param>(new Derived(allow_anims));
 	}
-	auto Properties::DirectionProp::value()
+	auto Properties::ImageFilenameProp::value()
 	-> std::unique_ptr<Value>
 	{
 		return Value::New(new CPropStringValue(fname.c_str()));
 	}
-	void Properties::DirectionProp::value(std::unique_ptr<Value> v)
+	void Properties::ImageFilenameProp::value(std::unique_ptr<Value> v)
 	{
 		fname = v->as<CPropStringValue>()->
 	#ifndef UNICODE
@@ -528,7 +532,7 @@ namespace hSDK
 		{
 			std::unique_ptr<std::int32_t []> sizes;
 			Derived(Sizes_t const &pr)
-			, sizes(new std::int32_t[(pr.size()+1)*2])
+			: sizes(new std::int32_t[(pr.size()+1)*2])
 			{
 				sizes[pr.size()*2 +0] = 0;
 				sizes[pr.size()*2 +1] = 0;
@@ -543,7 +547,7 @@ namespace hSDK
 				return reinterpret_cast<LPARAM>(sizes.get());
 			}
 		};
-		return std::unique_ptr<Param>(new Derived(prdefined));
+		return std::unique_ptr<Param>(new Derived(predefined));
 	}
 	auto Properties::SizeProp::value()
 	-> std::unique_ptr<Value>
@@ -620,59 +624,59 @@ namespace hSDK
 	{
 		return Value::New(new CPropDWordValue(v));
 	}
-	void Properties::SpinProp::value(std::unique_ptr<Value> val)
+	void Properties::SliderProp::value(std::unique_ptr<Value> val)
 	{
 		v = static_cast<std::int32_t>(val->as<CPropDWordValue>()->m_dwValue);
 	}
 
 	Properties::ReferenceToProp::ReferenceToProp(Property &p)
 	: Property(p.type, p.name, p.desc, p.options)
-	, prop(p)
+	, property(p)
 	{
 	}
 	auto Properties::ReferenceToProp::param()
 	-> std::unique_ptr<Param>
 	{
-		return prop.param();
+		return property.param();
 	}
 	auto Properties::ReferenceToProp::value()
 	-> std::unique_ptr<Value>
 	{
-		return prop.value();
+		return property.value();
 	}
 	void Properties::ReferenceToProp::value(std::unique_ptr<Value> v)
 	{
-		return prop.value(std::move(v));
+		return property.value(std::move(v));
 	}
 	auto Properties::ReferenceToProp::prop()
 	-> std::unique_ptr<impl>
 	{
-		return prop.prop();
+		return property.prop();
 	}
 
-	Properties::AdvancedProp::AcvancedProp(Property &p, bool l, bool rm, bool rn, bool m)
+	Properties::AdvancedProp::AdvancedProp(Property &p, bool l, bool rm, bool rn, bool m)
 	: Property(p.type, p.name, p.desc, p.options|popt(false, false, false, false, false, false, false, rm, rn, m, l))
-	, prop(p)
+	, property(p)
 	{
 	}
 	auto Properties::AdvancedProp::param()
 	-> std::unique_ptr<Param>
 	{
-		return prop.param();
+		return property.param();
 	}
 	auto Properties::AdvancedProp::value()
 	-> std::unique_ptr<Value>
 	{
-		return prop.value();
+		return property.value();
 	}
 	void Properties::AdvancedProp::value(std::unique_ptr<Value> v)
 	{
-		return prop.value(std::move(v));
+		return property.value(std::move(v));
 	}
 	auto Properties::AdvancedProp::prop()
 	-> std::unique_ptr<impl>
 	{
-		return prop.prop();
+		return property.prop();
 	}
 
 	Properties::UrlProp::UrlProp(string const &n, string const &d, string const &URL, bool c, bool b, bool s)

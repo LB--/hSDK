@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <set>
+#include <map>
 
 namespace hSDK
 {
@@ -99,7 +100,7 @@ namespace hSDK
 
 			using Directions_t = std::set<std::uint8_t>;
 
-			DirectionProp(string const &name, string const &description, std::int32_t num_dirs = 32, Directions_t const &dirs, Style style = Style::Flat, bool multi = true, bool slider = false, bool empty = false, bool buttons = true, bool checkbox = false, bool bold = false, bool singlesel = false);
+			DirectionProp(string const &name, string const &description, std::int32_t num_dirs = 32, Directions_t const &dirs = {}, Style style = Style::Flat, bool multi = true, bool slider = false, bool empty = false, bool buttons = true, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			Style style;
 			std::int32_t num_dirs;
@@ -241,7 +242,7 @@ namespace hSDK
 		};
 		struct SizeProp final : Property
 		{
-			using Size_t = std::pair<std::int32_t, std::int32_t>
+			using Size_t = std::pair<std::int32_t, std::int32_t>;
 			using Sizes_t = std::vector<Size_t>;
 
 			SizeProp(string const &name, string const &description, Size_t const &size = {0, 0}, Sizes_t const &predefined = {}, bool checkbox = false, bool bold = false, bool singlesel = false);
@@ -306,7 +307,7 @@ namespace hSDK
 		{
 			ReferenceToProp(Property &prop);
 
-			Property &prop;
+			Property &property;
 
 		private:
 			virtual std::unique_ptr<Param> param() override;
@@ -318,9 +319,9 @@ namespace hSDK
 		};
 		struct AdvancedProp final : Property
 		{
-			AcvancedProp(Property &prop, bool list = true, bool removable = true, bool renamable = true, bool movable = true);
+			AdvancedProp(Property &prop, bool list = true, bool removable = true, bool renamable = true, bool movable = true);
 
-			Property &prop;
+			Property &property;
 
 		private:
 			virtual std::unique_ptr<Param> param() override;

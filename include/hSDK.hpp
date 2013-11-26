@@ -53,7 +53,7 @@ namespace hSDK
 		EdittimeInfo &operator=(EdittimeInfo const &) = delete;
 		EdittimeInfo &operator=(EdittimeInfo &&) = delete;
 
-		friend struct ::hSDK::impl;
+		friend struct ::hSDK::Impl;
 	};
 	struct RD;
 	struct Extension;
@@ -79,7 +79,7 @@ namespace hSDK
 		RuntimeInfo &operator=(RuntimeInfo const &) = delete;
 		RuntimeInfo &operator=(RuntimeInfo &&) = delete;
 
-		friend struct ::hSDK::impl;
+		friend struct ::hSDK::Impl;
 	};
 
 	struct tuple_unpack final
