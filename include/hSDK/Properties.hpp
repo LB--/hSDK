@@ -5,6 +5,7 @@
 #include "hSDK/BinaryStream.hpp"
 
 #include <vector>
+#include <set>
 
 namespace hSDK
 {
@@ -18,11 +19,13 @@ namespace hSDK
 		{
 			string name;
 			string desc;
+			bool checked;
 
 		private:
-			Property(std::int32_t t, string const &n, string const &d, std::int32_t opt)
+			Property(std::int32_t t, string const &n, string const &d, std::int32_t opt, bool c = false)
 			: name(n)
 			, desc(d)
+			, checked(c)
 			, type(t)
 			, options(opt)
 			{
@@ -42,6 +45,9 @@ namespace hSDK
 			virtual std::unique_ptr<Value> value();
 			virtual void value(std::unique_ptr<Value>);
 
+			struct impl;
+			virtual std::unique_ptr<impl> prop();
+
 			friend struct ::hSDK::Properties;
 		};
 		using Properties_t = std::vector<std::unique_ptr<Property>>;
@@ -52,17 +58,11 @@ namespace hSDK
 			string text;
 
 		private:
-			virtual std::unique_ptr<Value> value() override;
+			virtual std::unique_ptr<Param> param() override;
 		};
 		struct CheckboxProp final : Property
 		{
 			CheckboxProp(string const &name, string const &description, bool checked, bool bold = false, bool singlesel = false);
-
-			bool checked;
-
-		private:
-			virtual std::unique_ptr<Value> value() override;
-			virtual void value(std::unique_ptr<Value>) override;
 		};
 		struct ColorProp final : Property
 		{
@@ -97,13 +97,17 @@ namespace hSDK
 				ThreeD
 			};
 
-			DirectionProp(string const &name, string const &description, std::int32_t num_dirs = 32, Style style = Style::Flat, bool slider = false, bool empty = false, bool buttons = true, bool checkbox = false, bool bold = false, bool singlesel = false);
+			using Directions_t = std::set<std::uint8_t>;
+
+			DirectionProp(string const &name, string const &description, std::int32_t num_dirs = 32, Directions_t const &dirs, Style style = Style::Flat, bool multi = true, bool slider = false, bool empty = false, bool buttons = true, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			Style style;
 			std::int32_t num_dirs;
+			bool multi;
 			bool slider;
 			bool empty;
 			bool buttons;
+			Directions_t dirs;
 
 		private:
 			virtual std::unique_ptr<Param> param() override;
@@ -136,7 +140,7 @@ namespace hSDK
 				Uppercase
 			};
 
-			StringProp(string const &name, string const &description, string s = T_"", Type t = Type::Multiline, CaseChange cc = CaseChange::None, bool password = false, bool checkbox = false, bool bold = false, bool singlesel = false);
+			StringProp(string const &name, string const &description, string const &s = T_"", Type t = Type::Multiline, CaseChange cc = CaseChange::None, bool password = false, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			string s;
 
@@ -156,7 +160,7 @@ namespace hSDK
 		};
 		struct FilenameProp final : Property
 		{
-			FilenameProp(string const &name, string const &description, string fname, bool file_must_exist = true, bool path_must_exist = true, bool hide_read_only = false, bool checkbox = false, bool bold = false, bool singlesel = false);
+			FilenameProp(string const &name, string const &description, string const &fname, string const &filter, bool file_must_exist = true, bool path_must_exist = true, bool hide_read_only = false, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			string fname;
 			string filter;
@@ -172,9 +176,12 @@ namespace hSDK
 		};
 		struct FolderProp final : Property
 		{
-			FolderProp(string const &name, string const &description, Properties_t props);
+			FolderProp(string const &name, string const &description, Properties_t const &props);
 
 			Properties_t props;
+
+		private:
+			virtual std::unique_ptr<impl> prop() override;
 		};/*
 		struct FontProp final : Property
 		{
@@ -221,7 +228,7 @@ namespace hSDK
 		};
 		struct ImageFilenameProp final : Property
 		{
-			ImageFilenameProp(string const &name, string const &description, string fname, bool allow_anims = false, bool checkbox = false, bool bold = false, bool singlesel = false);
+			ImageFilenameProp(string const &name, string const &description, string const &fname, bool allow_anims = false, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			string fname;
 			bool allow_anims;
@@ -250,9 +257,10 @@ namespace hSDK
 		};
 		struct SpinProp final : Property
 		{
-			SpinProp(string const &name, string const &description, std::int16_t min, std::int16_t max, bool checkbox = false, bool bold = false, bool singlesel = false);
+			SpinProp(string const &name, string const &description, std::int16_t min, std::int16_t max, std::int16_t v, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			std::int16_t min, max;
+			std::int16_t v;
 
 		private:
 			virtual std::unique_ptr<Param> param() override;
@@ -262,9 +270,10 @@ namespace hSDK
 		};
 		struct SliderProp final : Property
 		{
-			SliderProp(string const &name, string const &description, std::int32_t min, std::int32_t max, bool checkbox = false, bool bold = false, bool singlesel = false);
+			SliderProp(string const &name, string const &description, std::int32_t min, std::int32_t max, std::int32_t v, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			std::int32_t min, max;
+			std::int32_t v;
 
 		private:
 			virtual std::unique_ptr<Param> param() override;
@@ -304,6 +313,22 @@ namespace hSDK
 
 			virtual std::unique_ptr<Value> value() override;
 			virtual void value(std::unique_ptr<Value>) override;
+
+			virtual std::unique_ptr<impl> prop() override;
+		};
+		struct AdvancedProp final : Property
+		{
+			AcvancedProp(Property &prop, bool list = true, bool removable = true, bool renamable = true, bool movable = true);
+
+			Property &prop;
+
+		private:
+			virtual std::unique_ptr<Param> param() override;
+
+			virtual std::unique_ptr<Value> value() override;
+			virtual void value(std::unique_ptr<Value>) override;
+
+			virtual std::unique_ptr<impl> prop() override;
 		};
 
 		//Not documented in MMF2 SDK Help:
