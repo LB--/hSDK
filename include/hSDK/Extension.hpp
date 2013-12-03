@@ -467,7 +467,7 @@ namespace hSDK
 
 				std::int32_t operator()(ExtT &ext, std::int32_t)
 				{
-					return (*this)(ext, 0, 0);
+					return safe_return<R>([&]()->R{return (ext.*mfp)();});
 				}
 				std::int32_t operator()(ExtT &ext, std::int32_t, std::int32_t)
 				{
@@ -483,9 +483,16 @@ namespace hSDK
 				{
 				}
 
-				std::int32_t operator()(ExtT &ext, std::int32_t param1)
+				std::int32_t operator()(ExtT &ext, std::int32_t)
 				{
-					return (*this)(ext, param1, 0);
+					std::int32_t param1 = Params<CallT, Enforce32bit<Arg1>::ExpT>::GetFirst();
+					return safe_return<R>([&]() -> R
+					{
+						return (ext.*mfp)
+						(
+							typename Enforce32bit<Arg1>::fr32(param1)
+						);
+					});
 				}
 				std::int32_t operator()(ExtT &ext, std::int32_t param1, std::int32_t)
 				{
@@ -534,9 +541,10 @@ namespace hSDK
 			};
 		};
 
-		using Actions_t     = std::map<std::uint16_t, ExtMF<ACE::Action>>;
-		using Conditions_t  = std::map<std::uint16_t, ExtMF<ACE::Condition>>;
-		using Expressions_t = std::map<std::uint16_t, ExtMF<ACE::Expression>>;
+		using ACE_ID_t = std::uint16_t;
+		using Actions_t     = std::map<ACE_ID_t, ExtMF<ACE::Action>>;
+		using Conditions_t  = std::map<ACE_ID_t, ExtMF<ACE::Condition>>;
+		using Expressions_t = std::map<ACE_ID_t, ExtMF<ACE::Expression>>;
 	protected:
 		Extension(Properties const &props)
 		{
@@ -558,6 +566,29 @@ namespace hSDK
 			expressions.swap(e);
 		}
 
+	public:
+		void CallMovement(std::uint32_t action, std::int32_t param);
+		void Pause();
+		void Continue();
+		void Destroy();
+		bool DebuggerEditDialog(string const &title, std::int32_t &i);
+		bool DebuggerEditDialog(string const &title, string &s, std::uint32_t maxlen = 65535);
+		void ExecProgram(string const &path, string const &args_107, bool hide = false, bool wait = false);
+		void TriggerCondition(ACE_ID_t conditionID);
+		void QueueCondition(ACE_ID_t conditionID);
+		void UnqueueCondition(ACE_ID_t conditionID);
+		string CurrentDrive();
+		string CurrentDirectory();
+		string CurrentPath();
+		string CurrentAppname();
+		void RedrawEntireFrame();
+		void QueueRedraw();
+		void QueueTick();
+		void SetPosition(std::int32_t x, std::int32_t y);
+//		void SubclassWindow(std::uint32_t num, std::int32_t hook_routine);
+//		void *GetAddress(std::uint32_t wp, std::int32_t lp);
+//		void *GetCallTables(std::uint32_t wp, std::int32_t lp);
+
 	private:
 		Actions_t actions;
 		Conditions_t conditions;
@@ -577,6 +608,8 @@ namespace hSDK
 		Extension(Extension &&) = delete;
 		Extension &operator=(Extension const &) = delete;
 		Extension &operator=(Extension &&) = delete;
+
+		friend struct ::hSDK::Impl;
 	};
 	inline Extension::~Extension() = default;
 
