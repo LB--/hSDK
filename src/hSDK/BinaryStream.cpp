@@ -95,12 +95,12 @@ namespace hSDK
 				}
 			};
 
-			Out::Out(mv *mV, ED *&sed)
+			Out::Out(void *mV, ED *&sed)
 			: Out(nullptr, mV, sed)
 			{
 			}
-			Out::Out(Buf *temp, mv *mV, ED *&sed)
-			: OutBase(temp = new Buf(mV, sed))
+			Out::Out(Buf *temp, void *mV, ED *&sed)
+			: OutBase(temp = new Buf(reinterpret_cast<mv *>(mV), sed))
 			, b(temp)
 			{
 				temp = nullptr;

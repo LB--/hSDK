@@ -431,7 +431,7 @@ namespace hSDK
 			using OutBase = ::hSDK::BinaryStream::Out;
 			struct Out : OutBase
 			{
-				Out(mv *, ED *&);
+				Out(void *, ED *&);
 				Out(Out const &) = delete;
 				Out(Out &&) = default;
 				Out &operator=(Out const &) = delete;
@@ -441,7 +441,7 @@ namespace hSDK
 			private:
 				struct Buf;
 				std::unique_ptr<Buf> b;
-				Out(Buf *, mv *, ED *&);
+				Out(Buf *, void *, ED *&);
 			};
 		}
 		namespace ParamData

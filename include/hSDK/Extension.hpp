@@ -2,6 +2,7 @@
 #define hSDK_Extension_HeaderPlusPlus
 
 #include "hSDK.hpp"
+#include "hSDK/Properties.hpp"
 #include "hSDK/Parameters.hpp"
 
 #include <functional>
@@ -537,7 +538,7 @@ namespace hSDK
 		using Conditions_t  = std::map<std::uint16_t, ExtMF<ACE::Condition>>;
 		using Expressions_t = std::map<std::uint16_t, ExtMF<ACE::Expression>>;
 	protected:
-		Extension()
+		Extension(Properties const &props)
 		{
 		}
 
@@ -578,6 +579,18 @@ namespace hSDK
 		Extension &operator=(Extension &&) = delete;
 	};
 	inline Extension::~Extension() = default;
+
+	template<typename PropT, typename ExtT>
+	bool ImplementSubtype(string const &subtype = T_"")
+	{
+		static_assert(std::is_base_of<Properties, PropT>::value, "PropT must extend hSDK::Properties");
+		static_assert(std::is_base_of<Extension, ExtT>::value, "ExtT must extend hSDK::Extension");
+		static_assert(std::is_convertible<PropT, ExtT>::value, "ExtT must have a constructor taking PropT");
+
+		//...
+
+		return false;
+	}
 
 	template<> std::int32_t Extension::Params<ACE::Action    , ExpressionType::None   >::GetFirst();
 	template<> std::int32_t Extension::Params<ACE::Condition , ExpressionType::None   >::GetFirst();

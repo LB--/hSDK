@@ -11,8 +11,6 @@
 using namespace std::string_literals;
 #endif
 
-class mv;
-
 namespace hSDK
 {
 	static_assert(sizeof(void *) == 4 && sizeof(std::size_t) == 4, "MMF2 only supports 32-bit extensions");
@@ -21,7 +19,6 @@ namespace hSDK
 	using char_t = char16_t;
 	#define T_ u
 #else
-	static_assert(sizeof(char) == 1, "char size is wrong for MMF2");
 	using char_t = char;
 	#define T_ /*u8*/
 #endif
