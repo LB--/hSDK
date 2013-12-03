@@ -22,6 +22,7 @@ namespace hSDK
 			string desc;
 			bool checked;
 
+			virtual ~Property() = 0;
 		private:
 			Property(std::int32_t t, string const &n, string const &d, std::int32_t opt, bool c = false)
 			: name(n)
@@ -35,7 +36,6 @@ namespace hSDK
 			Property(Property &&) = delete;
 			Property &operator=(Property const &) = delete;
 			Property &operator=(Property &&) = delete;
-			virtual ~Property() = 0;
 
 			std::int32_t type;
 			std::int32_t options;
@@ -395,13 +395,17 @@ namespace hSDK
 		{
 		}
 
-		void addProps(Tabs_t const &tab)
+		void addProps(Tabs_t &&tab)
 		{
-			for(auto const &t : tab)
+			for(auto &t : tab)
 			{
-				for(auto const &p : t.second)
+				if(props.find(t.first) == props.end())
 				{
-					props[t.first].push_back(p);
+					props.emplace(t.first, std::move(t.second));
+				}
+				else for(auto &&p : t.second)
+				{
+					props.at(t.first).emplace_back(p);
 				}
 			}
 		}
