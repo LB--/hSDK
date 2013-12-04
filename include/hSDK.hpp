@@ -26,6 +26,9 @@ namespace hSDK
 
 	struct Impl;
 
+	bool isUnicode();
+	bool isHWA();
+
 	struct ED;
 	struct Properties;
 	struct EdittimeInfo

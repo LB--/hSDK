@@ -224,7 +224,7 @@ namespace hSDK
 		struct null_returning_void_t   final { constexpr null_returning_void_t  () = default; };
 		struct null_returning_int_t    final { constexpr null_returning_int_t   () = default; };
 		struct null_returning_float_t  final { constexpr null_returning_float_t () = default; };
-		struct null_returning_string_t final { constexpr null_returning_string_t() = default;};
+		struct null_returning_string_t final { constexpr null_returning_string_t() = default; };
 		static null_returning_void_t           constexpr null_returning_void    {};
 		static null_returning_int_t            constexpr null_returning_int     {};
 		static null_returning_int_t            constexpr null_returning_bool    {};
@@ -541,10 +541,32 @@ namespace hSDK
 			};
 		};
 
+		using ActionMF = ExtMF<ACE::Action>;
+		struct ConditionMF final
+		{
+			ExtMF<ACE::Condition> mf;
+			bool triggered;
+
+			ConditionMF(ExtMF<ACE::Condition> &&cmf, bool triggerable = false)
+			: mf(std::move(cmf))
+			, trggered(triggerable)
+			{
+			}
+
+			operator ExtMF<ACE::Condition>()
+			{
+				return mf;
+			}
+			operator bool()
+			{
+				return triggered;
+			}
+		};
+		using ExpressionMF = ExtMF<ACE::Expression>;
 		using ACE_ID_t = std::uint16_t;
-		using Actions_t     = std::map<ACE_ID_t, ExtMF<ACE::Action>>;
-		using Conditions_t  = std::map<ACE_ID_t, ExtMF<ACE::Condition>>;
-		using Expressions_t = std::map<ACE_ID_t, ExtMF<ACE::Expression>>;
+		using Actions_t     = std::map<ACE_ID_t, ActionMF>;
+		using Conditions_t  = std::map<ACE_ID_t, ConditionMF>;
+		using Expressions_t = std::map<ACE_ID_t, ExpressionMF>;
 	protected:
 		Extension(Properties const &props)
 		{
@@ -587,7 +609,9 @@ namespace hSDK
 		void SetPosition(std::int32_t x, std::int32_t y);
 //		void SubclassWindow(std::uint32_t num, std::int32_t hook_routine);
 //		void *GetAddress(std::uint32_t wp, std::int32_t lp);
-//		void *GetCallTables(std::uint32_t wp, std::int32_t lp);
+//		std::unique_ptr<CallTables, /*mvFree*/> GetCallTables(std::uint32_t wp, std::int32_t lp);
+
+//		bool isNegated();
 
 	private:
 		Actions_t actions;

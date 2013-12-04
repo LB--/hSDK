@@ -9,6 +9,7 @@ namespace hSDK
 	{
 		static ED *&ed;
 		static RD *&rd;
+		static mv *mV;
 	};
 }
 
