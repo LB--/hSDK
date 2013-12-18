@@ -151,6 +151,7 @@ namespace hSDK
 		Condition,
 		Expression
 	};
+	using ACE_ID_t = std::uint16_t;
 	enum struct ExpressionType
 	{
 		None,

@@ -500,7 +500,7 @@ namespace hSDK
 			}
 		};
 		using ExpressionMF = ExtMF<ACE::Expression>;
-		using ACE_ID_t = std::uint16_t;
+		using ACE_ID_t = ::hSDK::ACE_ID_t;
 		using Actions_t     = std::map<ACE_ID_t, ActionMF>;
 		using Conditions_t  = std::map<ACE_ID_t, ConditionMF>;
 		using Expressions_t = std::map<ACE_ID_t, ExpressionMF>;
