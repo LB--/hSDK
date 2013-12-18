@@ -1,0 +1,149 @@
+{
+	"en_US":
+	{
+		"About":
+		{
+			"Name": "hSDK Template Extension",
+			"Author": "Nicholas \"LB\" Braden",
+			"Copyright": "Copyright © 2013 LB-Stuff",
+			"Description": "Either this is actually the hSDK Template Extension, or the author of this extension forgot to change their Extension.json",
+			"Website": "https://github.com/LB--/hSDK",
+			"Help file": "Help/hSDK Template Extension/Help-en_US.chm"
+		},
+		"Sub Types":
+		{
+			"":
+			{
+				"Properties":
+				{
+				},
+				"Menus":
+				{
+					"Action menu":
+					[
+						[null, "Disabled menu item"],
+						["Whole numbers",
+							[0, "Set short"],
+							[1, "Set int"],
+							[2, "Set long long"]
+						],
+						["Real numbers",
+							[3, "Set float"],
+							[4, "Set double"],
+							[5, "Set long double"]
+						],
+						[6, "Set string"],
+						"Separator",
+						[7, "Do nothing w/ 0 params"],
+						[8, "Do nothing w/ 2 params"],
+						[9, "Do nothing w/ 3 params"],
+						[10,"Do nothing w/ 4 params"],
+						"Separator",
+						[11, "Trigger condition"],
+						[12, "Queue condition"],
+						[13, "Unqueue condition"]
+					],
+					"Condition menu":
+					[
+						["Whole numbers",
+							[0, "Compare to short"],
+							[1, "Compare to int"],
+							[2, "Compare to long long"]
+						],
+						["Real numbers",
+							[3, "Compare to float"],
+							[4, "Compare to double"],
+							[5, "Compare to long double"]
+						],
+						"Separator",
+						[6, "Compare to string"],
+						"Separator",
+						[7, "Do nothing w/ 0 params"],
+						[8, "Do nothing w/ 2 params"],
+						[9, "Do nothing w/ 3 params"],
+						[10,"Do nothing w/ 4 params"],
+						"Separator",
+						[11, "On Trigger"],
+						[12, "On Queue"],
+						[13, "On Trigger [always]"],
+						[14, "On Queue [always]"]
+					],
+					"Expression menu":
+					[
+						["Whole numbers",
+							[0, "Get short"],
+							[1, "Get int"],
+							[2, "Get long long"]
+						],
+						["Real numbers",
+							[3, "Get float"],
+							[4, "Get double"],
+							[5, "Get long double"]
+						],
+						"Separator",
+						[6, "Get string"],
+						"Separator",
+						[7, "Do nothing w/ 1 param"],
+						[8, "Do nothing w/ 2 params"],
+						[9, "Do nothing w/ 3 params"],
+						[10,"Do nothing w/ 4 params"]
+					]
+				},
+				"Actions":
+				[
+					[0, "Set short to %0",       ["New value for short"]],
+					[1, "Set int to %0",         ["New value for int"]],
+					[2, "Set long long to %0",   ["New value for long long"]],
+					[3, "Set float to %0",       ["New value for float"]],
+					[4, "Set double to %0",      ["New value for double"]],
+					[5, "Set long double to %0", ["New value for long double"]],
+					[6, "Set string to %0",      ["New value for string"]],
+
+					[7, "Do nothing", []],
+					[8, "Do nothing with %0 and %1", ["0", "1"]],
+					[9, "Do nothing with %0, %1, and %2", ["0", "1", "2"]],
+					[10,"Do nothing with %0, %1, %2, and %3", ["0", "1", "2", "3]],
+
+					[11, "Trigger condition", []],
+					[12, "Queue condition", []],
+					[13, "Unqueue condition", []]
+				],
+				"Conditions":
+				[
+					[0, "%o short == %0",       ["Value to compare to short"]],
+					[1, "%o int == %0",         ["Value to compare to int"]],
+					[2, "%o long long == %0",   ["Value to compare to long long"]],
+					[3, "%o float == %0",       ["Value to compare to float"]],
+					[4, "%o double == %0",      ["Value to compare to double"]],
+					[5, "%o long double == %0", ["Value to compare to long double"]],
+					[6, "%o string == %0",      ["Value to compare to string"]],
+
+					[7, "%o Do nothing", []],
+					[8, "%o Do nothing with %0 and %1", ["0", "1"]],
+					[9, "%o Do nothing with %0, %1, and %2", ["0", "1", "2"]],
+					[10,"%o Do nothing with %0, %1, %2, and %3", ["0", "1", "2", "3]],
+
+					[11, "%o On Trigger (%0)", ["0->false, 1->true"]],
+					[12, "%o On Queue", []],
+					[13, "A%o On Trigger (%0)", ["0->false, 1->true"]],
+					[14, "A%o On Queue", []]
+				],
+				"Expressions":
+				[
+					[0, "Get short",       []],
+					[1, "Get int",         []],
+					[2, "Get long long",   []],
+					[3, "Get float",       []],
+					[4, "Get double",      []],
+					[5, "Get long double", []],
+					[6, "Get string",      []],
+
+					[7, "Do nothing with 1", ["0"]],
+					[8, "Do nothing with 2", ["0", "1"]],
+					[9, "Do nothing with 3", ["0", "1", "2"]],
+					[10,"Do nothing with 4", ["0", "1", "2", "3]]
+				]
+			}
+		}
+	}
+}

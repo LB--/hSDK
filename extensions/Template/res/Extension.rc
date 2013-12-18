@@ -1,0 +1,46 @@
+#define APSTUDIO_READONLY_SYMBOLS
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "Windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+#undef APSTUDIO_READONLY_SYMBOLS
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+1 VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x0L
+#ifdef _DEBUG
+ FILEFLAGS 0x21L
+#else
+ FILEFLAGS 0x20L
+#endif
+ FILEOS 0x10001L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904e4"
+		BEGIN
+			VALUE "CompanyName", "LB-Stuff"
+			VALUE "FileDescription", "hSDK Template Extension"
+			VALUE "FileVersion", "2.00"
+			VALUE "InternalName", "hSDK_Template"
+			VALUE "LegalCopyright", "Copyright © 2013 LB-Stuff"
+			VALUE "OriginalFilename", "hSDK_Template.mfx"
+			VALUE "ProductVersion", "1, 0, 0, 1"
+			VALUE "SpecialBuild", "00000001"
+		END
+	END
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x409, 1252
+	END
+END
+
+#ifdef EDITOR
+ExtensionIcon         hSDK "Icon.png"
+ExtensionTranslations hSDK "Translations.json"
+#endif
