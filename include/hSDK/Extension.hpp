@@ -611,8 +611,6 @@ namespace hSDK
 //		void *GetAddress(std::uint32_t wp, std::int32_t lp);
 //		std::unique_ptr<CallTables, /*mvFree*/> GetCallTables(std::uint32_t wp, std::int32_t lp);
 
-//		bool isNegated();
-
 	private:
 		Actions_t actions;
 		Conditions_t conditions;
