@@ -5,37 +5,85 @@
 
 #include <vector>
 
+#include "json.h"
+
 namespace hSDK
 {
 	struct Translation
 	{
 		virtual ~Translation() = default;
 
-		struct MenuItem
+		struct MenuBase
 		{
-			virtual ~MenuItem() = default;
+			virtual ~MenuBase() = 0;
+
+		private:
+			MenuBase() = default;
+			friend struct ::hSDK::Translation;
+		};
+		using Menu_t = std::vector<std::unique_ptr<MenuBase>>;
+		struct MenuSeparator final : MenuBase
+		{
+		};
+		struct MenuItem : MenuBase
+		{
+			virtual ~MenuItem() = 0;
 
 			string text;
 			bool enabled;
-			ACE_ID_t id;
+
+		private:
+			MenuItem(string const &t, bool e)
+			: text(t)
+			, enabled(e)
+			{
+			}
+			friend struct ::hSDK::Translation;
 		};
-		struct SubMenu : MenuItem
+		struct ACEMenuItem final : MenuItem
 		{
-			std::vector<std::unique_ptr<MenuItem>> items;
+			ACE_ID_t id;
+
+			ACEMenuItem(ACE_ID_t Id, string const &t, bool e = true)
+			: MenuItem(t, e)
+			, id(Id)
+			{
+			}
+		};
+		struct SubMenu final : MenuItem
+		{
+			Menu_t items;
+
+			SubMenu(Menu_t const &i, string const &t, bool e = true)
+			: MenuItem(t, e)
+			, items(i)
+			{
+			}
 		};
 
-		virtual Submenu ActionMenu() const = 0;
-		virtual Submenu ConditionMenu() const = 0;
-		virtual Submenu ExpressionMenu() const = 0;
+		virtual Menu_t Menu(string const &subtype, ACE ace) const = 0;
 
 		using ParamID_t = std::uint16_t;
-		virtual string ParamName(ACE ace, ACE_ID_t ace_id, ParamID_t param_id) const = 0;
+		virtual string ParamName(string const &subtype, ACE ace, ACE_ID_t ace_id, ParamID_t param_id) const = 0;
 
-		virtual string DisplayText(ACE ace, ACE_ID_t ace_id) const = 0;
+		virtual string DisplayText(string const &subtype, ACE ace, ACE_ID_t ace_id) const = 0;
 	};
+	Translation::MenuBase::~MenuBase() = default;
+	Translation::MenuItem::~MenuItem() = default;
 	struct JsonTranslation : Translation
 	{
-		JsonTranslation(/**/);
+		JsonTranslation(std::shared_ptr<json_value> json);
+
+		virtual Menu_t Menu(string const &subtype, ACE ace) const override;
+
+		virtual string ParamName(string const &subtype, ACE ace, ACE_ID_t ace_id, ParamID_t param_id) const override;
+
+		virtual string DisplayText(string const &subtype, ACE ace, ACE_ID_t ace_id) const override;
+
+	private:
+		std::shared_ptr<json_value> json;
+
+		static Menu_t MenuGen(std::vector<json_value *> const &items);
 	};
 	struct ResourceJsonTranslation : JsonTranslation
 	{

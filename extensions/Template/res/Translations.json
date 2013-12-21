@@ -102,7 +102,7 @@
 					[7, "Do nothing", []],
 					[8, "Do nothing with %0 and %1", ["0", "1"]],
 					[9, "Do nothing with %0, %1, and %2", ["0", "1", "2"]],
-					[10,"Do nothing with %0, %1, %2, and %3", ["0", "1", "2", "3]],
+					[10,"Do nothing with %0, %1, %2, and %3", ["0", "1", "2", "3"]],
 
 					[11, "Trigger condition", []],
 					[12, "Queue condition", []],
@@ -121,7 +121,7 @@
 					[7, "%o Do nothing", []],
 					[8, "%o Do nothing with %0 and %1", ["0", "1"]],
 					[9, "%o Do nothing with %0, %1, and %2", ["0", "1", "2"]],
-					[10,"%o Do nothing with %0, %1, %2, and %3", ["0", "1", "2", "3]],
+					[10,"%o Do nothing with %0, %1, %2, and %3", ["0", "1", "2", "3"]],
 
 					[11, "%o On Trigger (%0)", ["0->false, 1->true"]],
 					[12, "%o On Queue", []],
@@ -141,7 +141,7 @@
 					[7, "Do nothing with 1", ["0"]],
 					[8, "Do nothing with 2", ["0", "1"]],
 					[9, "Do nothing with 3", ["0", "1", "2"]],
-					[10,"Do nothing with 4", ["0", "1", "2", "3]]
+					[10,"Do nothing with 4", ["0", "1", "2", "3"]]
 				]
 			}
 		}
