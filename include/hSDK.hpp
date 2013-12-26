@@ -16,13 +16,36 @@ namespace hSDK
 	static_assert(sizeof(void *) == 4 && sizeof(std::size_t) == 4, "MMF2 only supports 32-bit extensions");
 
 #ifdef UNICODE
-	using char_t = char16_t;
+	#define IS_UNICODE 1
 	#define T_ u
+	template<typename, typename T>
+	using unicode_type = T;
 #else
-	using char_t = char;
+	#define IS_UNICODE 0
 	#define T_ /*u8*/
+	template<typename T, typename>
+	using unicode_type = T;
 #endif
-	using string = std::basic_string<char_t>;
+	using string8 = std::string;
+	using string16 = std::u16string;
+	using string = unicode_type<string8, string16>;
+	using char_t = typename string::value_type;
+
+	string8         str_to8fr16(string16 const &s);
+	string16        str_to16fr8(string8  const &s);
+	string8  inline str_to8    (string8  const &s){ return s;              }
+	string8  inline str_to8    (string16 const &s){ return str_to8fr16(s); }
+	string16 inline str_to16   (string8  const &s){ return str_to16fr8(s); }
+	string16 inline str_to16   (string16 const &s){ return s;              }
+#ifdef UNICODE
+	string   inline str_fr     (string8  const &s){ return str_to16(s);    }
+	string   inline str_fr     (string16 const &s){ return s;              }
+#else
+	string   inline str_fr     (string8  const &s){ return s;              }
+	string   inline str_fr     (string16 const &s){ return str_to8(s);     }
+#endif
+
+	string8 EntireFile(string const &filename);
 
 	struct Impl;
 

@@ -13,6 +13,13 @@ namespace hSDK
 	{
 		virtual ~Translation() = default;
 
+		virtual string Name() const = 0;
+		virtual string Author() const = 0;
+		virtual string Copyright() const = 0;
+		virtual string Description() const = 0;
+		virtual string Website() const = 0;
+		virtual string HelpFile() const = 0;
+
 		struct MenuBase
 		{
 			virtual ~MenuBase() = 0;
@@ -73,6 +80,13 @@ namespace hSDK
 	struct JsonTranslation : Translation
 	{
 		JsonTranslation(std::shared_ptr<json_value> json);
+
+		virtual string Name() const override;
+		virtual string Author() const override;
+		virtual string Copyright() const override;
+		virtual string Description() const override;
+		virtual string Website() const override;
+		virtual string HelpFile() const override;
 
 		virtual Menu_t Menu(string const &subtype, ACE ace) const override;
 

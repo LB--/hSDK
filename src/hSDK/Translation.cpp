@@ -1,12 +1,40 @@
-#include "Translation.hpp"
+#include "hSDK/Translation.hpp"
+
+#include "hSDK/Resources.hpp"
 
 #include <sstream>
+#include <fstream>
+#include <streambuf>
 
 namespace hSDK
 {
 	JsonTranslation::JsonTranslation(std::shared_ptr<json_value> json_)
 	: json(json_)
 	{
+	}
+	string JsonTranslation::Name() const
+	{
+		return str_fr((*json)["About"]["Name"]);
+	}
+	string JsonTranslation::Author() const
+	{
+		return str_fr((*json)["About"]["Author"]);
+	}
+	string JsonTranslation::Copyright() const
+	{
+		return str_fr((*json)["About"]["Copyright"]);
+	}
+	string JsonTranslation::Description() const
+	{
+		return str_fr((*json)["About"]["Description"]);
+	}
+	string JsonTranslation::Website() const
+	{
+		return str_fr((*json)["About"]["Website"]);
+	}
+	string JsonTranslation::HelpFile() const
+	{
+		return str_fr((*json)["About"]["Help file"]);
 	}
 	static Menu_t JsonTranslation::MenuGen(std::vector<json_value *> const &items)
 	{
@@ -24,7 +52,7 @@ namespace hSDK
 				m.push_back(Menu_t::value_type{new ACEMenuItem
 				(
 					*id,
-					static_cast<char const *>(*tx),
+					str_fr(*tx),
 					id->type == json_integer
 				)});
 			}
@@ -40,7 +68,7 @@ namespace hSDK
 				m.push_back(Menu_t::value_type{new SubMenu
 				(
 					sub,
-					*arr[name_off],
+					str_fr(*arr[name_off]),
 					name_off == 0
 				)});
 			}
@@ -56,7 +84,7 @@ namespace hSDK
 			{ACE::Conditon, "Condition menu"},
 			{ACE::Expression, "Expression menu"}
 		};
-		json_value &menu = (*json)["Sub Types"][subtype.c_str()]["Menus"][mm[ace]];
+		json_value &menu = (*json)["Sub Types"][str_to8(subtype).c_str()]["Menus"][mm[ace]];
 		if(menu.type == json_array)
 		{
 			return MenuGen(std::vector<json_value *>
@@ -75,7 +103,7 @@ namespace hSDK
 	};
 	string JsonTranslation::ParamName(string const &subtype, ACE ace, ACE_ID_t ace_id, ParamID_t param_id) const
 	{
-		for(json_value *jace : (*json)["Sub Types"][subtype.c_str()][nm[ace]])
+		for(json_value *jace : (*json)["Sub Types"][str_to8(subtype).c_str()][nm[ace]])
 		{
 			json_value &id = (*jace)[0];
 			if(id.type == json_integer && id == ace_id)
@@ -83,17 +111,17 @@ namespace hSDK
 				json_value &text = (*jace)[2][param_id];
 				if(text.type == json_string)
 				{
-					return static_cast<char const *>(text);
+					return str_fr(text);
 				}
 			}
 		}
 		std::ostringstream oss;
-		oss << "\"" << subtype << "\"->" << nm[ace] << "->#" << ace_id << "->P" << param_id;
+		oss << "\"" << str_to8(subtype) << "\"->" << nm[ace] << "->#" << ace_id << "->P" << param_id;
 		return oss.str();
 	}
 	string JsonTranslation::DisplayText(string const &subtype, ACE ace, ACE_ID_t ace_id) const
 	{
-		for(json_value *jace : (*json)["Sub Types"][subtype.c_str()][nm[ace]])
+		for(json_value *jace : (*json)["Sub Types"][str_to8(subtype).c_str()][nm[ace]])
 		{
 			json_value &id = (*jace)[0];
 			if(id.type == json_integer && id == ace_id)
@@ -101,12 +129,33 @@ namespace hSDK
 				json_value &text = (*jace)[1];
 				if(text.type == json_string)
 				{
-					return static_cast<char const *>(text);
+					return str_fr(text);
 				}
 			}
 		}
 		std::ostringstream oss;
-		oss << "\"" << subtype << "\"->" << nm[ace] << "->#" << ace_id;
+		oss << "\"" << str_to8(subtype) << "\"->" << nm[ace] << "->#" << ace_id;
 		return oss.str();
+	}
+
+	static json_value &RcJson()
+	{
+		static Resource jsonrc = Resource::Get(T_"ExtensionTranslations");
+		static std::unique_ptr<json_value, json_value_free> json {json_parse(jsonrc.data, jsonrc.size)};
+		return *json.get();
+	}
+	ResourceJsonTranslation::ResourceJsonTranslation(string const &lang)
+	: JsonTranslation(std::shared_ptr<json_value>{&(RcJson()[lang]), [](json_value *){}})
+	{
+	}
+
+	static std::shared_ptr<json_value> FileJson(string const &file)
+	{
+		auto json = EntireFile(file);
+		return std::shared_ptr<json_value>{json_parse(json.c_str(), json.size()), json_value_free};
+	}
+	ExternalJsonTranslation::ExternalJsonTranslation(string const &file)
+	: JsonTranslation(FileJson(file))
+	{
 	}
 }

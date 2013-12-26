@@ -7,7 +7,7 @@ namespace hSDK
 {
 	struct Resource final
 	{
-		using std::uint8_t const * = data_t;
+		using data_t = std::uint8_t const *;
 		data_t const data;
 		std::size_t const size;
 
