@@ -1,5 +1,5 @@
-#ifndef hSDK_Properties_HeaderPlusPlus
-#define hSDK_Properties_HeaderPlusPlus
+#ifndef hSDK_BinaryStream_HeaderPlusPlus
+#define hSDK_BinaryStream_HeaderPlusPlus
 
 #include "hSDK.hpp"
 

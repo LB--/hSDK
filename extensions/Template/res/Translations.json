@@ -1,11 +1,11 @@
-{
+﻿{
 	"en_US":
 	{
 		"About":
 		{
 			"Name": "hSDK Template Extension",
 			"Author": "Nicholas \"LB\" Braden",
-			"Copyright": "Copyright � 2013 LB-Stuff",
+			"Copyright": "Copyright © 2013 LB-Stuff",
 			"Description": "Either this is actually the hSDK Template Extension, or the author of this extension forgot to change their Extension.json",
 			"Website": "https://github.com/LB--/hSDK",
 			"Help file": "Help/hSDK Template Extension/Help-en_US.chm"

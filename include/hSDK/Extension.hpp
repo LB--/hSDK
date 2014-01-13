@@ -248,7 +248,14 @@ namespace hSDK
 		template<ACE CallT>
 		using Forwarder_t = typename Forwarder_t_helper<CallT>::type;
 		template<ACE CallT>
-		struct ExtMF : public Forwarder_t<CallT>
+		struct ExtMF
+		: Forwarder_t<CallT>
+		, private std::conditional
+		<
+			CallT == ACE::Condition,
+			std::tuple<bool>,
+			std::tuple<>
+		>::type
 		{
 			template<typename ExtT, typename R, typename... Args>
 			ExtMF(R (ExtT::*mfp)(Args...))
@@ -269,10 +276,36 @@ namespace hSDK
 			)
 			{
 			}
+			template<typename ExtT, typename R, typename... Args>
+			ExtMF(R (ExtT::*mfp)(Args...), typename std::enable_if<CallT == ACE::Condition || std::is_void<ExtT>::value, bool>::type triggered)
+			: Forwarder_t<CallT>
+			(
+				translator<ExtT, caller<ExtT, R, Args...>, std::int32_t, std::int32_t>
+				(
+					caller<ExtT, R, Args...>
+					(
+						verify<ExtT, R, Args...>(mfp)
+					)
+				)
+			)
+			, std::tuple<bool>(triggered)
+			{
+			}
 			ExtMF(ExtMF const &) = default;
 			ExtMF(ExtMF &&) = default;
 			ExtMF &operator=(ExtMF const &) = default;
 			ExtMF &operator=(ExtMF &&) = default;
+
+			template<bool E = (CallT == ACE::Condition)>
+			auto triggerable() const
+			-> typename std::enable_if
+			<
+				(CallT == ACE::Condition) == E,
+				bool
+			>::type
+			{
+				return std::get<0>(*this);
+			}
 
 		private:
 			template<typename ExtT, typename R, typename... Args>
@@ -478,27 +511,8 @@ namespace hSDK
 			};
 		};
 
-		using ActionMF = ExtMF<ACE::Action>;
-		struct ConditionMF final
-		{
-			ExtMF<ACE::Condition> mf;
-			bool triggered;
-
-			ConditionMF(ExtMF<ACE::Condition> &&cmf, bool triggerable = false)
-			: mf(std::move(cmf))
-			, trggered(triggerable)
-			{
-			}
-
-			operator ExtMF<ACE::Condition>()
-			{
-				return mf;
-			}
-			operator bool()
-			{
-				return triggered;
-			}
-		};
+		using ActionMF     = ExtMF<ACE::Action>;
+		using ConditionMF  = ExtMF<ACE::Condition>;
 		using ExpressionMF = ExtMF<ACE::Expression>;
 		using ACE_ID_t = ::hSDK::ACE_ID_t;
 		using Actions_t     = std::map<ACE_ID_t, ActionMF>;
