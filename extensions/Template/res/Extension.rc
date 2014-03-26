@@ -28,7 +28,7 @@ BEGIN
 			VALUE "FileDescription", "hSDK Template Extension"
 			VALUE "FileVersion", "2.00"
 			VALUE "InternalName", "hSDK_Template"
-			VALUE "LegalCopyright", "Copyright © 2013 LB-Stuff"
+			VALUE "LegalCopyright", "Copyright © 2014 LB-Stuff"
 			VALUE "OriginalFilename", "hSDK_Template.mfx"
 			VALUE "ProductVersion", "1, 0, 0, 1"
 			VALUE "SpecialBuild", "00000001"
