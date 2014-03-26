@@ -2,7 +2,7 @@
 
 #include <limits>
 
-#include "MMF2API.hpp"
+#include "FusionAPI.hpp"
 
 namespace hSDK
 {
