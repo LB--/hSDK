@@ -3,6 +3,8 @@
 
 #include "hSDK.hpp"
 
+class mv;
+
 namespace hSDK
 {
 	struct Impl

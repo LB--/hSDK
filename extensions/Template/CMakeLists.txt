@@ -1,7 +1,7 @@
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.1)
 
-project(hSDK_EXTENSION)
+project(hSDK_Template)
 
 set(EXT_NAME hSDK_Template)
 message(STATUS "Extension Filename = ${EXT_NAME}.mfx")
@@ -20,7 +20,6 @@ link_directories("${PROJECT_SOURCE_DIR}/" "${PROJECT_SOURCE_DIR}/../../lib/")
 message(STATUS "Extension Sources = ${EXT_SOURCES}")
 message(STATUS "Extension Headers = ${EXT_HEADERS}")
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -O2 ${CMAKE_CXX_FLAGS} -Wno-multichar")
 set(CMAKE_BUILD_TYPE "RELEASE")
 
 list(APPEND EXT_MFX_TYPE "Plain")
@@ -68,9 +67,13 @@ foreach(curr_mfx_t ${EXT_MFX_TYPE})
 		message(STATUS "Target ${curr_name} outputs to ${out_dir}")
 
         target_link_libraries(${curr_name} ${curr_libs})
-        SET_TARGET_PROPERTIES(${curr_name} PROPERTIES
+        set_target_properties(${curr_name} PROPERTIES
+            ARCHIVE_OUTPUT_NAME "${EXT_NAME}.mfx"
             LIBRARY_OUTPUT_NAME "${EXT_NAME}.mfx"
+            RUNTIME_OUTPUT_NAME "${EXT_NAME}.mfx"
+            ARCHIVE_OUTPUT_DIRECTORY "${out_dir}"
             LIBRARY_OUTPUT_DIRECTORY "${out_dir}"
+            RUNTIME_OUTPUT_DIRECTORY "${out_dir}"
             COMPILE_DEFINITIONS "${curr_defs}"
         )
     endforeach()

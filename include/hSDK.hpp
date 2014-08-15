@@ -7,27 +7,23 @@
 #include <string>
 #include <memory>
 
-#if __cplusplus > 201103L
-using namespace std::string_literals;
-#endif
-
 namespace hSDK
 {
 	static_assert(sizeof(void *) == 4 && sizeof(std::size_t) == 4, "MMF2 only supports 32-bit extensions");
 
 #ifdef UNICODE
 	#define IS_UNICODE 1
-	#define T_ u
+	#define T_(s) L##s
 	template<typename, typename T>
 	using unicode_type = T;
 #else
 	#define IS_UNICODE 0
-	#define T_ /*u8*/
+	#define T_(s) u8##s
 	template<typename T, typename>
 	using unicode_type = T;
 #endif
-	using string8 = std::string;
-	using string16 = std::u16string;
+	using string8  = std::string;
+	using string16 = std::wstring;
 	using string = unicode_type<string8, string16>;
 	using char_t = typename string::value_type;
 

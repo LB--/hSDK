@@ -54,108 +54,112 @@ namespace hSDK
 		AC_ProgramF,
 		AC_Effect
 	};
+	using AgnosticParamsType_t = typename std::underlying_type<AgnosticParamsType>::type;
 	template<ACE CallT>
 	struct Params;
 	template<>
 	struct Params<ACE::Action> final
 	{
-		enum struct Type : typename std::underlying_type<AgnosticParamsType>::type
+		enum struct Type
+		: AgnosticParamsType_t
 		{
-			Click     = AgnosticParamsType::AC_Click,
-			Color     = AgnosticParamsType::AC_Color,
-			Number    = AgnosticParamsType::AC_Number,
-			String    = AgnosticParamsType::AC_String,
-			Filename  = AgnosticParamsType::AC_Filename,
-			Joystick  = AgnosticParamsType::AC_Joystick,
-			Key       = AgnosticParamsType::AC_Key,
-			Direction = AgnosticParamsType::AC_Direction,
-			Player    = AgnosticParamsType::AC_Player,
-			Position  = AgnosticParamsType::AC_Position,
-			Speed     = AgnosticParamsType::AC_Speed,
-			Time      = AgnosticParamsType::AC_Time,
-			Zone      = AgnosticParamsType::AC_Zone,
-			Custom    = AgnosticParamsType::AC_Custom,
+			Click     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Click),
+			Color     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Color),
+			Number    = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Number),
+			String    = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_String),
+			Filename  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Filename),
+			Joystick  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Joystick),
+			Key       = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Key),
+			Direction = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Direction),
+			Player    = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Player),
+			Position  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Position),
+			Speed     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Speed),
+			Time      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Time),
+			Zone      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Zone),
+			Custom    = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Custom),
 
-			Object     = AgnosticParamsType::AC_Object,
-			Border     = AgnosticParamsType::AC_Border,
-			Create     = AgnosticParamsType::AC_Create,
-			Shoot      = AgnosticParamsType::AC_Shoot,
-			SysCreate  = AgnosticParamsType::AC_SysCreate,
-			Animation  = AgnosticParamsType::AC_Animation,
-			None       = AgnosticParamsType::AC_None,
-			Every      = AgnosticParamsType::AC_Every,
-			Frame      = AgnosticParamsType::AC_Frame,
-			Sample     = AgnosticParamsType::AC_Sample,
-			Music      = AgnosticParamsType::AC_Music,
-			SampleLoop = AgnosticParamsType::AC_SampleLoop,
-			MusicLoop  = AgnosticParamsType::AC_MusicLoop,
-			Program    = AgnosticParamsType::AC_Program,
-			Paste      = AgnosticParamsType::AC_Paste,
-			InkEffect  = AgnosticParamsType::AC_InkEffect,
-			Menu       = AgnosticParamsType::AC_Menu,
-			Extension  = AgnosticParamsType::AC_Extension,
-			Direction8 = AgnosticParamsType::AC_Direction8,
-			Movement   = AgnosticParamsType::AC_Movement,
-			ProgramF   = AgnosticParamsType::AC_ProgramF,
-			Effect     = AgnosticParamsType::AC_Effect
+			Object     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Object),
+			Border     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Border),
+			Create     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Create),
+			Shoot      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Shoot),
+			SysCreate  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_SysCreate),
+			Animation  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Animation),
+			None       = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_None),
+			Every      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Every),
+			Frame      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Frame),
+			Sample     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Sample),
+			Music      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Music),
+			SampleLoop = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_SampleLoop),
+			MusicLoop  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_MusicLoop),
+			Program    = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Program),
+			Paste      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Paste),
+			InkEffect  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_InkEffect),
+			Menu       = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Menu),
+			Extension  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Extension),
+			Direction8 = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Direction8),
+			Movement   = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Movement),
+			ProgramF   = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_ProgramF),
+			Effect     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Effect)
 		};
 	};
 	template<>
 	struct Params<ACE::Condition> final
 	{
-		enum struct Type : typename std::underlying_type<AgnosticParamsType>::type
+		enum struct Type
+		: AgnosticParamsType_t
 		{
-			Click            = AgnosticParamsType::AC_Click,
-			Color            = AgnosticParamsType::AC_Color,
-			Number           = AgnosticParamsType::AC_Number,
-			String           = AgnosticParamsType::AC_String,
-			Filename         = AgnosticParamsType::AC_Filename,
-			Joystick         = AgnosticParamsType::AC_Joystick,
-			Key              = AgnosticParamsType::AC_Key,
-			Direction        = AgnosticParamsType::AC_Direction,
-			Player           = AgnosticParamsType::AC_Player,
-			Position         = AgnosticParamsType::AC_Position,
-			Speed            = AgnosticParamsType::AC_Speed,
-			Time             = AgnosticParamsType::AC_Time,
-			Zone             = AgnosticParamsType::AC_Zone,
-			Custom           = AgnosticParamsType::AC_Custom,
-			NumberComparison = AgnosticParamsType::C_NumberComparison,
-			StringComparison = AgnosticParamsType::C_StringComparison,
-			TimeComparison   = AgnosticParamsType::C_TimeComparison,
+			Click            = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Click),
+			Color            = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Color),
+			Number           = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Number),
+			String           = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_String),
+			Filename         = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Filename),
+			Joystick         = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Joystick),
+			Key              = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Key),
+			Direction        = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Direction),
+			Player           = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Player),
+			Position         = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Position),
+			Speed            = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Speed),
+			Time             = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Time),
+			Zone             = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Zone),
+			Custom           = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Custom),
+			NumberComparison = static_cast<AgnosticParamsType_t>(AgnosticParamsType::C_NumberComparison),
+			StringComparison = static_cast<AgnosticParamsType_t>(AgnosticParamsType::C_StringComparison),
+			TimeComparison   = static_cast<AgnosticParamsType_t>(AgnosticParamsType::C_TimeComparison),
 
-			Object     = AgnosticParamsType::AC_Object,
-			Border     = AgnosticParamsType::AC_Border,
-			Create     = AgnosticParamsType::AC_Create,
-			Shoot      = AgnosticParamsType::AC_Shoot,
-			SysCreate  = AgnosticParamsType::AC_SysCreate,
-			Animation  = AgnosticParamsType::AC_Animation,
-			None       = AgnosticParamsType::AC_None,
-			Every      = AgnosticParamsType::AC_Every,
-			Frame      = AgnosticParamsType::AC_Frame,
-			Sample     = AgnosticParamsType::AC_Sample,
-			Music      = AgnosticParamsType::AC_Music,
-			SampleLoop = AgnosticParamsType::AC_SampleLoop,
-			MusicLoop  = AgnosticParamsType::AC_MusicLoop,
-			SampleNF   = AgnosticParamsType::C_Sample,
-			MusicNF    = AgnosticParamsType::C_Music,
-			Program    = AgnosticParamsType::AC_Program,
-			Paste      = AgnosticParamsType::AC_Paste,
-			InkEffect  = AgnosticParamsType::AC_InkEffect,
-			Menu       = AgnosticParamsType::AC_Menu,
-			Extension  = AgnosticParamsType::AC_Extension,
-			Direction8 = AgnosticParamsType::AC_Direction8,
-			Movement   = AgnosticParamsType::AC_Movement,
-			ProgramF   = AgnosticParamsType::AC_ProgramF,
-			Effect     = AgnosticParamsType::AC_Effect
+			Object     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Object),
+			Border     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Border),
+			Create     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Create),
+			Shoot      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Shoot),
+			SysCreate  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_SysCreate),
+			Animation  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Animation),
+			None       = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_None),
+			Every      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Every),
+			Frame      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Frame),
+			Sample     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Sample),
+			Music      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Music),
+			SampleLoop = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_SampleLoop),
+			MusicLoop  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_MusicLoop),
+			SampleNF   = static_cast<AgnosticParamsType_t>(AgnosticParamsType::C_Sample),
+			MusicNF    = static_cast<AgnosticParamsType_t>(AgnosticParamsType::C_Music),
+			Program    = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Program),
+			Paste      = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Paste),
+			InkEffect  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_InkEffect),
+			Menu       = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Menu),
+			Extension  = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Extension),
+			Direction8 = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Direction8),
+			Movement   = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Movement),
+			ProgramF   = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_ProgramF),
+			Effect     = static_cast<AgnosticParamsType_t>(AgnosticParamsType::AC_Effect)
 		};
 	};
 	template<>
 	struct Params<ACE::Expression> final
 	{
-		enum struct Type : typename std::underlying_type<AgnosticParamsType>::type
+		enum struct Type
+		: AgnosticParamsType_t
 		{
-			Number = AgnosticParamsType::E_Number,
-			String = AgnosticParamsType::E_String
+			Number = static_cast<AgnosticParamsType_t>(AgnosticParamsType::E_Number),
+			String = static_cast<AgnosticParamsType_t>(AgnosticParamsType::E_String)
 		};
 	};
 	template<ACE CallT>

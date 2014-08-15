@@ -54,7 +54,7 @@ namespace hSDK
 		using Properties_t = std::vector<std::unique_ptr<Property>>;
 		struct ButtonProp final : Property
 		{
-			ButtonProp(string const &name, string const &description, string const &text = T_"Edit", bool checkbox = false, bool bold = false, bool singlesel = false);
+			ButtonProp(string const &name, string const &description, string const &text = T_("Edit"), bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			string text;
 
@@ -141,7 +141,7 @@ namespace hSDK
 				Uppercase
 			};
 
-			StringProp(string const &name, string const &description, string const &s = T_"", Type t = Type::Multiline, CaseChange cc = CaseChange::None, bool password = false, bool checkbox = false, bool bold = false, bool singlesel = false);
+			StringProp(string const &name, string const &description, string const &s = T_(""), Type t = Type::Multiline, CaseChange cc = CaseChange::None, bool password = false, bool checkbox = false, bool bold = false, bool singlesel = false);
 
 			string s;
 
@@ -179,7 +179,7 @@ namespace hSDK
 		{
 			FolderProp(string const &name, string const &description, Properties_t const &props);
 
-			Properties_t props;
+			Properties_t const &props;
 
 		private:
 			virtual std::unique_ptr<impl> prop() override;
@@ -405,7 +405,7 @@ namespace hSDK
 				}
 				else for(auto &&p : t.second)
 				{
-					props.at(t.first).emplace_back(p);
+					props.at(t.first).emplace_back(std::move(p));
 				}
 			}
 		}

@@ -18,6 +18,11 @@ namespace hSDK
 		using string = hSDK::string;
 
 	private:
+		template<typename T, T...>
+		struct ignore final
+		{
+			static constexpr bool value = true;
+		};
 		template<typename Fr, typename To>
 		struct implicit_cast final
 		{
@@ -101,7 +106,7 @@ namespace hSDK
 		{
 			struct implicit_to32 final
 			{
-				string const &s;
+				string const s;
 				implicit_to32(string const &str)
 				: s(str)
 				{
@@ -113,9 +118,9 @@ namespace hSDK
 			};
 			struct implicit_fr32 final
 			{
-				string const &s;
+				string const s;
 				implicit_fr32(std::int32_t i32)
-				: s(reinterpret_cast<char *>(i32))
+				: s(reinterpret_cast<char_t const *>(i32))
 				{
 				}
 				operator string() const
@@ -371,26 +376,19 @@ namespace hSDK
 				};
 
 				
-				template<std::size_t J, typename Last>
-				auto tuple_gen() -> std::tuple<typename Enforce32bit<Last>::fr32>
+				template<std::size_t J>
+				auto tuple_gen()
 				{
-					return std::make_tuple<typename Enforce32bit<Last>::fr32>
-						(GetParam<J, Enforce32bit<Last>::ExpT>());
+					return std::tuple<>{};
 				}
 				template<std::size_t J, typename First, typename... Rest>
 				auto tuple_gen()
-				-> decltype(std::tuple_cat
-				(
-					std::make_tuple<typename Enforce32bit<First>::fr32>
-						(GetParam<J, Enforce32bit<First>::ExpT>()),
-					tuple_gen<J+1, typename Enforce32bit<Rest>::fr32...>()
-				))
 				{
 					return std::tuple_cat
 					(
 						std::make_tuple<typename Enforce32bit<First>::fr32>
-							(GetParam<J, Enforce32bit<First>::ExpT>()),
-						tuple_gen<J+1, typename Enforce32bit<Rest>::fr32...>()
+						(static_cast<typename Enforce32bit<First>::fr32>(GetParam<J, Enforce32bit<First>::ExpT>())),
+						tuple_gen<J+1, Rest...>()
 					);
 				}
 
@@ -398,9 +396,9 @@ namespace hSDK
 				auto call(ExtT &ext, tuple_unpack::seq<S...>)
 				-> typename std::enable_if
 				<
-					!std::is_same<R, void>::value,
-					typename Enforce32bit<R>::to32
-				>::type
+					!std::is_same<R, void>::value && ignore<int, S...>::value,
+					Enforce32bit<R>
+				>::type::to32
 				{
 					auto params = tuple_gen<0, Args...>();
 					return (ext.*mfp)(std::get<S>(params)...);
@@ -409,7 +407,7 @@ namespace hSDK
 				auto call(ExtT &ext, tuple_unpack::seq<S...>)
 				-> typename std::enable_if
 				<
-					std::is_same<R, void>::value,
+					std::is_same<R, void>::value && ignore<int, S...>::value,
 					std::int32_t
 				>::type
 				{
@@ -587,11 +585,10 @@ namespace hSDK
 	inline Extension::~Extension() = default;
 
 	template<typename PropT, typename ExtT>
-	bool ImplementSubtype(string const &subtype = T_"")
+	bool ImplementSubtype(string const &subtype = T_(""))
 	{
 		static_assert(std::is_base_of<Properties, PropT>::value, "PropT must extend hSDK::Properties");
 		static_assert(std::is_base_of<Extension, ExtT>::value, "ExtT must extend hSDK::Extension");
-		static_assert(std::is_convertible<PropT, ExtT>::value, "ExtT must have a constructor taking PropT");
 
 		//...
 

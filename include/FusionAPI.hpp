@@ -10,4 +10,7 @@
 #include "FusionAPI/Cncf.h"
 #include "FusionAPI/Mvt.h"
 
+#undef min
+#undef max
+
 #endif

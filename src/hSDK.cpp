@@ -1,5 +1,6 @@
 #include "hSDK.hpp"
 
+#include <codecvt>
 #include <fstream>
 #include <streambuf>
 
@@ -14,7 +15,7 @@ namespace hSDK
 		(
 			CP_UTF8,
 			0,
-			s.c_str(),
+			reinterpret_cast<wchar_t const *>(s.c_str()),
 			s.size(),
 			NULL,
 			0,
@@ -27,7 +28,7 @@ namespace hSDK
 		(
 			CP_UTF8,
 			0,
-			s.c_str(),
+			reinterpret_cast<wchar_t const *>(s.c_str()),
 			s.size(),
 			buf.get(),
 			r1,
@@ -57,7 +58,7 @@ namespace hSDK
 			0,
 			s.c_str(),
 			s.size(),
-			buf.get(),
+			reinterpret_cast<wchar_t *>(buf.get()),
 			r1
 		);
 		if(r2 == 0) return string16();

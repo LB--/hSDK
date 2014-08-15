@@ -18,6 +18,7 @@ namespace hSDK
 	-> std::unique_ptr<Properties>
 	{
 		//
+		return {};
 	}
 }
 

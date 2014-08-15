@@ -59,7 +59,7 @@ namespace hSDK
 		};
 		struct SubMenu final : MenuItem
 		{
-			Menu_t items;
+			Menu_t const &items;
 
 			SubMenu(Menu_t const &i, string const &t, bool e = true)
 			: MenuItem(t, e)
@@ -79,7 +79,7 @@ namespace hSDK
 	Translation::MenuItem::~MenuItem() = default;
 	struct JsonTranslation : Translation
 	{
-		JsonTranslation(std::shared_ptr<json_value> json);
+		JsonTranslation(std::shared_ptr<json_value const> json);
 
 		virtual string Name() const override;
 		virtual string Author() const override;
@@ -95,7 +95,7 @@ namespace hSDK
 		virtual string DisplayText(string const &subtype, ACE ace, ACE_ID_t ace_id) const override;
 
 	private:
-		std::shared_ptr<json_value> json;
+		std::shared_ptr<json_value const> json;
 
 		static Menu_t MenuGen(std::vector<json_value *> const &items);
 	};

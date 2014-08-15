@@ -1556,7 +1556,7 @@ __inline void mvRecalcLayout(LPMV mV) \
 	{ mV->mvCallFunction(NULL, EF_RECALCLAYOUT, (LPARAM)0, (LPARAM)0, (LPARAM)0); }
 
 __inline CSoundManager* mvGetSoundMgr(LPMV mV) \
-	{ mV->mvCallFunction(NULL, EF_GETSOUNDMGR, (LPARAM)0, (LPARAM)0, (LPARAM)0); }
+	{ return (CSoundManager*)mV->mvCallFunction(NULL, EF_GETSOUNDMGR, (LPARAM)0, (LPARAM)0, (LPARAM)0); }
 
 __inline void mvCloseSoundMgr(LPMV mV) \
 	{ mV->mvCallFunction(NULL, EF_CLOSESOUNDMGR, (LPARAM)0, (LPARAM)0, (LPARAM)0); }

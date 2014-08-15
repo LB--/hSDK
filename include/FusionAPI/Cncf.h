@@ -2687,7 +2687,7 @@ enum
 
 typedef struct
 {
-	LPSTR pTitle;
+	LPCSTR pTitle;
 	int value;
 	LPSTR pText;
 	int lText;
@@ -2695,7 +2695,7 @@ typedef struct
 
 typedef struct
 {
-	LPWSTR pTitle;
+	LPCWSTR pTitle;
 	int value;
 	LPWSTR pText;
 	int lText;
@@ -4074,7 +4074,7 @@ typedef	ForEach*	LPFOREACH;
 //#undef CValue
 #undef CRunApp
 #undef CRunFrame
-#endif;
+#endif
 
 // Restores structure alignment...
 #ifndef      _H2INC 
