@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Global to All Extensions">
+      <UniqueIdentifier>{47be32c5-5814-4ba5-a96c-d23da0c86880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global to All Extensions\FusionAPI">
+      <UniqueIdentifier>{66e938b0-ddf5-4d6e-8177-484ec81556c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global to All Extensions\hSDK">
+      <UniqueIdentifier>{f2cb9ce6-941d-4aaf-a4bd-72e6d63cc8f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global to All Extensions\json-parser">
+      <UniqueIdentifier>{ee589636-3721-4661-b1a0-8a229d9b1c95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Specific to This Extension">
+      <UniqueIdentifier>{2e1b1862-7883-4ed0-9476-5f3524918911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Specific to This Extension\Resources">
+      <UniqueIdentifier>{7292fc15-f081-4bcd-a16e-869db16060ad}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\sdk\FusionAPI.hpp">
+      <Filter>Global to All Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK.hpp">
+      <Filter>Global to All Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\BlitMac.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Ccx.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Ccxhdr.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\CfcError.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\CfcFile.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\CFCMacro.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Cncf.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\cncr.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Cncy.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Cnpdll.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\colors.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\D3dSurfInfo.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\EVTCCX.H">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Fill.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\FilterMgr.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\ImageFlt.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\ImgFlt.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\ImgFltDefs.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Mvt.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Palet.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\PaletCpp.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\PictEdDefs.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Props.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\PTYPE.H">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\SndDefs.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\SoundConverter.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\SoundError.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\SoundFilter.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\SoundFilterMgr.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\StdDefs.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\Surface.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\SurfaceDefs.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\TigsExt.hpp">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FusionAPI\WinMacro.h">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\BinaryStream.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\DLL.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\EditData.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\Extension.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\Impl.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\Parameters.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\Properties.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\Resources.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\RunData.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\Serialization.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\hSDK\Translation.hpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\json-parser\json.h">
+      <Filter>Global to All Extensions\json-parser</Filter>
+    </ClInclude>
+    <ClInclude Include="TestExtension.hpp">
+      <Filter>Specific to This Extension</Filter>
+    </ClInclude>
+    <ClInclude Include="TestProperties.hpp">
+      <Filter>Specific to This Extension</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\sdk\hSDK.cpp">
+      <Filter>Global to All Extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\BinaryStream.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\DLL.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\Extension.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\Impl.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\Parameters.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\Properties.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\Resources.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\Serialization.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\hSDK\Translation.cpp">
+      <Filter>Global to All Extensions\hSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\json-parser\json.c">
+      <Filter>Global to All Extensions\json-parser</Filter>
+    </ClCompile>
+    <ClCompile Include="TestExtension.cpp">
+      <Filter>Specific to This Extension</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\sdk\hSDK.rc">
+      <Filter>Global to All Extensions</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="res\Extension.rc">
+      <Filter>Specific to This Extension\Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\sdk\FusionAPI\mmfs2.0.lib">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </Library>
+    <Library Include="..\..\sdk\FusionAPI\mmfs2.0hwa.lib">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </Library>
+    <Library Include="..\..\sdk\FusionAPI\mmfs2.0u.lib">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </Library>
+    <Library Include="..\..\sdk\FusionAPI\mmfs2.5.lib">
+      <Filter>Global to All Extensions\FusionAPI</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Icon.png">
+      <Filter>Specific to This Extension\Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Translations.json">
+      <Filter>Specific to This Extension\Resources</Filter>
+    </None>
+    <None Include="..\..\sdk\hSDK.def">
+      <Filter>Global to All Extensions</Filter>
+    </None>
+  </ItemGroup>
+</Project>

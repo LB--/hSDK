@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Template", "Template.vcxproj", "{0C379BA5-DB0C-4F36-90C6-01DB7D3E7324}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Fusion-2.x = Debug|Fusion-2.x
+		Edittime|Fusion-2.x = Edittime|Fusion-2.x
+		Runtime|Fusion-2.x = Runtime|Fusion-2.x
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C379BA5-DB0C-4F36-90C6-01DB7D3E7324}.Debug|Fusion-2.x.ActiveCfg = Debug|Win32
+		{0C379BA5-DB0C-4F36-90C6-01DB7D3E7324}.Debug|Fusion-2.x.Build.0 = Debug|Win32
+		{0C379BA5-DB0C-4F36-90C6-01DB7D3E7324}.Edittime|Fusion-2.x.ActiveCfg = Edittime|Win32
+		{0C379BA5-DB0C-4F36-90C6-01DB7D3E7324}.Edittime|Fusion-2.x.Build.0 = Edittime|Win32
+		{0C379BA5-DB0C-4F36-90C6-01DB7D3E7324}.Runtime|Fusion-2.x.ActiveCfg = Runtime|Win32
+		{0C379BA5-DB0C-4F36-90C6-01DB7D3E7324}.Runtime|Fusion-2.x.Build.0 = Runtime|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

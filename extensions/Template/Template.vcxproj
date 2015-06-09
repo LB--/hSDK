@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Edittime|Win32">
+      <Configuration>Edittime</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Runtime|Win32">
+      <Configuration>Runtime</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0C379BA5-DB0C-4F36-90C6-01DB7D3E7324}</ProjectGuid>
+    <RootNamespace>Template</RootNamespace>
+    <TargetPlatformVersion>10.0.10069.0</TargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Edittime|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Runtime|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Edittime|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Runtime|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetExt>.mfx</TargetExt>
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>MFX/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Edittime|Win32'">
+    <TargetExt>.mfx</TargetExt>
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>MFX/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Runtime|Win32'">
+    <TargetExt>.mfx</TargetExt>
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>MFX/</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../sdk/json-parser/;../../sdk/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>EDITOR;COXSDK;IN_EXT_VERSION2;HWABETA;HWA;UNICODE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_WINDOWS;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../sdk/FusionAPI/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mmfs2.5.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>../../sdk/hSDK.def</ModuleDefinitionFile>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <OptimizeReferences>false</OptimizeReferences>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
+    </Link>
+    <Xdcmake>
+      <OutputFile>$(IntDir)$(TargetName).xml</OutputFile>
+    </Xdcmake>
+    <Bscmake>
+      <OutputFile>$(IntDir)$(TargetName).bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Edittime|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../sdk/json-parser/;../../sdk/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>EDITOR;COXSDK;IN_EXT_VERSION2;HWABETA;HWA;UNICODE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_WINDOWS;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../../sdk/FusionAPI/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mmfs2.5.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>../../sdk/hSDK.def</ModuleDefinitionFile>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
+    </Link>
+    <Xdcmake>
+      <OutputFile>$(IntDir)$(TargetName).xml</OutputFile>
+    </Xdcmake>
+    <Bscmake>
+      <OutputFile>$(IntDir)$(TargetName).bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Runtime|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../sdk/json-parser/;../../sdk/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>RUN_ONLY;COXSDK;IN_EXT_VERSION2;HWABETA;HWA;UNICODE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_WINDOWS;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>No</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../../sdk/FusionAPI/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mmfs2.5.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>../../sdk/hSDK.def</ModuleDefinitionFile>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
+    </Link>
+    <Xdcmake>
+      <OutputFile>$(IntDir)$(TargetName).xml</OutputFile>
+    </Xdcmake>
+    <Bscmake>
+      <OutputFile>$(IntDir)$(TargetName).bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\sdk\FusionAPI.hpp" />
+    <ClInclude Include="..\..\sdk\FusionAPI\BlitMac.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Ccx.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Ccxhdr.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\CfcError.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\CfcFile.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\CFCMacro.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Cncf.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\cncr.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Cncy.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Cnpdll.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\colors.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\D3dSurfInfo.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\EVTCCX.H" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Fill.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\FilterMgr.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\ImageFlt.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\ImgFlt.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\ImgFltDefs.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Mvt.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Palet.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\PaletCpp.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\PictEdDefs.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Props.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\PTYPE.H" />
+    <ClInclude Include="..\..\sdk\FusionAPI\SndDefs.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\SoundConverter.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\SoundError.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\SoundFilter.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\SoundFilterMgr.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\StdDefs.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\Surface.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\SurfaceDefs.h" />
+    <ClInclude Include="..\..\sdk\FusionAPI\TigsExt.hpp" />
+    <ClInclude Include="..\..\sdk\FusionAPI\WinMacro.h" />
+    <ClInclude Include="..\..\sdk\hSDK.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\BinaryStream.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\DLL.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\EditData.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\Extension.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\Impl.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\Parameters.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\Properties.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\Resources.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\RunData.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\Serialization.hpp" />
+    <ClInclude Include="..\..\sdk\hSDK\Translation.hpp" />
+    <ClInclude Include="..\..\sdk\json-parser\json.h" />
+    <ClInclude Include="TestExtension.hpp" />
+    <ClInclude Include="TestProperties.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\sdk\hSDK.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\BinaryStream.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\DLL.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\Extension.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\Impl.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\Parameters.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\Properties.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\Resources.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\Serialization.cpp" />
+    <ClCompile Include="..\..\sdk\hSDK\Translation.cpp" />
+    <ClCompile Include="..\..\sdk\json-parser\json.c" />
+    <ClCompile Include="TestExtension.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\sdk\hSDK.rc" />
+    <ResourceCompile Include="res\Extension.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\sdk\FusionAPI\mmfs2.0.lib" />
+    <Library Include="..\..\sdk\FusionAPI\mmfs2.0hwa.lib" />
+    <Library Include="..\..\sdk\FusionAPI\mmfs2.0u.lib" />
+    <Library Include="..\..\sdk\FusionAPI\mmfs2.5.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\sdk\hSDK.def" />
+    <None Include="res\Translations.json" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

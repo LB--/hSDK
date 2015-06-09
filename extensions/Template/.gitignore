@@ -1,7 +1,10 @@
 build/
 *[Mm]ake*/
 *[Mm]ake*
-!CMakeLists.txt
+Debug/
+Release/
+Edittime/
+Runtime/
 *.obj
 *.dll
 *.mfx
