@@ -317,8 +317,7 @@ namespace hSDK
 			static auto verify(R (ExtT::*mfp)(Args...))
 			-> typename std::enable_if
 			<
-				(CallT == ACE::Action &&  std::is_same<R, void>::value)
-			 || (CallT != ACE::Action && !std::is_same<R, void>::value),
+				(CallT == ACE::Action) == (std::is_void<R>::value),
 				ExtMFP<ExtT, R, Args...>
 			>::type
 			{
