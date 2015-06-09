@@ -123,7 +123,7 @@ typedef struct _json_value
 
          json_object_entry * values;
 
-         #if defined(__cplusplus) && __cplusplus >= 201103L
+         #if defined(__cplusplus) //&& __cplusplus >= 201103L
          decltype(values) begin () const
          {  return values;
          }
@@ -139,7 +139,7 @@ typedef struct _json_value
          unsigned int length;
          struct _json_value ** values;
 
-         #if defined(__cplusplus) && __cplusplus >= 201103L
+         #if defined(__cplusplus) //&& __cplusplus >= 201103L
          decltype(values) begin () const
          {  return values;
          }

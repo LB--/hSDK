@@ -27,8 +27,8 @@ namespace hSDK
 			{
 				virtual ~AsBase() = default;
 
-				using oit_t = typename std::num_put<char_t>::iter_type;
-				using iit_t = typename std::num_get<char_t>::iter_type;
+				using oit_t = std::num_put<char_t>::iter_type;
+				using iit_t = std::num_get<char_t>::iter_type;
 
 				virtual oit_t Put(oit_t it, std::uint64_t v) = 0;
 				virtual iit_t Get(iit_t it, std::uint64_t &v) = 0;
@@ -227,7 +227,7 @@ namespace hSDK
 					{
 						std::uint64_t temp;
 						iter_type r = as->Get(it, temp);
-						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
+						v = static_cast<std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
@@ -240,7 +240,7 @@ namespace hSDK
 					{
 						std::uint64_t temp;
 						iter_type r = as->Get(it, temp);
-						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
+						v = static_cast<std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
@@ -253,7 +253,7 @@ namespace hSDK
 					{
 						std::uint64_t temp;
 						iter_type r = as->Get(it, temp);
-						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
+						v = static_cast<std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
@@ -266,7 +266,7 @@ namespace hSDK
 					{
 						std::uint64_t temp;
 						iter_type r = as->Get(it, temp);
-						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
+						v = static_cast<std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
@@ -279,7 +279,7 @@ namespace hSDK
 					{
 						std::uint64_t temp;
 						iter_type r = as->Get(it, temp);
-						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
+						v = static_cast<std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
@@ -303,7 +303,7 @@ namespace hSDK
 					{
 						long double temp;
 						iter_type r = as->Get(it, temp);
-						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
+						v = static_cast<std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}
@@ -316,7 +316,7 @@ namespace hSDK
 					{
 						long double temp;
 						iter_type r = as->Get(it, temp);
-						v = static_cast<typename std::remove_reference<decltype(v)>::type>(temp);
+						v = static_cast<std::remove_reference<decltype(v)>::type>(temp);
 						delete as, as = nullptr;
 						return r;
 					}

@@ -25,7 +25,7 @@ namespace hSDK
 	using string8  = std::string;
 	using string16 = std::wstring;
 	using string = unicode_type<string8, string16>;
-	using char_t = typename string::value_type;
+	using char_t = string::value_type;
 
 	string8         str_to8fr16(string16 const &s);
 	string16        str_to16fr8(string8  const &s);

@@ -195,7 +195,7 @@ namespace hSDK
 	{
 		if(selected == items.end())
 		{
-			return Value::New(new CPropDWordValue(-1ul));
+			return Value::New(new CPropDWordValue(std::numeric_limits<unsigned long>::max()));
 		}
 		else
 		{
@@ -205,7 +205,7 @@ namespace hSDK
 	void Properties::ListProp::value(std::unique_ptr<Value> v)
 	{
 		std::uint32_t sel = v->as<CPropDWordValue>()->m_dwValue;
-		if(sel == -1ul)
+		if(sel == std::numeric_limits<unsigned long>::max())
 		{
 			selected = items.end();
 		}
@@ -403,7 +403,7 @@ namespace hSDK
 	{
 		struct derived_impl : impl
 		{
-			std::vector<std::pair<string, string> const> nds;
+			std::vector<std::pair<string const, string const>> nds;
 			derived_impl(FolderProp const &fp)
 			{
 				{
